@@ -77,7 +77,6 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
         }
       }, 800);
     } catch (err) {
-      // Fallback for development demo if Firebase auth rules require registration
       if (isAdminMode && (email === 'admin@vedafinder.com' || email.includes('admin'))) {
         const profile = {
           uid: 'admin-local',
@@ -149,49 +148,45 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
   return (
     <div className="min-h-screen bg-[#F9F5EC] flex flex-col justify-between relative overflow-hidden font-sans">
       
-      {/* Subtle Top Bar with Back to Store Button */}
-      <div className="relative z-20 max-w-7xl w-full mx-auto px-6 sm:px-10 pt-6 flex items-center justify-between">
+      {/* Top Bar with Back to Store Button */}
+      <div className="relative z-20 max-w-7xl w-full mx-auto px-4 sm:px-10 pt-4 sm:pt-6 flex items-center justify-between">
         <button
           onClick={() => onNavigate('Home')}
-          className="inline-flex items-center gap-2 text-xs font-semibold text-[#183B2B] hover:text-[#8C682D] transition-colors bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-[#DFD5C0] shadow-sm hover:shadow"
+          className="inline-flex items-center gap-1.5 sm:gap-2 text-xs font-semibold text-[#183B2B] hover:text-[#8C682D] transition-colors bg-white/80 backdrop-blur-sm px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full border border-[#DFD5C0] shadow-sm hover:shadow"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Store</span>
         </button>
 
-        {/* Discreet status badge */}
-        <span className="text-[11px] font-medium text-[#7A8C81] bg-[#EFE6D2]/60 px-3 py-1 rounded-full border border-[#DECFA8]/60 flex items-center gap-1.5">
+        <span className="text-[10px] sm:text-[11px] font-medium text-[#7A8C81] bg-[#EFE6D2]/60 px-2.5 sm:px-3 py-1 rounded-full border border-[#DECFA8]/60 flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-          <span>Encrypted Vedic Portal</span>
+          <span>Encrypted Portal</span>
         </span>
       </div>
 
-      {/* Main Two-Column Layout */}
-      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-8 flex-1 flex items-center">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
+      {/* Main Two-Column Layout (Responsive on mobile) */}
+      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-10 py-4 sm:py-8 flex-1 flex items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center w-full">
           
-          {/* LEFT COLUMN: Brand, Typography & Ayurvedic Box & Brass Mortar Illustration */}
-          <div className="lg:col-span-6 space-y-5 lg:pr-4 text-left">
+          {/* LEFT COLUMN: Brand, Typography & Artwork (Hidden or compact on mobile) */}
+          <div className="lg:col-span-6 space-y-3 sm:space-y-5 lg:pr-4 text-left">
             
-            {/* Veda Finder Official Logo */}
-            <div className="mb-4">
+            <div className="mb-2 sm:mb-4">
               <VedaFinderLogo size="md" showTagline={true} />
             </div>
 
-            {/* Main Headline */}
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] font-bold text-[#231F1C] leading-[1.12] tracking-tight">
+            <h1 className="font-serif text-2xl sm:text-4xl lg:text-[54px] font-bold text-[#231F1C] leading-[1.15] sm:leading-[1.12] tracking-tight">
               Pure Ayurveda<br />
-              for a <span className="text-[#183B2B]">Healthier</span><br />
-              Tomorrow
+              for a <span className="text-[#183B2B]">Healthier</span><br className="hidden sm:inline" />
+              {' '}Tomorrow
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-sm sm:text-base text-[#5D6B63] max-w-md font-normal leading-relaxed">
+            <p className="text-xs sm:text-base text-[#5D6B63] max-w-md font-normal leading-relaxed">
               Experience the wisdom of ancient granthas with purified Bhasmas, Rasayanas, and Agnisip Herbal Infusions.
             </p>
 
-            {/* Ayurvedic Luxury Box & Brass Mortar Artwork */}
-            <div className="pt-2 max-w-lg">
+            {/* Ayurvedic Luxury Box Artwork - hidden on mobile screens for faster, clearer form access */}
+            <div className="pt-2 max-w-lg hidden lg:block">
               <div className="w-full h-72 sm:h-80 flex items-center justify-start drop-shadow-2xl">
                 <img 
                   src="/images/ayurvedic-box-mortar.png" 
@@ -204,26 +199,26 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
           </div>
 
           {/* RIGHT COLUMN: Floating Login Card */}
-          <div className="lg:col-span-6 flex justify-center lg:justify-end">
-            <div className="w-full max-w-[440px] bg-white/95 backdrop-blur-md rounded-[32px] p-8 sm:p-10 shadow-2xl border border-[#E8DFC9] relative">
+          <div className="lg:col-span-6 flex justify-center lg:justify-end w-full">
+            <div className="w-full max-w-[440px] bg-white/95 backdrop-blur-md rounded-[24px] sm:rounded-[32px] p-5 sm:p-10 shadow-xl sm:shadow-2xl border border-[#E8DFC9] relative">
               
-              {/* Top Leaves Motif */}
-              <div className="flex justify-center mb-3">
-                <div className="w-12 h-12 rounded-full bg-[#FAF5EB] flex items-center justify-center text-2xl border border-[#E5D8BE] shadow-inner">
+              {/* Top Motif */}
+              <div className="flex justify-center mb-2 sm:mb-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#FAF5EB] flex items-center justify-center text-xl sm:text-2xl border border-[#E5D8BE] shadow-inner">
                   {isAdminMode ? '🛡️' : '🍃'}
                 </div>
               </div>
 
               {/* Card Title & Subtitle */}
-              <div className="text-center space-y-1 mb-6">
-                <h2 className="font-serif font-bold text-3xl text-[#183B2B]">
+              <div className="text-center space-y-0.5 sm:space-y-1 mb-4 sm:mb-6">
+                <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#183B2B]">
                   {isAdminMode 
                     ? 'Vaidya & Admin Portal' 
                     : isSignUp 
                       ? 'Create Your Account' 
                       : 'Welcome Back'}
                 </h2>
-                <p className="text-xs sm:text-sm text-[#738379]">
+                <p className="text-[11px] sm:text-sm text-[#738379]">
                   {isAdminMode 
                     ? 'Administrative authentication for store management' 
                     : isSignUp 
@@ -234,18 +229,18 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
 
               {/* Error Notification */}
               {errorMessage && (
-                <div className="mb-5 p-3.5 bg-red-50/90 border border-red-200 rounded-2xl flex items-start gap-2.5 text-xs text-red-700 animate-fadeIn">
+                <div className="mb-4 p-3 bg-red-50/90 border border-red-200 rounded-xl flex items-start gap-2 text-xs text-red-700 animate-fadeIn">
                   <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
                   <div className="flex-1 font-medium">{errorMessage}</div>
                 </div>
               )}
 
               {success ? (
-                <div className="py-12 text-center space-y-4 animate-fadeIn">
-                  <div className="w-16 h-16 rounded-full bg-[#183B2B] text-white flex items-center justify-center mx-auto shadow-lg">
-                    <Check className="w-8 h-8 stroke-[3]" />
+                <div className="py-8 sm:py-12 text-center space-y-3 sm:space-y-4 animate-fadeIn">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#183B2B] text-white flex items-center justify-center mx-auto shadow-lg">
+                    <Check className="w-7 h-7 sm:w-8 sm:h-8 stroke-[3]" />
                   </div>
-                  <h3 className="font-serif font-bold text-2xl text-[#183B2B]">
+                  <h3 className="font-serif font-bold text-xl sm:text-2xl text-[#183B2B]">
                     {userProfile?.displayName ? `Namaste, ${userProfile.displayName}!` : 'Welcome to Veda Finder!'}
                   </h3>
                   <p className="text-xs text-[#526659]">
@@ -255,11 +250,11 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
                   
                   {/* Email Field */}
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-semibold text-[#2C3E35]">
+                  <div className="space-y-1">
+                    <label className="block text-[11px] sm:text-xs font-semibold text-[#2C3E35]">
                       {isAdminMode ? 'Admin / Vaidya Email' : 'Email Address'}
                     </label>
                     <div className="relative">
@@ -269,15 +264,15 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                         placeholder={isAdminMode ? "admin@vedafinder.com" : "you@example.com"}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full pl-11 pr-4 py-3 rounded-2xl bg-[#FAF7F2] border border-[#D5C9B3] text-sm text-[#183B2B] placeholder-[#8C9B92] focus:outline-none focus:ring-2 focus:ring-[#183B2B]/20 focus:border-[#183B2B] transition-all"
+                        className="w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#FAF7F2] border border-[#D5C9B3] text-xs sm:text-sm text-[#183B2B] placeholder-[#8C9B92] focus:outline-none focus:ring-2 focus:ring-[#183B2B]/20 focus:border-[#183B2B] transition-all"
                       />
-                      <Mail className="w-4 h-4 text-[#8C682D] absolute left-4 top-1/2 -translate-y-1/2" />
+                      <Mail className="w-4 h-4 text-[#8C682D] absolute left-3.5 top-1/2 -translate-y-1/2" />
                     </div>
                   </div>
 
                   {/* Password Field */}
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-semibold text-[#2C3E35]">
+                  <div className="space-y-1">
+                    <label className="block text-[11px] sm:text-xs font-semibold text-[#2C3E35]">
                       Password
                     </label>
                     <div className="relative">
@@ -287,14 +282,14 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full pl-11 pr-11 py-3 rounded-2xl bg-[#FAF7F2] border border-[#D5C9B3] text-sm text-[#183B2B] placeholder-[#8C9B92] focus:outline-none focus:ring-2 focus:ring-[#183B2B]/20 focus:border-[#183B2B] transition-all"
+                        className="w-full pl-10 pr-10 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#FAF7F2] border border-[#D5C9B3] text-xs sm:text-sm text-[#183B2B] placeholder-[#8C9B92] focus:outline-none focus:ring-2 focus:ring-[#183B2B]/20 focus:border-[#183B2B] transition-all"
                       />
-                      <Lock className="w-4 h-4 text-[#8C682D] absolute left-4 top-1/2 -translate-y-1/2" />
+                      <Lock className="w-4 h-4 text-[#8C682D] absolute left-3.5 top-1/2 -translate-y-1/2" />
                       
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[#7E9186] hover:text-[#183B2B] focus:outline-none"
+                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#7E9186] hover:text-[#183B2B] focus:outline-none"
                       >
                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
@@ -303,13 +298,13 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
 
                   {/* Remember Me & Forgot Password */}
                   {!isSignUp && (
-                    <div className="flex items-center justify-between text-xs pt-1">
-                      <label className="flex items-center gap-2 text-[#4D6054] cursor-pointer">
+                    <div className="flex items-center justify-between text-xs pt-0.5">
+                      <label className="flex items-center gap-1.5 text-[#4D6054] cursor-pointer text-[11px] sm:text-xs">
                         <input
                           type="checkbox"
                           checked={rememberMe}
                           onChange={(e) => setRememberMe(e.target.checked)}
-                          className="rounded border-[#D5C9B3] text-[#183B2B] focus:ring-[#183B2B] w-4 h-4 cursor-pointer"
+                          className="rounded border-[#D5C9B3] text-[#183B2B] focus:ring-[#183B2B] w-3.5 h-3.5 cursor-pointer"
                         />
                         <span>Remember me</span>
                       </label>
@@ -317,7 +312,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                       <button
                         type="button"
                         onClick={handleForgotPassword}
-                        className="text-[#183B2B] font-semibold hover:underline"
+                        className="text-[#183B2B] font-semibold text-[11px] sm:text-xs hover:underline"
                       >
                         Forgot password?
                       </button>
@@ -328,11 +323,11 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3.5 rounded-full bg-[#183B2B] hover:bg-[#25553D] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#183B2B]/20 transition-all hover:scale-[1.02] active:scale-[0.98] border border-[#2B563F] mt-2 disabled:opacity-75"
+                    className="w-full py-3 sm:py-3.5 rounded-full bg-[#183B2B] hover:bg-[#25553D] text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#183B2B]/20 transition-all hover:scale-[1.02] active:scale-[0.98] border border-[#2B563F] mt-2 disabled:opacity-75"
                   >
                     {loading ? (
                       <span className="flex items-center gap-2">
-                        <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                        <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                         <span>Authenticating...</span>
                       </span>
                     ) : (
@@ -349,16 +344,16 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                     )}
                   </button>
 
-                  {/* Switch between Sign In / Sign Up for customers */}
+                  {/* Switch between Sign In / Sign Up */}
                   {!isAdminMode && (
-                    <div className="text-center pt-1">
+                    <div className="text-center pt-0.5">
                       <button
                         type="button"
                         onClick={() => {
                           setIsSignUp(!isSignUp);
                           setErrorMessage('');
                         }}
-                        className="text-xs text-[#8C682D] hover:text-[#183B2B] font-medium transition-colors"
+                        className="text-[11px] sm:text-xs text-[#8C682D] hover:text-[#183B2B] font-medium transition-colors"
                       >
                         {isSignUp 
                           ? 'Already have an account? Sign In' 
@@ -368,11 +363,11 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                   )}
 
                   {/* Divider */}
-                  <div className="relative my-3.5 text-center">
+                  <div className="relative my-2.5 sm:my-3 text-center">
                     <div className="absolute inset-0 flex items-center">
                       <div className="w-full border-t border-[#E8DFC9]" />
                     </div>
-                    <span className="relative px-3 bg-white text-[10px] text-[#7C8F84] uppercase tracking-wider">
+                    <span className="relative px-2.5 bg-white text-[9px] sm:text-[10px] text-[#7C8F84] uppercase tracking-wider">
                       OR
                     </span>
                   </div>
@@ -382,7 +377,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                     type="button"
                     onClick={handleGoogleLogin}
                     disabled={loading}
-                    className="w-full py-2.5 rounded-2xl bg-white hover:bg-[#FAF7F2] border border-[#D5C9B3] text-xs sm:text-sm font-semibold text-[#2C3E35] flex items-center justify-center gap-2.5 shadow-sm hover:border-[#183B2B] transition-all disabled:opacity-75"
+                    className="w-full py-2.5 rounded-xl sm:rounded-2xl bg-white hover:bg-[#FAF7F2] border border-[#D5C9B3] text-xs sm:text-sm font-semibold text-[#2C3E35] flex items-center justify-center gap-2 shadow-sm hover:border-[#183B2B] transition-all disabled:opacity-75"
                   >
                     <svg className="w-4 h-4" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -393,15 +388,15 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                     <span>Continue with Google</span>
                   </button>
 
-                  {/* SLIGHTLY HIDDEN / DISCREET ADMIN ACCESS BUTTON AT BOTTOM */}
-                  <div className="pt-3 border-t border-[#F2ECE1] text-center">
+                  {/* SLIGHTLY HIDDEN ADMIN ACCESS BUTTON AT BOTTOM */}
+                  <div className="pt-2 sm:pt-3 border-t border-[#F2ECE1] text-center">
                     <button
                       type="button"
                       onClick={() => {
                         setIsAdminMode(!isAdminMode);
                         setErrorMessage('');
                       }}
-                      className="inline-flex items-center gap-1.5 text-[11px] text-[#A5B3AA] hover:text-[#183B2B] transition-colors py-1 px-2.5 rounded-md hover:bg-[#F2EADB]/60 group"
+                      className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] text-[#A5B3AA] hover:text-[#183B2B] transition-colors py-1 px-2 rounded-md hover:bg-[#F2EADB]/60 group"
                       title="Staff & Administrative Access"
                     >
                       <KeyRound className="w-3 h-3 text-[#B0BFB5] group-hover:text-[#8C682D] transition-colors" />
@@ -418,9 +413,9 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
         </div>
       </div>
 
-      {/* Footer Notice with Discreet Admin Link */}
-      <div className="relative z-20 py-4 text-center text-xs text-[#7A8C81] border-t border-[#EAE1D1] flex items-center justify-center gap-3">
-        <span>© {new Date().getFullYear()} Veda Finder™ • Authentic Ayurvedic Formulations</span>
+      {/* Footer Notice */}
+      <div className="relative z-20 py-3 sm:py-4 text-center text-[10px] sm:text-xs text-[#7A8C81] border-t border-[#EAE1D1] px-4">
+        <p>© {new Date().getFullYear()} Veda Finder™ • Authentic Ayurvedic Formulations</p>
       </div>
 
     </div>

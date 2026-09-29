@@ -5,7 +5,7 @@ import {
   ChevronRight, ChevronDown, Plus, Edit2, Trash2, Eye, X, 
   Check, ArrowRight, ShieldCheck, Filter, ArrowLeft, TrendingUp,
   BarChart3, AlertTriangle, Clock, Calendar, DollarSign, Upload,
-  Sparkles, CheckCircle2, Tag, Layers, RefreshCw
+  Sparkles, CheckCircle2, Tag, Layers, RefreshCw, Menu
 } from 'lucide-react';
 import { VedaFinderLogo } from '../components/VedaLogoBrand';
 import { BotanicalBranch } from '../components/AyurvedicIcons';
@@ -16,6 +16,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // Products State
   const [products, setProducts] = useState([
@@ -435,29 +436,105 @@ export default function AdminPage({ onLogout, onNavigate }) {
 
       </aside>
 
+      {/* Mobile Sidebar Drawer Overlay */}
+      {mobileSidebarOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div 
+            onClick={() => setMobileSidebarOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm animate-fadeIn" 
+          />
+          <div className="fixed inset-y-0 left-0 w-72 max-w-[85vw] bg-[#112F22] text-[#E8DFC8] flex flex-col justify-between p-4 shadow-2xl z-10 border-r border-[#1B4432] animate-slideIn">
+            <div>
+              {/* Top Brand Logo & Close button */}
+              <div className="p-2 pb-4 border-b border-[#1A4230] flex items-center justify-between">
+                <button onClick={() => { setMobileSidebarOpen(false); onNavigate('Home'); }} className="text-left focus:outline-none">
+                  <VedaFinderLogo variant="light" size="sm" showTagline={true} />
+                </button>
+                <button 
+                  onClick={() => setMobileSidebarOpen(false)}
+                  className="p-1 rounded-full text-[#A2BCB0] hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Navigation Links */}
+              <nav className="py-4 space-y-1">
+                {sidebarLinks.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.name;
+                  return (
+                    <button
+                      key={item.name}
+                      onClick={() => {
+                        setActiveTab(item.name);
+                        setMobileSidebarOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 ${
+                        isActive
+                          ? 'bg-white/15 text-white shadow-sm font-semibold'
+                          : 'text-[#A2BCB0] hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      <Icon className={`w-4 h-4 ${isActive ? 'text-[#E6C887]' : 'text-[#8EA89C]'}`} />
+                      <span>{item.name}</span>
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
+
+            {/* Logout at Bottom */}
+            <div className="pt-3 border-t border-[#1A4230]">
+              <button
+                onClick={() => {
+                  setMobileSidebarOpen(false);
+                  onLogout();
+                }}
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-[#D5BFA0] hover:text-white hover:bg-white/5 transition-colors"
+              >
+                <LogOut className="w-4 h-4 text-[#C59A4E]" />
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 2. MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col min-w-0">
         
         {/* Top Header Bar */}
-        <header className="h-20 bg-[#FAF7F2] border-b border-[#E7DECD] px-6 sm:px-8 flex items-center justify-between sticky top-0 z-20 shadow-sm">
+        <header className="h-16 sm:h-20 bg-[#FAF7F2] border-b border-[#E7DECD] px-3 sm:px-8 flex items-center justify-between sticky top-0 z-20 shadow-sm gap-2 sm:gap-4">
           
-          {/* Search bar */}
-          <div className="relative w-72 sm:w-96">
-            <input
-              type="text"
-              placeholder="Search formulations, orders, seekers..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-full text-xs sm:text-sm bg-white border border-[#DCD3C0] text-[#174D3A] placeholder-[#8A9C91] focus:outline-none focus:ring-2 focus:ring-[#174D3A]/20 focus:border-[#174D3A] shadow-inner"
-            />
-            <Search className="w-4 h-4 text-[#8C682D] absolute left-3.5 top-1/2 -translate-y-1/2" />
+          {/* Mobile Sidebar Hamburger Toggle & Search */}
+          <div className="flex items-center gap-2 flex-1 max-w-md">
+            <button
+              onClick={() => setMobileSidebarOpen(true)}
+              className="lg:hidden p-2 rounded-xl bg-white border border-[#DCD3C0] text-[#174D3A] shadow-sm shrink-0"
+              aria-label="Open admin menu"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+
+            {/* Search bar */}
+            <div className="relative flex-1">
+              <input
+                type="text"
+                placeholder="Search dispensary..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm bg-white border border-[#DCD3C0] text-[#174D3A] placeholder-[#8A9C91] focus:outline-none focus:ring-2 focus:ring-[#174D3A]/20 focus:border-[#174D3A] shadow-inner"
+              />
+              <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#8C682D] absolute left-3 top-1/2 -translate-y-1/2" />
+            </div>
           </div>
 
           {/* Right Header Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             
             {/* Date Filter Dropdown */}
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#DCD3C0] text-xs font-semibold text-[#174D3A] shadow-sm">
+            <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#DCD3C0] text-xs font-semibold text-[#174D3A] shadow-sm">
               <Calendar className="w-3.5 h-3.5 text-[#8C682D]" />
               <select
                 value={dateRange}
@@ -475,34 +552,34 @@ export default function AdminPage({ onLogout, onNavigate }) {
             {/* Back to Store Button */}
             <button
               onClick={() => onNavigate('Home')}
-              className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-[#EFE7D8] text-[#174D3A] border border-[#DCD3C0] text-xs font-semibold shadow-sm transition-all"
+              className="inline-flex items-center gap-1 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white hover:bg-[#EFE7D8] text-[#174D3A] border border-[#DCD3C0] text-[11px] sm:text-xs font-semibold shadow-sm transition-all"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Storefront</span>
+              <ArrowLeft className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <span className="hidden sm:inline">Storefront</span>
             </button>
 
             {/* Notification Bell */}
             <div className="relative">
               <button 
                 onClick={() => setNotificationOpen(!notificationOpen)}
-                className="w-10 h-10 rounded-full bg-white border border-[#DCD3C0] flex items-center justify-center text-[#2C3E35] hover:bg-[#FAF7F2] transition-colors shadow-sm"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white border border-[#DCD3C0] flex items-center justify-center text-[#2C3E35] hover:bg-[#FAF7F2] transition-colors shadow-sm"
               >
-                <Bell className="w-4 h-4 text-[#4E6155]" />
-                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white" />
+                <Bell className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#4E6155]" />
+                <span className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white" />
               </button>
 
               {notificationOpen && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-[#E5DCBF] p-4 z-50 text-xs space-y-3 animate-fadeIn">
+                <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-white rounded-2xl shadow-xl border border-[#E5DCBF] p-4 z-50 text-xs space-y-3 animate-fadeIn">
                   <div className="flex items-center justify-between border-b pb-2">
                     <span className="font-bold text-[#174D3A]">Dispensary Alerts</span>
                     <span className="text-[10px] text-[#8C682D]">3 New</span>
                   </div>
                   <div className="space-y-2">
                     <p className="text-[#4E6155] p-2 bg-[#FAF7F2] rounded-lg">
-                      ⚠️ <strong>Low Stock:</strong> Chandi Bhasma is down to 6 units.
+                      ⚠️ <strong>Low Stock:</strong> Chandi is down to 8 units.
                     </p>
                     <p className="text-[#4E6155] p-2 bg-[#FAF7F2] rounded-lg">
-                      📦 <strong>New Order #VF1283:</strong> Received from Riya Sharma (₹280).
+                      📦 <strong>New Order #VF1283:</strong> Received from Riya Sharma (₹130).
                     </p>
                   </div>
                 </div>
@@ -510,8 +587,8 @@ export default function AdminPage({ onLogout, onNavigate }) {
             </div>
 
             {/* Admin Profile */}
-            <div className="flex items-center gap-2.5 pl-2">
-              <div className="w-9 h-9 rounded-full bg-[#174D3A] text-white flex items-center justify-center font-bold text-xs shadow-sm">
+            <div className="flex items-center gap-2 pl-1 sm:pl-2">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#174D3A] text-white flex items-center justify-center font-bold text-xs shadow-sm">
                 A
               </div>
               <div className="hidden sm:flex flex-col text-left">
@@ -525,13 +602,13 @@ export default function AdminPage({ onLogout, onNavigate }) {
         </header>
 
         {/* Dynamic Main Body based on Active Tab */}
-        <main className="p-6 sm:p-8 space-y-8 flex-1">
+        <main className="p-3 sm:p-8 space-y-6 sm:space-y-8 flex-1">
           
           {/* ========================================================================= */}
           {/* TAB 1: DASHBOARD OVERVIEW */}
           {/* ========================================================================= */}
           {activeTab === 'Dashboard' && (
-            <div className="space-y-8">
+            <div className="space-y-6 sm:space-y-8">
               
               {/* Welcome Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -572,81 +649,81 @@ export default function AdminPage({ onLogout, onNavigate }) {
                 </div>
               </div>
 
-              {/* 4 Metric KPI Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {/* 4 Metric KPI Cards: 2x2 on mobile, 4 columns on lg */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
                 
                 {/* Total Sales */}
-                <div className="bg-white rounded-2xl p-5 border border-[#E6DCC8] shadow-sm flex items-center justify-between hover:shadow-md transition-all group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#FAF0DC] text-[#A67824] flex items-center justify-center shadow-inner font-bold text-xl">
+                <div className="bg-white rounded-2xl p-3.5 sm:p-5 border border-[#E6DCC8] shadow-sm flex items-center justify-between hover:shadow-md transition-all group">
+                  <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
+                    <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-[#FAF0DC] text-[#A67824] flex items-center justify-center shadow-inner font-bold text-base sm:text-xl shrink-0">
                       ₹
                     </div>
-                    <div>
-                      <span className="text-xs text-[#708277] font-medium block">Total Sales</span>
-                      <span className="font-serif font-bold text-2xl sm:text-3xl text-[#174D3A] leading-tight block">
-                        ₹ 1,48,250
+                    <div className="min-w-0">
+                      <span className="text-[10px] sm:text-xs text-[#708277] font-medium block truncate">Total Sales</span>
+                      <span className="font-serif font-bold text-lg sm:text-3xl text-[#174D3A] leading-tight block truncate">
+                        ₹ 1.48L
                       </span>
-                      <span className="text-[11px] text-emerald-700 font-semibold">+28% vs last month</span>
+                      <span className="text-[9px] sm:text-[11px] text-emerald-700 font-semibold block truncate">+28%</span>
                     </div>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E3D8C4] flex items-center justify-center text-[#73857B] group-hover:bg-[#174D3A] group-hover:text-white transition-colors">
+                  <div className="hidden sm:flex w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E3D8C4] items-center justify-center text-[#73857B] group-hover:bg-[#174D3A] group-hover:text-white transition-colors">
                     <ChevronRight className="w-4 h-4" />
                   </div>
                 </div>
 
                 {/* Total Orders */}
-                <div className="bg-white rounded-2xl p-5 border border-[#E6DCC8] shadow-sm flex items-center justify-between hover:shadow-md transition-all group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#F6EBE3] text-[#A66133] flex items-center justify-center shadow-inner">
-                      <ShoppingCart className="w-5 h-5 text-[#A66133]" />
+                <div className="bg-white rounded-2xl p-3.5 sm:p-5 border border-[#E6DCC8] shadow-sm flex items-center justify-between hover:shadow-md transition-all group">
+                  <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
+                    <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-[#F6EBE3] text-[#A66133] flex items-center justify-center shadow-inner shrink-0">
+                      <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-[#A66133]" />
                     </div>
-                    <div>
-                      <span className="text-xs text-[#708277] font-medium block">Total Orders</span>
-                      <span className="font-serif font-bold text-2xl sm:text-3xl text-[#174D3A] leading-tight block">
+                    <div className="min-w-0">
+                      <span className="text-[10px] sm:text-xs text-[#708277] font-medium block truncate">Total Orders</span>
+                      <span className="font-serif font-bold text-lg sm:text-3xl text-[#174D3A] leading-tight block truncate">
                         128
                       </span>
-                      <span className="text-[11px] text-[#55695C] font-semibold">+18 this month</span>
+                      <span className="text-[9px] sm:text-[11px] text-[#55695C] font-semibold block truncate">+18 mo</span>
                     </div>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E3D8C4] flex items-center justify-center text-[#73857B] group-hover:bg-[#174D3A] group-hover:text-white transition-colors">
+                  <div className="hidden sm:flex w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E3D8C4] items-center justify-center text-[#73857B] group-hover:bg-[#174D3A] group-hover:text-white transition-colors">
                     <ChevronRight className="w-4 h-4" />
                   </div>
                 </div>
 
                 {/* Total Customers */}
-                <div className="bg-white rounded-2xl p-5 border border-[#E6DCC8] shadow-sm flex items-center justify-between hover:shadow-md transition-all group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#E5F2E9] text-[#246A42] flex items-center justify-center shadow-inner">
-                      <Users className="w-5 h-5 text-[#246A42]" />
+                <div className="bg-white rounded-2xl p-3.5 sm:p-5 border border-[#E6DCC8] shadow-sm flex items-center justify-between hover:shadow-md transition-all group">
+                  <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
+                    <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-[#E5F2E9] text-[#246A42] flex items-center justify-center shadow-inner shrink-0">
+                      <Users className="w-4 h-4 sm:w-5 sm:h-5 text-[#246A42]" />
                     </div>
-                    <div>
-                      <span className="text-xs text-[#708277] font-medium block">Total Customers</span>
-                      <span className="font-serif font-bold text-2xl sm:text-3xl text-[#174D3A] leading-tight block">
+                    <div className="min-w-0">
+                      <span className="text-[10px] sm:text-xs text-[#708277] font-medium block truncate">Seekers</span>
+                      <span className="font-serif font-bold text-lg sm:text-3xl text-[#174D3A] leading-tight block truncate">
                         1,280
                       </span>
-                      <span className="text-[11px] text-[#55695C] font-semibold">+96 seekers</span>
+                      <span className="text-[9px] sm:text-[11px] text-[#55695C] font-semibold block truncate">+96 new</span>
                     </div>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E3D8C4] flex items-center justify-center text-[#73857B] group-hover:bg-[#174D3A] group-hover:text-white transition-colors">
+                  <div className="hidden sm:flex w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E3D8C4] items-center justify-center text-[#73857B] group-hover:bg-[#174D3A] group-hover:text-white transition-colors">
                     <ChevronRight className="w-4 h-4" />
                   </div>
                 </div>
 
                 {/* Total Products */}
-                <div className="bg-white rounded-2xl p-5 border border-[#E6DCC8] shadow-sm flex items-center justify-between hover:shadow-md transition-all group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#E5EFE7] text-[#246A42] flex items-center justify-center shadow-inner">
-                      <Package className="w-5 h-5 text-[#246A42]" />
+                <div className="bg-white rounded-2xl p-3.5 sm:p-5 border border-[#E6DCC8] shadow-sm flex items-center justify-between hover:shadow-md transition-all group">
+                  <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
+                    <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-[#E5EFE7] text-[#246A42] flex items-center justify-center shadow-inner shrink-0">
+                      <Package className="w-4 h-4 sm:w-5 sm:h-5 text-[#246A42]" />
                     </div>
-                    <div>
-                      <span className="text-xs text-[#708277] font-medium block">Total Products</span>
-                      <span className="font-serif font-bold text-2xl sm:text-3xl text-[#174D3A] leading-tight block">
+                    <div className="min-w-0">
+                      <span className="text-[10px] sm:text-xs text-[#708277] font-medium block truncate">Products</span>
+                      <span className="font-serif font-bold text-lg sm:text-3xl text-[#174D3A] leading-tight block truncate">
                         {products.length}
                       </span>
-                      <span className="text-[11px] text-emerald-700 font-semibold">100% Genuine AYUSH</span>
+                      <span className="text-[9px] sm:text-[11px] text-emerald-700 font-semibold block truncate">AYUSH Mark</span>
                     </div>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E3D8C4] flex items-center justify-center text-[#73857B] group-hover:bg-[#174D3A] group-hover:text-white transition-colors">
+                  <div className="hidden sm:flex w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E3D8C4] items-center justify-center text-[#73857B] group-hover:bg-[#174D3A] group-hover:text-white transition-colors">
                     <ChevronRight className="w-4 h-4" />
                   </div>
                 </div>

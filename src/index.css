@@ -3,11 +3,26 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
   body {
     background-color: #FAF6F0;
     color: #2D3D34;
     overflow-x: hidden;
+    touch-action: manipulation;
   }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 /* Custom herbal aesthetic textures and glow */
@@ -57,17 +72,19 @@
   100% { transform: translateY(-10px) rotate(3deg); }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #F4EFE6;
-}
-::-webkit-scrollbar-thumb {
-  background: #C4B59D;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #1F4735;
+/* Custom desktop scrollbar */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #F4EFE6;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #C4B59D;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #1F4735;
+  }
 }
