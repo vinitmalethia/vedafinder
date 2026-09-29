@@ -29,15 +29,17 @@ export default function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
+        const isMasterAdmin = (currentUser.email === 'sachin@gmail.com');
         setUser({
           uid: currentUser.uid,
           email: currentUser.email,
-          displayName: currentUser.displayName || currentUser.email?.split('@')[0] || 'Admin',
+          displayName: currentUser.displayName || (isMasterAdmin ? 'Sachin (Admin)' : currentUser.email?.split('@')[0]),
           photoURL: currentUser.photoURL,
-          role: 'admin'
+          role: isMasterAdmin ? 'admin' : 'customer'
         });
       } else {
-        setUser(null);
+        // Keep local admin session if active
+        setUser(prev => (prev?.email === 'sachin@gmail.com' ? prev : null));
       }
     });
 
@@ -95,8 +97,24 @@ export default function App() {
     handleNavigate('Home');
   };
 
-  // If Admin Page is active, render the dedicated Admin View
+  // PRIVATE ADMIN ROUTE GUARD
   if (currentPage === 'Admin') {
+    // Check if user is authenticated with the private admin credentials
+    const isAuthorizedAdmin = user && user.role === 'admin' && user.email === 'sachin@gmail.com';
+
+    if (!isAuthorizedAdmin) {
+      return (
+        <LoginPage 
+          initialAdminMode={true}
+          onNavigate={handleNavigate}
+          onLoginSuccess={(adminData) => {
+            setUser(adminData);
+            setCurrentPage('Admin');
+          }}
+        />
+      );
+    }
+
     return (
       <AdminPage 
         currentUser={user}
@@ -113,7 +131,11 @@ export default function App() {
         onNavigate={handleNavigate}
         onLoginSuccess={(userData) => {
           setUser(userData);
-          handleNavigate('Admin');
+          if (userData.role === 'admin') {
+            handleNavigate('Admin');
+          } else {
+            handleNavigate('Home');
+          }
         }}
       />
     );

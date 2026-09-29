@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff, ArrowRight, ArrowLeft, Check, AlertCircle, ShieldCheck, Sparkles, User, KeyRound } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ArrowRight, ArrowLeft, Check, AlertCircle, ShieldCheck, Sparkles, User, KeyRound, ShieldAlert } from 'lucide-react';
 import { VedaFinderLogo } from '../components/VedaLogoBrand';
 import { 
   loginWithEmail, 
@@ -8,8 +8,8 @@ import {
   resetPassword 
 } from '../firebase/config';
 
-export default function LoginPage({ onNavigate, onLoginSuccess }) {
-  const [isAdminMode, setIsAdminMode] = useState(false);
+export default function LoginPage({ onNavigate, onLoginSuccess, initialAdminMode = false }) {
+  const [isAdminMode, setIsAdminMode] = useState(initialAdminMode);
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -48,6 +48,50 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
     setErrorMessage('');
     setLoading(true);
 
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPass = password.trim();
+
+    // 1. SPECIFIC PRIVATE ADMIN CREDENTIAL VERIFICATION
+    if (cleanEmail === 'sachin@gmail.com' && cleanPass === 'sachinjammu') {
+      const adminProfile = {
+        uid: 'admin-sachin-master',
+        email: 'sachin@gmail.com',
+        displayName: 'Sachin (Admin)',
+        role: 'admin'
+      };
+
+      // Also try Firebase sign-in or register in background for persistence
+      try {
+        await loginWithEmail('sachin@gmail.com', 'sachinjammu').catch(async () => {
+          await registerWithEmail('sachin@gmail.com', 'sachinjammu').catch(() => {});
+        });
+      } catch (e) {
+        // Fallback continues with verified local master admin session
+      }
+
+      setUserProfile(adminProfile);
+      setSuccess(true);
+      setTimeout(() => {
+        if (onLoginSuccess) {
+          onLoginSuccess(adminProfile);
+        } else {
+          onNavigate('Admin');
+        }
+      }, 700);
+      setLoading(false);
+      return;
+    }
+
+    // If attempting Admin mode with wrong credentials
+    if (isAdminMode) {
+      setTimeout(() => {
+        setErrorMessage('Access Denied: Invalid administrator credentials for private portal.');
+        setLoading(false);
+      }, 500);
+      return;
+    }
+
+    // 2. STANDARD CUSTOMER AUTHENTICATION (Firebase)
     try {
       let userCredential;
       if (isSignUp) {
@@ -57,13 +101,12 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
       }
 
       const user = userCredential.user;
-      const role = (isAdminMode || email.includes('admin') || email.includes('vaidya')) ? 'admin' : 'customer';
-
+      const isMasterAdmin = (user.email === 'sachin@gmail.com');
       const profile = {
         uid: user.uid,
         email: user.email,
         displayName: user.displayName || user.email.split('@')[0],
-        role: role
+        role: isMasterAdmin ? 'admin' : 'customer'
       };
 
       setUserProfile(profile);
@@ -73,25 +116,10 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
         if (onLoginSuccess) {
           onLoginSuccess(profile);
         } else {
-          onNavigate(role === 'admin' ? 'Admin' : 'Home');
+          onNavigate(profile.role === 'admin' ? 'Admin' : 'Home');
         }
       }, 800);
     } catch (err) {
-      if (isAdminMode && (email === 'admin@vedafinder.com' || email.includes('admin'))) {
-        const profile = {
-          uid: 'admin-local',
-          email: email || 'admin@vedafinder.com',
-          displayName: 'Veda Administrator',
-          role: 'admin'
-        };
-        setUserProfile(profile);
-        setSuccess(true);
-        setTimeout(() => {
-          if (onLoginSuccess) onLoginSuccess(profile);
-          else onNavigate('Admin');
-        }, 800);
-        return;
-      }
       setErrorMessage(cleanFirebaseError(err));
     } finally {
       setLoading(false);
@@ -105,14 +133,14 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
     try {
       const result = await loginWithGoogle();
       const user = result.user;
-      const role = (isAdminMode || user.email?.includes('admin')) ? 'admin' : 'customer';
+      const isMasterAdmin = (user.email === 'sachin@gmail.com');
       
       const profile = {
         uid: user.uid,
         email: user.email,
-        displayName: user.displayName || 'Veda Customer',
+        displayName: user.displayName || (isMasterAdmin ? 'Sachin (Admin)' : 'Veda Customer'),
         photoURL: user.photoURL,
-        role: role
+        role: isMasterAdmin ? 'admin' : 'customer'
       };
 
       setUserProfile(profile);
@@ -122,7 +150,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
         if (onLoginSuccess) {
           onLoginSuccess(profile);
         } else {
-          onNavigate(role === 'admin' ? 'Admin' : 'Home');
+          onNavigate(profile.role === 'admin' ? 'Admin' : 'Home');
         }
       }, 800);
     } catch (err) {
@@ -160,15 +188,15 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
 
         <span className="text-[10px] sm:text-[11px] font-medium text-[#7A8C81] bg-[#EFE6D2]/60 px-2.5 sm:px-3 py-1 rounded-full border border-[#DECFA8]/60 flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-          <span>Encrypted Portal</span>
+          <span>{isAdminMode ? 'Private Admin Access' : 'Encrypted Portal'}</span>
         </span>
       </div>
 
-      {/* Main Two-Column Layout (Responsive on mobile) */}
+      {/* Main Two-Column Layout */}
       <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-10 py-4 sm:py-8 flex-1 flex items-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center w-full">
           
-          {/* LEFT COLUMN: Brand, Typography & Artwork (Hidden or compact on mobile) */}
+          {/* LEFT COLUMN: Brand & Typography */}
           <div className="lg:col-span-6 space-y-3 sm:space-y-5 lg:pr-4 text-left">
             
             <div className="mb-2 sm:mb-4">
@@ -185,7 +213,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
               Experience the wisdom of ancient granthas with purified Bhasmas, Rasayanas, and Agnisip Herbal Infusions.
             </p>
 
-            {/* Ayurvedic Luxury Box Artwork - hidden on mobile screens for faster, clearer form access */}
+            {/* Ayurvedic Luxury Box Artwork */}
             <div className="pt-2 max-w-lg hidden lg:block">
               <div className="w-full h-72 sm:h-80 flex items-center justify-start drop-shadow-2xl">
                 <img 
@@ -204,7 +232,11 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
               
               {/* Top Motif */}
               <div className="flex justify-center mb-2 sm:mb-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#FAF5EB] flex items-center justify-center text-xl sm:text-2xl border border-[#E5D8BE] shadow-inner">
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xl sm:text-2xl border shadow-inner ${
+                  isAdminMode 
+                    ? 'bg-[#183B2B] text-white border-[#2A523D]' 
+                    : 'bg-[#FAF5EB] text-[#183B2B] border-[#E5D8BE]'
+                }`}>
                   {isAdminMode ? '🛡️' : '🍃'}
                 </div>
               </div>
@@ -213,14 +245,14 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
               <div className="text-center space-y-0.5 sm:space-y-1 mb-4 sm:mb-6">
                 <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#183B2B]">
                   {isAdminMode 
-                    ? 'Vaidya & Admin Portal' 
+                    ? 'Private Admin Portal' 
                     : isSignUp 
                       ? 'Create Your Account' 
                       : 'Welcome Back'}
                 </h2>
                 <p className="text-[11px] sm:text-sm text-[#738379]">
                   {isAdminMode 
-                    ? 'Administrative authentication for store management' 
+                    ? 'Authorized personnel only • Enter master credentials' 
                     : isSignUp 
                       ? 'Join Veda Finder for authentic Ayurvedic care' 
                       : 'Sign in to access your orders and wellness history'}
@@ -245,7 +277,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                   </h3>
                   <p className="text-xs text-[#526659]">
                     {userProfile?.role === 'admin' 
-                      ? 'Verified credentials. Launching your Admin Console...' 
+                      ? 'Master Admin verified. Launching private dashboard...' 
                       : 'Login successful. Redirecting to store...'}
                   </p>
                 </div>
@@ -255,13 +287,13 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                   {/* Email Field */}
                   <div className="space-y-1">
                     <label className="block text-[11px] sm:text-xs font-semibold text-[#2C3E35]">
-                      {isAdminMode ? 'Admin / Vaidya Email' : 'Email Address'}
+                      {isAdminMode ? 'Administrator ID / Email' : 'Email Address'}
                     </label>
                     <div className="relative">
                       <input
                         type="email"
                         required
-                        placeholder={isAdminMode ? "admin@vedafinder.com" : "you@example.com"}
+                        placeholder={isAdminMode ? "sachin@gmail.com" : "you@example.com"}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#FAF7F2] border border-[#D5C9B3] text-xs sm:text-sm text-[#183B2B] placeholder-[#8C9B92] focus:outline-none focus:ring-2 focus:ring-[#183B2B]/20 focus:border-[#183B2B] transition-all"
@@ -273,7 +305,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                   {/* Password Field */}
                   <div className="space-y-1">
                     <label className="block text-[11px] sm:text-xs font-semibold text-[#2C3E35]">
-                      Password
+                      {isAdminMode ? 'Master Password' : 'Password'}
                     </label>
                     <div className="relative">
                       <input
@@ -297,7 +329,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                   </div>
 
                   {/* Remember Me & Forgot Password */}
-                  {!isSignUp && (
+                  {!isSignUp && !isAdminMode && (
                     <div className="flex items-center justify-between text-xs pt-0.5">
                       <label className="flex items-center gap-1.5 text-[#4D6054] cursor-pointer text-[11px] sm:text-xs">
                         <input
@@ -328,13 +360,13 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                     {loading ? (
                       <span className="flex items-center gap-2">
                         <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                        <span>Authenticating...</span>
+                        <span>Verifying Security Clearance...</span>
                       </span>
                     ) : (
                       <>
                         <span>
                           {isAdminMode 
-                            ? 'Login to Admin Dashboard' 
+                            ? 'Unlock Admin Dashboard' 
                             : isSignUp 
                               ? 'Create Account' 
                               : 'Sign In'}
@@ -344,7 +376,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                     )}
                   </button>
 
-                  {/* Switch between Sign In / Sign Up */}
+                  {/* Switch between Sign In / Sign Up for customers */}
                   {!isAdminMode && (
                     <div className="text-center pt-0.5">
                       <button
@@ -362,39 +394,44 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                     </div>
                   )}
 
-                  {/* Divider */}
-                  <div className="relative my-2.5 sm:my-3 text-center">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-[#E8DFC9]" />
-                    </div>
-                    <span className="relative px-2.5 bg-white text-[9px] sm:text-[10px] text-[#7C8F84] uppercase tracking-wider">
-                      OR
-                    </span>
-                  </div>
+                  {/* Divider & Google Login (only for customer mode) */}
+                  {!isAdminMode && (
+                    <>
+                      <div className="relative my-2.5 sm:my-3 text-center">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-[#E8DFC9]" />
+                        </div>
+                        <span className="relative px-2.5 bg-white text-[9px] sm:text-[10px] text-[#7C8F84] uppercase tracking-wider">
+                          OR
+                        </span>
+                      </div>
 
-                  {/* Google Login Button */}
-                  <button
-                    type="button"
-                    onClick={handleGoogleLogin}
-                    disabled={loading}
-                    className="w-full py-2.5 rounded-xl sm:rounded-2xl bg-white hover:bg-[#FAF7F2] border border-[#D5C9B3] text-xs sm:text-sm font-semibold text-[#2C3E35] flex items-center justify-center gap-2 shadow-sm hover:border-[#183B2B] transition-all disabled:opacity-75"
-                  >
-                    <svg className="w-4 h-4" viewBox="0 0 24 24">
-                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-                    </svg>
-                    <span>Continue with Google</span>
-                  </button>
+                      <button
+                        type="button"
+                        onClick={handleGoogleLogin}
+                        disabled={loading}
+                        className="w-full py-2.5 rounded-xl sm:rounded-2xl bg-white hover:bg-[#FAF7F2] border border-[#D5C9B3] text-xs sm:text-sm font-semibold text-[#2C3E35] flex items-center justify-center gap-2 shadow-sm hover:border-[#183B2B] transition-all disabled:opacity-75"
+                      >
+                        <svg className="w-4 h-4" viewBox="0 0 24 24">
+                          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                        </svg>
+                        <span>Continue with Google</span>
+                      </button>
+                    </>
+                  )}
 
-                  {/* SLIGHTLY HIDDEN ADMIN ACCESS BUTTON AT BOTTOM */}
+                  {/* SLIGHTLY HIDDEN DISCREET TRIGGER FOR ADMIN PORTAL */}
                   <div className="pt-2 sm:pt-3 border-t border-[#F2ECE1] text-center">
                     <button
                       type="button"
                       onClick={() => {
                         setIsAdminMode(!isAdminMode);
                         setErrorMessage('');
+                        setEmail('');
+                        setPassword('');
                       }}
                       className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] text-[#A5B3AA] hover:text-[#183B2B] transition-colors py-1 px-2 rounded-md hover:bg-[#F2EADB]/60 group"
                       title="Staff & Administrative Access"
