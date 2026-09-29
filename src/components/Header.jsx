@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, User, ShoppingBag, Menu, X, ShieldCheck, Lock } from 'lucide-react';
+import { Search, User, ShoppingBag, Menu, X } from 'lucide-react';
 import { VedaFinderLogo } from './VedaLogoBrand';
 
 export default function Header({ 
@@ -33,28 +33,16 @@ export default function Header({
 
   return (
     <header className="sticky top-0 z-40 w-full transition-all duration-300">
-      {/* Top Announcement Bar with Direct Admin Access */}
-      <div className="w-full bg-[#122A1E] text-[#E8DFC8] py-2 px-4 text-[11px] md:text-xs tracking-wide font-medium flex items-center justify-between border-b border-[#254634]">
-        <div className="flex-1 flex items-center justify-center gap-2 md:gap-4 flex-wrap text-center">
+      {/* Top Announcement Bar */}
+      <div className="w-full bg-[#122A1E] text-[#E8DFC8] py-2 px-4 text-[11px] md:text-xs tracking-wide font-medium flex items-center justify-center border-b border-[#254634]">
+        <div className="flex items-center justify-center gap-2 md:gap-4 flex-wrap text-center">
           <span className="flex items-center gap-1.5 text-[#F2ECE1]">
             <span className="text-[#C59A4E]">🌿</span> Free shipping on orders above ₹499
           </span>
           <span className="hidden sm:inline text-[#C59A4E]/60">|</span>
           <span className="text-[#E8DFC8] hidden sm:inline">Authentic Ayurvedic Formulations</span>
           <span className="hidden md:inline text-[#C59A4E]/60">|</span>
-          <span className="text-[#E8DFC8] hidden md:inline">COD Available</span>
-        </div>
-
-        {/* Quick Top Admin Trigger */}
-        <div className="hidden sm:flex items-center shrink-0">
-          <button
-            onClick={() => handleNavClick('Admin')}
-            className="flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#1B3E2C] hover:bg-[#C59A4E] text-[#E6C887] hover:text-[#122A1E] text-[10px] font-bold tracking-wider uppercase border border-[#2D5A42] hover:border-[#E6C887] transition-all"
-            title="Open Admin Portal"
-          >
-            <ShieldCheck className="w-3 h-3" />
-            <span>Admin Portal</span>
-          </button>
+          <span className="text-[#E8DFC8] hidden md:inline">COD Available Across India</span>
         </div>
       </div>
 
@@ -94,7 +82,7 @@ export default function Header({
             })}
           </nav>
 
-          {/* Right Action Items: Search Input, Distinct Admin Portal Button, Profile & Cart */}
+          {/* Right Action Items: Search Input, Profile & Cart */}
           <div className="flex items-center space-x-2.5 sm:space-x-3">
             
             {/* Pill Search Input */}
@@ -102,11 +90,11 @@ export default function Header({
               <form onSubmit={handleSearchSubmit} className="relative">
                 <input
                   type="text"
-                  placeholder="Search products..."
+                  placeholder="Search remedies..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => onOpenSearch && onOpenSearch('')}
-                  className="w-44 pl-4 pr-9 py-2 rounded-full text-sm bg-white/90 border border-[#D5C9B3] text-[#2C3E35] placeholder-[#8A9990] focus:outline-none focus:ring-2 focus:ring-[#183B2B]/20 focus:border-[#183B2B] shadow-inner transition-all duration-200"
+                  className="w-48 pl-4 pr-9 py-2 rounded-full text-sm bg-white/90 border border-[#D5C9B3] text-[#2C3E35] placeholder-[#8A9990] focus:outline-none focus:ring-2 focus:ring-[#183B2B]/20 focus:border-[#183B2B] shadow-inner transition-all duration-200"
                 />
                 <button
                   type="submit"
@@ -118,25 +106,20 @@ export default function Header({
               </form>
             </div>
 
-            {/* DISTINCT ADMIN PORTAL BUTTON */}
+            {/* Mobile Search Button */}
             <button
-              onClick={() => handleNavClick('Admin')}
-              className={`group flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold transition-all duration-300 shadow-sm border ${
-                activeNav === 'Admin'
-                  ? 'bg-[#174D3A] text-white border-[#174D3A] ring-2 ring-[#C59A4E]/40'
-                  : 'bg-[#FAF0DC] hover:bg-[#174D3A] text-[#8C682D] hover:text-white border-[#DFCFA8] hover:border-[#174D3A]'
-              }`}
-              title="Open Veda Finder Admin Portal"
+              onClick={() => onOpenSearch && onOpenSearch('')}
+              aria-label="Open Search"
+              className="xl:hidden w-10 h-10 rounded-full border border-[#D5C9B3] bg-white/80 hover:bg-[#F2ECE1] flex items-center justify-center text-[#2C3E35] transition-all shadow-sm"
             >
-              <ShieldCheck className="w-4 h-4 text-[#C59A4E] group-hover:text-[#E6C887] transition-colors" />
-              <span>Admin Portal</span>
+              <Search className="w-4 h-4 text-[#374D41]" />
             </button>
 
             {/* User Profile / Login Button */}
             <button
               onClick={() => handleNavClick('Login')}
-              aria-label="User Account"
-              title="Customer Login / Sign In"
+              aria-label="Account Login"
+              title="Account & Login"
               className={`w-10 h-10 rounded-full border border-[#D5C9B3] flex items-center justify-center text-[#2C3E35] transition-all duration-200 shadow-sm ${
                 activeNav === 'Login' ? 'bg-[#183B2B] text-white border-[#183B2B]' : 'bg-white/80 hover:bg-[#F2ECE1] hover:border-[#183B2B]'
               }`}
@@ -171,7 +154,7 @@ export default function Header({
 
         </div>
 
-        {/* Mobile Dropdown Menu with Oval Capsule items */}
+        {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-[#EAE2D2] bg-[#FAF7F2] px-4 pt-3 pb-6 space-y-2 animate-fadeIn">
             {navLinks.map((link) => (
@@ -188,21 +171,13 @@ export default function Header({
               </button>
             ))}
             
-            <div className="pt-2 border-t border-[#E8DFC9] flex flex-col gap-2">
-              <button
-                onClick={() => handleNavClick('Admin')}
-                className="w-full text-left py-2.5 px-4 rounded-full text-sm font-bold bg-[#FAF0DC] text-[#174D3A] border border-[#DFCFA8] flex items-center gap-2"
-              >
-                <ShieldCheck className="w-4 h-4 text-[#8C682D]" />
-                <span>Admin Portal</span>
-              </button>
-
+            <div className="pt-2 border-t border-[#E8DFC9]">
               <button
                 onClick={() => handleNavClick('Login')}
                 className="w-full text-left py-2.5 px-4 rounded-full text-sm font-medium bg-white text-[#183B2B] border border-[#D5C9B3] flex items-center gap-2"
               >
                 <User className="w-4 h-4" />
-                <span>Customer Login</span>
+                <span>Account Login</span>
               </button>
             </div>
           </div>

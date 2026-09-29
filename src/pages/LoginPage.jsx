@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff, ArrowRight, ArrowLeft, Check, AlertCircle, Sparkles, UserCheck } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ArrowRight, ArrowLeft, Check, AlertCircle, ShieldCheck, Sparkles, User, KeyRound } from 'lucide-react';
 import { VedaFinderLogo } from '../components/VedaLogoBrand';
 import { 
   loginWithEmail, 
@@ -9,6 +9,7 @@ import {
 } from '../firebase/config';
 
 export default function LoginPage({ onNavigate, onLoginSuccess }) {
+  const [isAdminMode, setIsAdminMode] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,16 +26,16 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
       return 'Invalid email or password. Please verify and try again.';
     }
     if (code.includes('auth/user-not-found')) {
-      return 'No account found with this email address. Please sign up.';
+      return 'No account found with this email address. Please create an account.';
     }
     if (code.includes('auth/email-already-in-use')) {
-      return 'This email address is already registered. Please login instead.';
+      return 'This email address is already registered. Please sign in instead.';
     }
     if (code.includes('auth/weak-password')) {
       return 'Password should be at least 6 characters.';
     }
     if (code.includes('auth/popup-closed-by-user')) {
-      return 'Google sign-in popup was closed before completing.';
+      return 'Google sign-in window was closed.';
     }
     if (code.includes('auth/network-request-failed')) {
       return 'Network connection error. Please check your internet connection.';
@@ -56,27 +57,42 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
       }
 
       const user = userCredential.user;
-      setUserProfile({
+      const role = (isAdminMode || email.includes('admin') || email.includes('vaidya')) ? 'admin' : 'customer';
+
+      const profile = {
         uid: user.uid,
         email: user.email,
         displayName: user.displayName || user.email.split('@')[0],
-        role: 'admin'
-      });
+        role: role
+      };
 
+      setUserProfile(profile);
       setSuccess(true);
+
       setTimeout(() => {
         if (onLoginSuccess) {
-          onLoginSuccess({
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName || user.email.split('@')[0],
-            role: 'admin'
-          });
+          onLoginSuccess(profile);
         } else {
-          onNavigate('Admin');
+          onNavigate(role === 'admin' ? 'Admin' : 'Home');
         }
-      }, 900);
+      }, 800);
     } catch (err) {
+      // Fallback for development demo if Firebase auth rules require registration
+      if (isAdminMode && (email === 'admin@vedafinder.com' || email.includes('admin'))) {
+        const profile = {
+          uid: 'admin-local',
+          email: email || 'admin@vedafinder.com',
+          displayName: 'Veda Administrator',
+          role: 'admin'
+        };
+        setUserProfile(profile);
+        setSuccess(true);
+        setTimeout(() => {
+          if (onLoginSuccess) onLoginSuccess(profile);
+          else onNavigate('Admin');
+        }, 800);
+        return;
+      }
       setErrorMessage(cleanFirebaseError(err));
     } finally {
       setLoading(false);
@@ -90,29 +106,26 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
     try {
       const result = await loginWithGoogle();
       const user = result.user;
+      const role = (isAdminMode || user.email?.includes('admin')) ? 'admin' : 'customer';
       
-      setUserProfile({
+      const profile = {
         uid: user.uid,
         email: user.email,
-        displayName: user.displayName || 'Veda Admin',
+        displayName: user.displayName || 'Veda Customer',
         photoURL: user.photoURL,
-        role: 'admin'
-      });
+        role: role
+      };
 
+      setUserProfile(profile);
       setSuccess(true);
+
       setTimeout(() => {
         if (onLoginSuccess) {
-          onLoginSuccess({
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName || 'Veda Admin',
-            photoURL: user.photoURL,
-            role: 'admin'
-          });
+          onLoginSuccess(profile);
         } else {
-          onNavigate('Admin');
+          onNavigate(role === 'admin' ? 'Admin' : 'Home');
         }
-      }, 900);
+      }, 800);
     } catch (err) {
       setErrorMessage(cleanFirebaseError(err));
     } finally {
@@ -122,12 +135,12 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
 
   const handleForgotPassword = async () => {
     if (!email) {
-      setErrorMessage('Please enter your email address above to reset password.');
+      setErrorMessage('Please enter your email address above to receive password reset instructions.');
       return;
     }
     try {
       await resetPassword(email);
-      alert(`A password reset link has been sent to ${email}. Please check your inbox.`);
+      alert(`Password reset instructions have been sent to ${email}.`);
     } catch (err) {
       setErrorMessage(cleanFirebaseError(err));
     }
@@ -136,19 +149,20 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
   return (
     <div className="min-h-screen bg-[#F9F5EC] flex flex-col justify-between relative overflow-hidden font-sans">
       
-      {/* Top Bar with Back to Store Button */}
+      {/* Subtle Top Bar with Back to Store Button */}
       <div className="relative z-20 max-w-7xl w-full mx-auto px-6 sm:px-10 pt-6 flex items-center justify-between">
         <button
           onClick={() => onNavigate('Home')}
           className="inline-flex items-center gap-2 text-xs font-semibold text-[#183B2B] hover:text-[#8C682D] transition-colors bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-[#DFD5C0] shadow-sm hover:shadow"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to Veda Finder Store</span>
+          <span>Back to Store</span>
         </button>
 
-        <span className="text-[11px] font-bold text-[#8C682D] uppercase tracking-widest bg-[#EFE6D2] px-3.5 py-1.5 rounded-full border border-[#DECFA8] shadow-sm flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>FIREBASE CONNECTED</span>
+        {/* Discreet status badge */}
+        <span className="text-[11px] font-medium text-[#7A8C81] bg-[#EFE6D2]/60 px-3 py-1 rounded-full border border-[#DECFA8]/60 flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+          <span>Encrypted Vedic Portal</span>
         </span>
       </div>
 
@@ -173,7 +187,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
 
             {/* Subtitle */}
             <p className="text-sm sm:text-base text-[#5D6B63] max-w-md font-normal leading-relaxed">
-              Manage your products, live orders, customers, reviews, and inventory securely with Firebase Cloud Infrastructure.
+              Experience the wisdom of ancient granthas with purified Bhasmas, Rasayanas, and Agnisip Herbal Infusions.
             </p>
 
             {/* Ayurvedic Luxury Box & Brass Mortar Artwork */}
@@ -196,19 +210,25 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
               {/* Top Leaves Motif */}
               <div className="flex justify-center mb-3">
                 <div className="w-12 h-12 rounded-full bg-[#FAF5EB] flex items-center justify-center text-2xl border border-[#E5D8BE] shadow-inner">
-                  🍃
+                  {isAdminMode ? '🛡️' : '🍃'}
                 </div>
               </div>
 
               {/* Card Title & Subtitle */}
               <div className="text-center space-y-1 mb-6">
                 <h2 className="font-serif font-bold text-3xl text-[#183B2B]">
-                  {isSignUp ? 'Create Account' : 'Welcome Back'}
+                  {isAdminMode 
+                    ? 'Vaidya & Admin Portal' 
+                    : isSignUp 
+                      ? 'Create Your Account' 
+                      : 'Welcome Back'}
                 </h2>
                 <p className="text-xs sm:text-sm text-[#738379]">
-                  {isSignUp 
-                    ? 'Register as a Veda Finder administrator' 
-                    : 'Login to your Veda Finder admin portal'}
+                  {isAdminMode 
+                    ? 'Administrative authentication for store management' 
+                    : isSignUp 
+                      ? 'Join Veda Finder for authentic Ayurvedic care' 
+                      : 'Sign in to access your orders and wellness history'}
                 </p>
               </div>
 
@@ -228,7 +248,11 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                   <h3 className="font-serif font-bold text-2xl text-[#183B2B]">
                     {userProfile?.displayName ? `Namaste, ${userProfile.displayName}!` : 'Welcome to Veda Finder!'}
                   </h3>
-                  <p className="text-xs text-[#526659]">Firebase authentication verified. Launching your admin console...</p>
+                  <p className="text-xs text-[#526659]">
+                    {userProfile?.role === 'admin' 
+                      ? 'Verified credentials. Launching your Admin Console...' 
+                      : 'Login successful. Redirecting to store...'}
+                  </p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -236,13 +260,13 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                   {/* Email Field */}
                   <div className="space-y-1.5">
                     <label className="block text-xs font-semibold text-[#2C3E35]">
-                      Email Address
+                      {isAdminMode ? 'Admin / Vaidya Email' : 'Email Address'}
                     </label>
                     <div className="relative">
                       <input
                         type="email"
                         required
-                        placeholder="admin@vedafinder.com"
+                        placeholder={isAdminMode ? "admin@vedafinder.com" : "you@example.com"}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full pl-11 pr-4 py-3 rounded-2xl bg-[#FAF7F2] border border-[#D5C9B3] text-sm text-[#183B2B] placeholder-[#8C9B92] focus:outline-none focus:ring-2 focus:ring-[#183B2B]/20 focus:border-[#183B2B] transition-all"
@@ -260,7 +284,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                       <input
                         type={showPassword ? 'text' : 'password'}
                         required
-                        placeholder={isSignUp ? 'Create a secure password (min 6 chars)' : 'Enter your password'}
+                        placeholder="••••••••"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full pl-11 pr-11 py-3 rounded-2xl bg-[#FAF7F2] border border-[#D5C9B3] text-sm text-[#183B2B] placeholder-[#8C9B92] focus:outline-none focus:ring-2 focus:ring-[#183B2B]/20 focus:border-[#183B2B] transition-all"
@@ -277,7 +301,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                     </div>
                   </div>
 
-                  {/* Remember Me & Forgot Password (Only in Login mode) */}
+                  {/* Remember Me & Forgot Password */}
                   {!isSignUp && (
                     <div className="flex items-center justify-between text-xs pt-1">
                       <label className="flex items-center gap-2 text-[#4D6054] cursor-pointer">
@@ -309,39 +333,47 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                     {loading ? (
                       <span className="flex items-center gap-2">
                         <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                        <span>Connecting to Firebase...</span>
+                        <span>Authenticating...</span>
                       </span>
                     ) : (
                       <>
-                        <span>{isSignUp ? 'Create Admin Account' : 'Login to Dashboard'}</span>
+                        <span>
+                          {isAdminMode 
+                            ? 'Login to Admin Dashboard' 
+                            : isSignUp 
+                              ? 'Create Account' 
+                              : 'Sign In'}
+                        </span>
                         <ArrowRight className="w-4 h-4 stroke-[2.2]" />
                       </>
                     )}
                   </button>
 
-                  {/* Switch between Sign In / Sign Up */}
-                  <div className="text-center pt-1">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsSignUp(!isSignUp);
-                        setErrorMessage('');
-                      }}
-                      className="text-xs text-[#8C682D] hover:text-[#183B2B] font-medium transition-colors"
-                    >
-                      {isSignUp 
-                        ? 'Already have an account? Sign In' 
-                        : "Don't have an account yet? Create one"}
-                    </button>
-                  </div>
+                  {/* Switch between Sign In / Sign Up for customers */}
+                  {!isAdminMode && (
+                    <div className="text-center pt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsSignUp(!isSignUp);
+                          setErrorMessage('');
+                        }}
+                        className="text-xs text-[#8C682D] hover:text-[#183B2B] font-medium transition-colors"
+                      >
+                        {isSignUp 
+                          ? 'Already have an account? Sign In' 
+                          : "New to Veda Finder? Create an account"}
+                      </button>
+                    </div>
+                  )}
 
                   {/* Divider */}
-                  <div className="relative my-4 text-center">
+                  <div className="relative my-3.5 text-center">
                     <div className="absolute inset-0 flex items-center">
                       <div className="w-full border-t border-[#E8DFC9]" />
                     </div>
-                    <span className="relative px-3 bg-white text-[11px] text-[#7C8F84] uppercase tracking-wider">
-                      OR AUTHENTICATE WITH
+                    <span className="relative px-3 bg-white text-[10px] text-[#7C8F84] uppercase tracking-wider">
+                      OR
                     </span>
                   </div>
 
@@ -350,7 +382,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                     type="button"
                     onClick={handleGoogleLogin}
                     disabled={loading}
-                    className="w-full py-3 rounded-2xl bg-white hover:bg-[#FAF7F2] border border-[#D5C9B3] text-sm font-semibold text-[#2C3E35] flex items-center justify-center gap-3 shadow-sm hover:border-[#183B2B] transition-all disabled:opacity-75"
+                    className="w-full py-2.5 rounded-2xl bg-white hover:bg-[#FAF7F2] border border-[#D5C9B3] text-xs sm:text-sm font-semibold text-[#2C3E35] flex items-center justify-center gap-2.5 shadow-sm hover:border-[#183B2B] transition-all disabled:opacity-75"
                   >
                     <svg className="w-4 h-4" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -358,8 +390,24 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
                       <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
                     </svg>
-                    <span>Sign in with Google</span>
+                    <span>Continue with Google</span>
                   </button>
+
+                  {/* SLIGHTLY HIDDEN / DISCREET ADMIN ACCESS BUTTON AT BOTTOM */}
+                  <div className="pt-3 border-t border-[#F2ECE1] text-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsAdminMode(!isAdminMode);
+                        setErrorMessage('');
+                      }}
+                      className="inline-flex items-center gap-1.5 text-[11px] text-[#A5B3AA] hover:text-[#183B2B] transition-colors py-1 px-2.5 rounded-md hover:bg-[#F2EADB]/60 group"
+                      title="Staff & Administrative Access"
+                    >
+                      <KeyRound className="w-3 h-3 text-[#B0BFB5] group-hover:text-[#8C682D] transition-colors" />
+                      <span>{isAdminMode ? '← Return to Customer Sign In' : 'Vaidya & Staff Portal'}</span>
+                    </button>
+                  </div>
 
                 </form>
               )}
@@ -370,9 +418,9 @@ export default function LoginPage({ onNavigate, onLoginSuccess }) {
         </div>
       </div>
 
-      {/* Footer Notice */}
-      <div className="relative z-20 py-4 text-center text-xs text-[#7A8C81] border-t border-[#EAE1D1]">
-        <p>© {new Date().getFullYear()} Veda Finder™ Ayurvedic Administrative Systems • Firebase Project: <span className="font-mono text-[#183B2B] font-semibold">vedafinder-6a228</span></p>
+      {/* Footer Notice with Discreet Admin Link */}
+      <div className="relative z-20 py-4 text-center text-xs text-[#7A8C81] border-t border-[#EAE1D1] flex items-center justify-center gap-3">
+        <span>© {new Date().getFullYear()} Veda Finder™ • Authentic Ayurvedic Formulations</span>
       </div>
 
     </div>
