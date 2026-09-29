@@ -12,6 +12,7 @@ import BlogPage from './pages/BlogPage';
 import ContactPage from './pages/ContactPage';
 import LoginPage from './pages/LoginPage';
 import AdminPage from './pages/AdminPage';
+import CustomerAccountModal from './components/CustomerAccountModal';
 import { INITIAL_CART } from './data/products';
 import { auth, logoutUser, onAuthStateChanged } from './firebase/config';
 
@@ -21,6 +22,7 @@ export default function App() {
   const [cartItems, setCartItems] = useState(INITIAL_CART);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [searchInitialQuery, setSearchInitialQuery] = useState('');
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const [user, setUser] = useState(null);
@@ -206,6 +208,7 @@ export default function App() {
         onNavigate={handleNavigate}
         user={user}
         onLogout={handleLogout}
+        onOpenAccountModal={() => setIsAccountModalOpen(true)}
       />
 
       {/* Dynamic Main Page Content */}
@@ -238,6 +241,16 @@ export default function App() {
         product={quickViewProduct}
         onClose={() => setQuickViewProduct(null)}
         onAddToCart={handleAddToCart}
+      />
+
+      {/* Customer Account & Orders Modal */}
+      <CustomerAccountModal 
+        isOpen={isAccountModalOpen}
+        onClose={() => setIsAccountModalOpen(false)}
+        user={user}
+        onLogout={handleLogout}
+        onNavigate={handleNavigate}
+        orders={[]}
       />
     </div>
   );

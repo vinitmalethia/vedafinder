@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Search, User, ShoppingBag, Menu, X, LogOut, ChevronDown, Sparkles, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, User, ShoppingBag, Menu, X, ChevronDown, ShieldCheck } from 'lucide-react';
 import { VedaFinderLogo } from './VedaLogoBrand';
 
 export default function Header({ 
@@ -9,23 +9,11 @@ export default function Header({
   activeNav, 
   onNavigate,
   user,
-  onLogout
+  onLogout,
+  onOpenAccountModal
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const dropdownRef = useRef(null);
-
-  // Close dropdown on click outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setUserDropdownOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const navLinks = [
     { name: 'Home', id: 'Home' },
@@ -43,7 +31,6 @@ export default function Header({
   const handleNavClick = (pageId) => {
     onNavigate(pageId);
     setMobileMenuOpen(false);
-    setUserDropdownOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -165,86 +152,42 @@ export default function Header({
               <Search className="w-4 h-4 text-[#374D41]" />
             </button>
 
-            {/* Customer Profile Button with Logged-in Name / Dropdown */}
-            <div className="relative" ref={dropdownRef}>
-              {user ? (
-                <button
-                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  aria-label="User Menu"
-                  className="flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full border border-[#C59A4E]/50 bg-gradient-to-r from-[#FAF7F2] to-[#F3ECE0] hover:border-[#183B2B] text-[#183B2B] transition-all duration-200 shadow-sm focus:outline-none"
-                >
+            {/* Customer Profile Button matching user reference design */}
+            {user ? (
+              <button
+                onClick={() => onOpenAccountModal && onOpenAccountModal()}
+                aria-label="User Account"
+                className="flex items-center gap-2 pl-1 pr-2.5 sm:pr-3 py-1 rounded-full border border-[#D5C9B3] bg-white hover:bg-[#FAF7F2] hover:border-[#183B2B] text-[#183B2B] transition-all duration-200 shadow-sm focus:outline-none cursor-pointer group"
+                title={`${displayName} - Account & Orders`}
+              >
+                {user.photoURL ? (
+                  <img 
+                    src={user.photoURL} 
+                    alt={displayName} 
+                    className="w-7 h-7 rounded-full object-cover ring-1 ring-[#D5C9B3]" 
+                  />
+                ) : (
                   <div className="w-7 h-7 rounded-full bg-[#183B2B] text-white flex items-center justify-center font-serif font-bold text-xs shadow-inner">
                     {userInitial}
                   </div>
-                  <div className="text-left hidden sm:block max-w-[100px] truncate">
-                    <p className="text-[11px] font-bold text-[#183B2B] leading-tight truncate">{displayName}</p>
-                    <p className="text-[9px] text-[#78887F] leading-tight">My Account</p>
-                  </div>
-                  <ChevronDown className={`w-3.5 h-3.5 text-[#6B7E73] transition-transform duration-200 ${userDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleNavClick('Login')}
-                  aria-label="Account Login"
-                  title="Account & Login"
-                  className={`w-10 h-10 rounded-full border border-[#D5C9B3] flex items-center justify-center text-[#2C3E35] transition-all duration-200 shadow-sm ${
-                    activeNav === 'Login' ? 'bg-[#183B2B] text-white border-[#183B2B]' : 'bg-white/80 hover:bg-[#F2ECE1] hover:border-[#183B2B]'
-                  }`}
-                >
-                  <User className={`w-5 h-5 stroke-[1.8] ${activeNav === 'Login' ? 'text-white' : 'text-[#374D41]'}`} />
-                </button>
-              )}
-
-              {/* User Dropdown Menu */}
-              {user && userDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#D5C9B3] shadow-xl py-2 z-50 animate-fadeIn">
-                  <div className="px-4 py-2.5 border-b border-[#F0E8DA] bg-[#FAF7F2]">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-[#183B2B] text-white flex items-center justify-center font-bold text-xs">
-                        {userInitial}
-                      </div>
-                      <div className="overflow-hidden">
-                        <p className="text-xs font-bold text-[#183B2B] truncate">{displayName}</p>
-                        <p className="text-[10px] text-[#73847B] truncate">{user.email}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-1">
-                    <button
-                      onClick={() => handleNavClick('Shop')}
-                      className="w-full text-left px-3 py-2 rounded-xl text-xs text-[#2C3E35] hover:bg-[#F2EADB] transition-colors flex items-center gap-2"
-                    >
-                      <ShoppingBag className="w-3.5 h-3.5 text-[#8C682D]" />
-                      <span>Browse Products</span>
-                    </button>
-                    
-                    {user.role === 'admin' && (
-                      <button
-                        onClick={() => handleNavClick('Admin')}
-                        className="w-full text-left px-3 py-2 rounded-xl text-xs text-[#183B2B] font-semibold hover:bg-[#F2EADB] transition-colors flex items-center gap-2"
-                      >
-                        <ShieldCheck className="w-3.5 h-3.5 text-[#183B2B]" />
-                        <span>Admin Dashboard</span>
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="p-1 border-t border-[#F0E8DA]">
-                    <button
-                      onClick={() => {
-                        setUserDropdownOpen(false);
-                        if (onLogout) onLogout();
-                      }}
-                      className="w-full text-left px-3 py-2 rounded-xl text-xs text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2 font-medium"
-                    >
-                      <LogOut className="w-3.5 h-3.5 text-red-500" />
-                      <span>Sign Out</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+                )}
+                <span className="text-xs font-semibold text-[#2C3E35] group-hover:text-[#183B2B] max-w-[85px] sm:max-w-[110px] truncate">
+                  {displayName.split(' ')[0].toLowerCase()}
+                </span>
+                <ChevronDown className="w-3.5 h-3.5 text-[#6B7E73] group-hover:text-[#183B2B] transition-transform" />
+              </button>
+            ) : (
+              <button
+                onClick={() => handleNavClick('Login')}
+                aria-label="Account Login"
+                title="Account & Login"
+                className={`w-10 h-10 rounded-full border border-[#D5C9B3] flex items-center justify-center text-[#2C3E35] transition-all duration-200 shadow-sm ${
+                  activeNav === 'Login' ? 'bg-[#183B2B] text-white border-[#183B2B]' : 'bg-white/80 hover:bg-[#F2ECE1] hover:border-[#183B2B]'
+                }`}
+              >
+                <User className={`w-5 h-5 stroke-[1.8] ${activeNav === 'Login' ? 'text-white' : 'text-[#374D41]'}`} />
+              </button>
+            )}
 
             {/* Cart Icon with badge */}
             <button
@@ -277,27 +220,35 @@ export default function Header({
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-[#EAE2D2] bg-[#FAF7F2] px-4 pt-3 pb-6 space-y-2 animate-fadeIn">
             
-            {/* If logged in on mobile, show customer banner */}
+            {/* If logged in on mobile, show customer banner that opens Account Modal */}
             {user ? (
-              <div className="p-3 bg-white border border-[#D5C9B3] rounded-2xl mb-3 flex items-center justify-between shadow-sm">
+              <div 
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  if (onOpenAccountModal) onOpenAccountModal();
+                }}
+                className="p-3 bg-white border border-[#D5C9B3] rounded-2xl mb-3 flex items-center justify-between shadow-sm cursor-pointer hover:border-[#183B2B] transition-all"
+              >
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-full bg-[#183B2B] text-white flex items-center justify-center font-bold text-sm">
-                    {userInitial}
-                  </div>
+                  {user.photoURL ? (
+                    <img 
+                      src={user.photoURL} 
+                      alt={displayName} 
+                      className="w-9 h-9 rounded-full object-cover ring-1 ring-[#D5C9B3]" 
+                    />
+                  ) : (
+                    <div className="w-9 h-9 rounded-full bg-[#183B2B] text-white flex items-center justify-center font-bold text-sm">
+                      {userInitial}
+                    </div>
+                  )}
                   <div>
                     <p className="text-xs font-bold text-[#183B2B]">Namaste, {displayName}</p>
                     <p className="text-[10px] text-[#73847B]">{user.email}</p>
                   </div>
                 </div>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    if (onLogout) onLogout();
-                  }}
-                  className="px-2.5 py-1 text-xs text-red-600 bg-red-50 hover:bg-red-100 rounded-lg font-medium transition-colors"
-                >
-                  Sign Out
-                </button>
+                <span className="text-xs text-[#8C682D] font-semibold">
+                  Account ›
+                </span>
               </div>
             ) : (
               <div className="pt-1 pb-2">
