@@ -204,6 +204,8 @@ export default function App() {
         onOpenSearch={handleOpenSearch}
         activeNav={currentPage}
         onNavigate={handleNavigate}
+        user={user}
+        onLogout={handleLogout}
       />
 
       {/* Dynamic Main Page Content */}
