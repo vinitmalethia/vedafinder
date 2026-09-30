@@ -191,7 +191,7 @@ export default function ContactPage() {
                         className="w-full px-4 py-2.5 rounded-xl bg-[#FAF7F2] border border-[#D5C9B3] text-sm text-[#183B2B] focus:outline-none focus:border-[#183B2B]"
                       >
                         <option>Digestion & Gut Agni (Agnisip Tea)</option>
-                        <option>Constipation & Bowel Health</option>
+                        <option>Constipation & Bowel Wellness</option>
                         <option>Male Vitality & Strength (Nar Ojas)</option>
                         <option>Acidity & Pitta (Praval / Moti Pishti)</option>
                         <option>Respiratory & Debility (Abhrak Bhasma)</option>
