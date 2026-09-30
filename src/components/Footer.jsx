@@ -56,7 +56,7 @@ export default function Footer({ onNavigate }) {
         </div>
 
         {/* Main Footer Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-[#203D2E]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-[#203D2E]">
           
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-4">
@@ -78,38 +78,6 @@ export default function Footer({ onNavigate }) {
                 <span>Help@vedafinder.com</span>
               </div>
             </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="space-y-3">
-            <h4 className="font-serif font-bold text-sm text-[#E6C887] uppercase tracking-wider">Collections</h4>
-            <ul className="space-y-2 text-xs text-[#9BB5A6]">
-              <li>
-                <button onClick={() => handleNav('Shop', 'bhasma')} className="hover:text-white transition-colors">
-                  Classical Bhasma (भस्म)
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNav('Shop', 'pishti')} className="hover:text-white transition-colors">
-                  Mineral Pishti (पिष्टी)
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNav('Shop', 'capsules')} className="hover:text-white transition-colors">
-                  Nar Ojas Vitality (कैप्सूल)
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNav('Shop', 'herbal-tea')} className="hover:text-white transition-colors">
-                  Agnisip Digestive Tea
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNav('Collections')} className="hover:text-white transition-colors">
-                  All Vault Collections
-                </button>
-              </li>
-            </ul>
           </div>
 
           {/* Ayurvedic Wisdom */}
