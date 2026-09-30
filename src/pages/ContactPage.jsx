@@ -69,7 +69,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h4 className="font-bold text-[#183B2B]">Ayurvedic Helpline</h4>
-                    <p className="text-[#72857A]">+91 1800-VEDA-CARE (Toll Free)</p>
+                    <p className="text-[#72857A]">+91 98883 35557</p>
                     <p className="text-[11px] text-[#8C682D]">Mon - Sat: 9:00 AM - 7:00 PM IST</p>
                   </div>
                 </div>
@@ -80,8 +80,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h4 className="font-bold text-[#183B2B]">Doctor Consultations & Orders</h4>
-                    <p className="text-[#72857A]">support@vedafinder.com</p>
-                    <p className="text-[11px] text-[#8C682D]">doctor@vedafinder.com</p>
+                    <p className="text-[#72857A]">Help@vedafinder.com</p>
                   </div>
                 </div>
 

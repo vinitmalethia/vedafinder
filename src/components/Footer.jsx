@@ -71,11 +71,11 @@ export default function Footer({ onNavigate }) {
             <div className="space-y-1 text-xs text-[#9BB5A6] pt-2">
               <div className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-[#E6C887]" />
-                <span>Ayurvedic Helpline: +91 1800-VEDA-CARE</span>
+                <span>Ayurvedic Helpline: +91 98883 35557</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-[#E6C887]" />
-                <span>support@vedafinder.com</span>
+                <span>Help@vedafinder.com</span>
               </div>
             </div>
           </div>

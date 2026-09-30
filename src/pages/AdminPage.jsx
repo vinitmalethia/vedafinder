@@ -199,74 +199,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
   ]);
 
   // Orders State
-  const [orders, setOrders] = useState([
-    {
-      id: '#VF1283',
-      customer: 'Riya Sharma',
-      email: 'riya.sharma@gmail.com',
-      phone: '+91 98765 43210',
-      products: 'Loh Bhasma 10GM x 1',
-      amount: 130,
-      paymentStatus: 'Paid (UPI)',
-      status: 'Delivered',
-      date: '30 Sep 2026, 11:20 AM'
-    },
-    {
-      id: '#VF1282',
-      customer: 'Aman Verma',
-      email: 'aman.verma@outlook.com',
-      phone: '+91 98123 45678',
-      products: 'Nar Ojas Vitality x 1, Agnisip x 1',
-      amount: 1698,
-      paymentStatus: 'Paid (Card)',
-      status: 'Processing',
-      date: '30 Sep 2026, 09:45 AM'
-    },
-    {
-      id: '#VF1281',
-      customer: 'Neha Gupta',
-      email: 'neha.gupta@yahoo.com',
-      phone: '+91 97654 32109',
-      products: 'Praval Pishti 10GM x 1',
-      amount: 430,
-      paymentStatus: 'COD Available',
-      status: 'Shipped',
-      date: '29 Sep 2026, 04:15 PM'
-    },
-    {
-      id: '#VF1280',
-      customer: 'Karan Mehta',
-      email: 'karan.mehta@gmail.com',
-      phone: '+91 99887 76655',
-      products: 'Moti Pishti Bhasma 10GM x 1',
-      amount: 865,
-      paymentStatus: 'Paid (UPI)',
-      status: 'Delivered',
-      date: '29 Sep 2026, 01:10 PM'
-    },
-    {
-      id: '#VF1279',
-      customer: 'Priya Singh',
-      email: 'priya.singh@gmail.com',
-      phone: '+91 98760 12345',
-      products: 'Abhrak Bhasma (1,000 Puti) x 1',
-      amount: 650,
-      paymentStatus: 'Cancelled',
-      status: 'Cancelled',
-      date: '28 Sep 2026, 06:30 PM'
-    },
-    {
-      id: '#VF1278',
-      customer: 'Vikram Patel',
-      email: 'vikram.patel@techcorp.in',
-      phone: '+91 94567 89012',
-      products: 'Chandi Bhasma (5gm) x 1',
-      amount: 750,
-      paymentStatus: 'Paid (NetBanking)',
-      status: 'Delivered',
-      date: '28 Sep 2026, 03:00 PM'
-    }
-  ]);
+  const [orders, setOrders] = useState([]);
 
   // Modal States
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -579,7 +512,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
                       ⚠️ <strong>Low Stock:</strong> Chandi is down to 8 units.
                     </p>
                     <p className="text-[#4E6155] p-2 bg-[#FAF7F2] rounded-lg">
-                      📦 <strong>New Order #VF1283:</strong> Received from Riya Sharma (₹130).
+                      📋 <strong>System:</strong> No new orders yet.
                     </p>
                   </div>
                 </div>
