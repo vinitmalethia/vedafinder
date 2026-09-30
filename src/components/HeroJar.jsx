@@ -1,11 +1,10 @@
 import React from 'react';
 
-export default function HeroJar({ activeSlide }) {
-  const imgSrc = activeSlide?.image || '/images/hero-ayurveda-yoga.jpg';
-  const isFullArtwork = imgSrc.includes('hero-') || imgSrc.endsWith('.jpg') || imgSrc.endsWith('.jpeg');
+export default function HeroJar({ activeSlide, slides = [], currentIndex = 0 }) {
+  const currentImage = activeSlide?.image || '/images/hero-ayurveda-yoga.jpg';
 
   return (
-    <div className="relative w-full max-w-[560px] mx-auto flex items-center justify-center select-none px-2 py-2">
+    <div className="relative w-full max-w-[500px] mx-auto flex items-center justify-center select-none px-2 py-2">
       {/* Background Soft Atmospheric Glow & Aura */}
       <div className="absolute -top-10 -right-6 w-64 sm:w-80 h-64 sm:h-80 bg-[#E2D4B9]/50 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute top-1/4 -left-6 w-56 sm:w-72 h-56 sm:h-72 bg-[#749D83]/25 rounded-full blur-3xl pointer-events-none" />
@@ -24,7 +23,7 @@ export default function HeroJar({ activeSlide }) {
               AYURVEDA
             </span>
             <span className="text-[7px] sm:text-[8px] font-bold tracking-widest text-[#183B2B] uppercase leading-tight font-serif">
-              WELLNESS
+              HERITAGE
             </span>
             <div className="flex items-center gap-1 mt-0.5 text-[#C59A4E]">
               <span className="text-[7px]">✦</span>
@@ -35,56 +34,59 @@ export default function HeroJar({ activeSlide }) {
         </div>
       </div>
 
-      {/* MAIN HERO SHOWCASE COMPOSITION */}
+      {/* MAIN HERO SHOWCASE: Smooth Multi-Image Crossfade Container */}
       <div className="relative z-10 w-full flex items-center justify-center">
-        {isFullArtwork ? (
-          /* High-Def Classical Ayurvedic Visual Art Frame */
-          <div className="relative w-full max-w-[360px] xs:max-w-[400px] sm:max-w-[460px] aspect-square rounded-3xl overflow-hidden border-2 border-[#D5C4A1] shadow-2xl bg-white/60 backdrop-blur-md group transition-all duration-500 hover:shadow-[0_25px_60px_rgba(24,59,43,0.25)] hover:border-[#8C682D]">
-            <img 
-              src={imgSrc} 
-              alt={activeSlide?.productName || activeSlide?.title || "Ayurvedic Heritage"} 
-              className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-            />
-            {/* Soft inner vignette and label */}
-            <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-black/10 pointer-events-none" />
-            <div className="absolute inset-x-0 bottom-0 pt-10 pb-3 px-4 bg-gradient-to-t from-[#183B2B]/85 via-[#183B2B]/40 to-transparent pointer-events-none flex items-end justify-between">
-              <div className="text-left">
-                <p className="text-[#E5D7BE] text-[10px] sm:text-xs font-serif font-bold uppercase tracking-widest">
-                  {activeSlide?.tag || "Natural Healing & Classical Formulations"}
-                </p>
-                <p className="text-white text-xs sm:text-sm font-serif font-semibold drop-shadow-sm">
-                  {activeSlide?.productSubtitle || "100% Pure & Lab Tested"}
-                </p>
-              </div>
-              <span className="text-[#E0B86C] text-xs font-bold bg-white/10 px-2.5 py-1 rounded-full backdrop-blur-sm border border-white/20">
-                ★ 4.98
-              </span>
-            </div>
-          </div>
-        ) : (
-          /* Transparent Product Pack Box Presentation */
-          <div className="relative flex flex-col items-center pt-2 pb-2 w-full">
-            <div className="relative w-[190px] xs:w-[220px] sm:w-[270px] h-[250px] xs:h-[280px] sm:h-[350px] flex items-center justify-center group transition-transform duration-500 hover:scale-[1.03] drop-shadow-2xl">
+        <div className="relative w-full max-w-[360px] xs:max-w-[400px] sm:max-w-[460px] aspect-square rounded-3xl overflow-hidden border-2 border-[#D5C4A1] shadow-2xl bg-[#FAF6F0] group transition-all duration-500 hover:shadow-[0_25px_60px_rgba(24,59,43,0.25)] hover:border-[#8C682D]">
+          
+          {slides.length > 0 ? (
+            slides.map((slide, idx) => {
+              const isActive = idx === currentIndex;
+              return (
+                <div 
+                  key={slide.id || idx}
+                  className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                    isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+                  }`}
+                >
+                  <img 
+                    src={slide.image} 
+                    alt={slide.title || "Ayurvedic Heritage"} 
+                    className={`w-full h-full object-cover object-center transition-transform duration-1000 ease-out ${
+                      isActive ? 'scale-100' : 'scale-105'
+                    }`}
+                    loading="eager"
+                  />
+                  
+                  {/* Soft Bottom Vignette & Tag Label */}
+                  <div className="absolute inset-x-0 bottom-0 pt-12 pb-3.5 px-4 bg-gradient-to-t from-[#183B2B]/90 via-[#183B2B]/40 to-transparent pointer-events-none flex items-end justify-between">
+                    <div className="text-left">
+                      <p className="text-[#E5D7BE] text-[10px] sm:text-xs font-serif font-bold uppercase tracking-widest">
+                        {slide.tag || "Natural Healing & Classical Formulations"}
+                      </p>
+                      <p className="text-white text-xs sm:text-sm font-serif font-semibold drop-shadow-sm">
+                        {slide.productSubtitle || "100% Pure & Lab Tested"}
+                      </p>
+                    </div>
+                    <span className="text-[#E0B86C] text-xs font-bold bg-white/15 px-2.5 py-1 rounded-full backdrop-blur-sm border border-white/20">
+                      ★ 4.98
+                    </span>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="relative w-full h-full">
               <img 
-                src={imgSrc} 
-                alt={activeSlide?.productName || "Veda Finder Product"} 
-                className="w-full h-full object-contain filter drop-shadow-xl"
+                src={currentImage} 
+                alt="Ayurvedic Heritage" 
+                className="w-full h-full object-cover object-center"
               />
             </div>
+          )}
 
-            {/* Stone / Wood Plinth Platform */}
-            <div className="relative w-[280px] xs:w-[320px] sm:w-[420px] max-w-full h-[32px] sm:h-[36px] -mt-5 sm:-mt-6 z-0 flex items-center justify-center">
-              <div className="absolute top-0 w-full h-[18px] sm:h-[22px] rounded-full bg-gradient-to-r from-[#8C7E6C] via-[#B8AA96] to-[#7D6F5E] shadow-md border-t border-[#D6CBBB]/70" />
-              <div className="absolute top-2.5 sm:top-3 w-[96%] h-[16px] sm:h-[20px] rounded-b-2xl bg-gradient-to-b from-[#695C4C] via-[#483D31] to-[#2E251D] shadow-xl" />
-              <div className="absolute top-6 sm:top-7 w-[98%] h-[14px] sm:h-[18px] bg-black/35 rounded-full blur-md" />
-              <div className="absolute top-1 left-4 sm:left-8 flex items-center gap-1.5 opacity-85">
-                <span className="text-[10px] sm:text-xs">🌿</span>
-                <div className="w-2 sm:w-3 h-1.5 sm:h-2 bg-[#8C682D] rounded-full rotate-45 shadow-sm" />
-                <div className="w-2 sm:w-2.5 h-2 sm:h-2.5 bg-[#4A2F13] rounded-sm rotate-12" />
-              </div>
-            </div>
-          </div>
-        )}
+          {/* Inner subtle frame border */}
+          <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-black/10 pointer-events-none z-20" />
+        </div>
       </div>
     </div>
   );

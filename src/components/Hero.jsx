@@ -17,15 +17,13 @@ export default function Hero({ onShopClick, onQuickView }) {
     setCurrentIndex((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
   };
 
-  // Auto-rotation (paused on interaction)
-  const [isPaused, setIsPaused] = useState(false);
+  // Continuous Auto-rotation (moves automatically every 4 seconds)
   useEffect(() => {
-    if (isPaused) return;
     const timer = setInterval(() => {
       nextSlide();
-    }, 8000);
+    }, 4000);
     return () => clearInterval(timer);
-  }, [currentIndex, isPaused]);
+  }, [currentIndex]);
 
   return (
     <section 
@@ -138,8 +136,12 @@ export default function Hero({ onShopClick, onQuickView }) {
               <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2]" />
             </button>
 
-            {/* Realistic Jar & Table Setting */}
-            <HeroJar activeSlide={currentSlide} />
+            {/* Hero Visual Artwork Showcase */}
+            <HeroJar 
+              activeSlide={currentSlide} 
+              slides={HERO_SLIDES} 
+              currentIndex={currentIndex} 
+            />
 
             {/* Carousel Next Button */}
             <button
