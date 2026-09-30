@@ -19,13 +19,35 @@ import { auth, logoutUser, onAuthStateChanged } from './firebase/config';
 export default function App() {
   const [currentPage, setCurrentPage] = useState('Home');
   const [shopCategoryFilter, setShopCategoryFilter] = useState('all');
-  const [cartItems, setCartItems] = useState(INITIAL_CART);
+  const [cartItems, setCartItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem('vf_cart');
+      return saved ? JSON.parse(saved) : INITIAL_CART;
+    } catch {
+      return INITIAL_CART;
+    }
+  });
+  const [customerOrders, setCustomerOrders] = useState(() => {
+    try {
+      const saved = localStorage.getItem('vf_customer_orders');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [searchInitialQuery, setSearchInitialQuery] = useState('');
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const [user, setUser] = useState(null);
+
+  // Save cart changes to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('vf_cart', JSON.stringify(cartItems));
+    } catch {}
+  }, [cartItems]);
 
   // Sync Firebase Auth state across the app
   useEffect(() => {
@@ -234,6 +256,9 @@ export default function App() {
         onClose={() => setIsCartOpen(false)}
         cartItems={cartItems}
         setCartItems={setCartItems}
+        onOrderPlaced={(newOrder) => {
+          setCustomerOrders(prev => [newOrder, ...prev]);
+        }}
       />
 
       {/* Global Search Modal */}
@@ -260,7 +285,7 @@ export default function App() {
         user={user}
         onLogout={handleLogout}
         onNavigate={handleNavigate}
-        orders={[]}
+        orders={customerOrders}
       />
     </div>
   );

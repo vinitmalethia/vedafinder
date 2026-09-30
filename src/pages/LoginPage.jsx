@@ -293,7 +293,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess, initialAdminMode
                       <input
                         type="email"
                         required
-                        placeholder={isAdminMode ? "sachin@gmail.com" : "you@example.com"}
+                        placeholder={isAdminMode ? "doctor@vedafinder.com" : "you@example.com"}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#FAF7F2] border border-[#D5C9B3] text-xs sm:text-sm text-[#183B2B] placeholder-[#8C9B92] focus:outline-none focus:ring-2 focus:ring-[#183B2B]/20 focus:border-[#183B2B] transition-all"

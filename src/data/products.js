@@ -294,32 +294,4 @@ export const CATEGORIES = [
   }
 ];
 
-export const INITIAL_CART = [
-  {
-    id: 'cart-1',
-    name: 'Agnisip',
-    category: 'Herbal Tea',
-    size: '20 Pyramid Tea Bags',
-    price: 799,
-    quantity: 1,
-    image: '/products/agnisip-tea.png'
-  },
-  {
-    id: 'cart-2',
-    name: 'Moti Pishti Bhasma 10GM',
-    category: 'Pishti',
-    size: '10gm Cultured Pearl Pack',
-    price: 865,
-    quantity: 1,
-    image: '/products/moti-pishti.png'
-  },
-  {
-    id: 'cart-3',
-    name: 'Loh Bhasma 10GM',
-    category: 'Bhasma',
-    size: '10gm Pure Calx',
-    price: 130,
-    quantity: 1,
-    image: '/products/loha-bhasma.png'
-  }
-];
+export const INITIAL_CART = [];
