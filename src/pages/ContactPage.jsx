@@ -14,6 +14,21 @@ export default function ContactPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Build WhatsApp message
+    const lines = [
+      `🌿 *New Consultation Request — Veda Finder*`,
+      ``,
+      `*Name:* ${formData.name}`,
+      formData.phone ? `*Phone:* ${formData.phone}` : '',
+      formData.email ? `*Email:* ${formData.email}` : '',
+      `*Health Area:* ${formData.doshaConcern}`,
+      formData.message ? `*Message/Symptoms:* ${formData.message}` : '',
+    ].filter(Boolean).join('\n');
+
+    const whatsappUrl = `https://wa.me/919888335557?text=${encodeURIComponent(lines)}`;
+    window.open(whatsappUrl, '_blank');
+
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
@@ -132,7 +147,7 @@ export default function ContactPage() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#183B2B] uppercase tracking-wider mb-1">Your Full Name</label>
+                      <label className="block text-xs font-bold text-[#183B2B] uppercase tracking-wider mb-1">Your Full Name <span className="text-red-500">*</span></label>
                       <input
                         type="text"
                         required
@@ -147,7 +162,6 @@ export default function ContactPage() {
                       <label className="block text-xs font-bold text-[#183B2B] uppercase tracking-wider mb-1">Email Address</label>
                       <input
                         type="email"
-                        required
                         placeholder="e.g. rajesh@example.com"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -158,7 +172,7 @@ export default function ContactPage() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#183B2B] uppercase tracking-wider mb-1">Phone Number</label>
+                      <label className="block text-xs font-bold text-[#183B2B] uppercase tracking-wider mb-1">Phone Number <span className="text-red-500">*</span></label>
                       <input
                         type="tel"
                         required
@@ -191,7 +205,6 @@ export default function ContactPage() {
                     <label className="block text-xs font-bold text-[#183B2B] uppercase tracking-wider mb-1">Your Message or Symptoms</label>
                     <textarea
                       rows="4"
-                      required
                       placeholder="Describe your current symptoms, constitution, or questions regarding formulation dosage..."
                       value={formData.message}
                       onChange={(e) => setFormData({...formData, message: e.target.value})}
