@@ -139,7 +139,7 @@ export default function Footer({ onNavigate }) {
 
         {/* Bottom Credits & Copyright */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#7A9586] gap-4">
-          <p>© {new Date().getFullYear()} Veda Finder™ Pvt Ltd. All rights reserved. Ayurveda for a Better Tomorrow.</p>
+          <p>© {new Date().getFullYear()} Veda Finder™. All rights reserved. Ayurveda for a Better Tomorrow.</p>
           <div className="flex items-center gap-6">
             <button onClick={() => handleNav('About Us')} className="hover:text-[#E6C887]">About Us</button>
             <button onClick={() => handleNav('Contact')} className="hover:text-[#E6C887]">Contact Support</button>

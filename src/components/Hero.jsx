@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, ChevronLeft, ChevronRight, ShieldCheck, Truck, Sparkles } from 'lucide-react';
 import HeroJar from './HeroJar';
 import { HERO_SLIDES } from '../data/products';
@@ -6,31 +6,44 @@ import { BotanicalBranch } from './AyurvedicIcons';
 
 export default function Hero({ onShopClick, onQuickView }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [displayIndex, setDisplayIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const timerRef = useRef(null);
 
   const currentSlide = HERO_SLIDES[currentIndex];
+  const displaySlide = HERO_SLIDES[displayIndex];
+
+  const goToSlide = (newIndex) => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    // Start image transition immediately
+    setCurrentIndex(newIndex);
+    // Fade out text, then swap and fade in
+    setTimeout(() => {
+      setDisplayIndex(newIndex);
+      setIsTransitioning(false);
+    }, 400);
+  };
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % HERO_SLIDES.length);
+    goToSlide((currentIndex + 1) % HERO_SLIDES.length);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+    goToSlide((currentIndex - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
   };
 
-  // Continuous Auto-rotation (moves automatically every 4 seconds)
+  // Auto-rotation every 5s (slightly longer for smoother feel)
   useEffect(() => {
-    const timer = setInterval(() => {
-      nextSlide();
-    }, 4000);
-    return () => clearInterval(timer);
-  }, [currentIndex]);
+    timerRef.current = setInterval(() => {
+      goToSlide((currentIndex + 1) % HERO_SLIDES.length);
+    }, 5000);
+    return () => clearInterval(timerRef.current);
+  }, [currentIndex, isTransitioning]);
 
   return (
     <section 
       className="relative overflow-hidden bg-gradient-to-b from-[#FAF7F2] via-[#F5EFE4] to-[#EDE5D5] pt-6 pb-12 sm:pt-8 sm:pb-16 lg:pt-14 lg:pb-24 border-b border-[#E3D9C6]"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={() => setIsPaused(true)}
     >
       {/* Botanical Branch in Top-Left Corner */}
       <div className="absolute top-0 left-0 -translate-x-4 -translate-y-4 pointer-events-none z-10 opacity-50 sm:opacity-70">
@@ -49,34 +62,61 @@ export default function Hero({ onShopClick, onQuickView }) {
           {/* LEFT COLUMN: Typography & Value Badges */}
           <div className="lg:col-span-6 space-y-4 sm:space-y-6 text-left pr-0 lg:pr-4">
             
-            {/* Tag Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EFE7D5]/90 border border-[#D8C7A3] text-[#8C682D] text-[10px] sm:text-xs font-bold tracking-widest uppercase">
+            {/* Tag Badge — smooth crossfade */}
+            <div 
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EFE7D5]/90 border border-[#D8C7A3] text-[#8C682D] text-[10px] sm:text-xs font-bold tracking-widest uppercase"
+              style={{
+                opacity: isTransitioning ? 0 : 1,
+                transform: isTransitioning ? 'translateY(-4px)' : 'translateY(0)',
+                transition: 'opacity 0.4s ease, transform 0.4s ease',
+              }}
+            >
               <span>🌿</span>
-              <span>{currentSlide.tag}</span>
+              <span>{displaySlide.tag}</span>
             </div>
 
-            {/* Main Headline */}
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[54px] leading-[1.15] sm:leading-[1.12] font-semibold text-[#183B2B] tracking-tight whitespace-pre-line drop-shadow-sm">
-              {currentSlide.title}
+            {/* Main Headline — smooth crossfade */}
+            <h1 
+              className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[54px] leading-[1.15] sm:leading-[1.12] font-semibold text-[#183B2B] tracking-tight whitespace-pre-line drop-shadow-sm"
+              style={{
+                opacity: isTransitioning ? 0 : 1,
+                transform: isTransitioning ? 'translateY(6px)' : 'translateY(0)',
+                transition: 'opacity 0.4s ease, transform 0.4s ease',
+              }}
+            >
+              {displaySlide.title}
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-[#516458] text-sm sm:text-base md:text-lg leading-relaxed max-w-xl font-normal">
-              {currentSlide.subtitle}
+            {/* Subtitle — smooth crossfade */}
+            <p 
+              className="text-[#516458] text-sm sm:text-base md:text-lg leading-relaxed max-w-xl font-normal"
+              style={{
+                opacity: isTransitioning ? 0 : 1,
+                transform: isTransitioning ? 'translateY(6px)' : 'translateY(0)',
+                transition: 'opacity 0.45s ease 0.05s, transform 0.45s ease 0.05s',
+              }}
+            >
+              {displaySlide.subtitle}
             </p>
 
             {/* CTA Buttons */}
-            <div className="pt-1 sm:pt-2 flex flex-wrap items-center gap-2.5 sm:gap-4">
+            <div 
+              className="pt-1 sm:pt-2 flex flex-wrap items-center gap-2.5 sm:gap-4"
+              style={{
+                opacity: isTransitioning ? 0.6 : 1,
+                transition: 'opacity 0.35s ease',
+              }}
+            >
               <button
-                onClick={() => onShopClick && onShopClick(currentSlide)}
+                onClick={() => onShopClick && onShopClick(displaySlide)}
                 className="group inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-3.5 rounded-full bg-[#183B2B] hover:bg-[#234F3A] text-[#FAF7F2] font-medium text-xs sm:text-base shadow-lg shadow-[#183B2B]/20 transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] border border-[#2B563F]"
               >
-                <span>{currentSlide.ctaText}</span>
+                <span>{displaySlide.ctaText}</span>
                 <ArrowRight className="w-4 h-4 stroke-[2.2] group-hover:translate-x-1 transition-transform" />
               </button>
 
               <button
-                onClick={() => onQuickView && onQuickView(currentSlide)}
+                onClick={() => onQuickView && onQuickView(displaySlide)}
                 className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full bg-white/80 hover:bg-white text-[#183B2B] font-medium text-xs sm:text-sm border border-[#D5C9B3] shadow-sm transition-all"
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#8C682D]" />
@@ -152,20 +192,30 @@ export default function Hero({ onShopClick, onQuickView }) {
               <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2]" />
             </button>
 
-            {/* Carousel Pagination Dots */}
-            <div className="flex items-center gap-2 mt-1 sm:mt-2 z-20">
-              {HERO_SLIDES.map((slide, idx) => (
-                <button
-                  key={slide.id}
-                  onClick={() => setCurrentIndex(idx)}
-                  aria-label={`Go to slide ${idx + 1}`}
-                  className={`transition-all duration-300 rounded-full ${
-                    currentIndex === idx 
-                      ? 'w-6 sm:w-7 h-2 bg-[#183B2B]' 
-                      : 'w-2 h-2 bg-[#B8A88E] hover:bg-[#8C7A60]'
-                  }`}
-                />
-              ))}
+            {/* Carousel Pagination Progress Indicators */}
+            <div className="flex items-center gap-2 mt-2 z-20">
+              {HERO_SLIDES.map((slide, idx) => {
+                const isActive = currentIndex === idx;
+                return (
+                  <button
+                    key={slide.id}
+                    onClick={() => goToSlide(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    className={`relative overflow-hidden transition-all duration-500 ease-out rounded-full h-2 ${
+                      isActive 
+                        ? 'w-8 sm:w-10 bg-[#183B2B]/20' 
+                        : 'w-2 bg-[#B8A88E] hover:bg-[#8C7A60]'
+                    }`}
+                  >
+                    {isActive && (
+                      <span 
+                        key={`progress-${idx}-${currentIndex}`}
+                        className="absolute inset-y-0 left-0 bg-[#183B2B] rounded-full animate-progress-bar" 
+                      />
+                    )}
+                  </button>
+                );
+              })}
             </div>
 
           </div>
