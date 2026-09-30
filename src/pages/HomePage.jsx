@@ -1,15 +1,10 @@
 import React from 'react';
 import Hero from '../components/Hero';
-import CategoryCards from '../components/CategoryCards';
 import FeaturesBanner from '../components/FeaturesBanner';
 import ShopSection from '../components/ShopSection';
 import AboutSection from '../components/AboutSection';
 
 export default function HomePage({ onNavigate, onQuickView, onAddToCart, onBuyNow }) {
-  const handleCategorySelect = (category) => {
-    onNavigate('Shop', category.id);
-  };
-
   const handleHeroShopClick = () => {
     onNavigate('Shop');
   };
@@ -20,11 +15,6 @@ export default function HomePage({ onNavigate, onQuickView, onAddToCart, onBuyNo
       <Hero 
         onShopClick={handleHeroShopClick}
         onQuickView={(slide) => onQuickView(slide)}
-      />
-
-      {/* 4 Category Pill Cards */}
-      <CategoryCards 
-        onSelectCategory={handleCategorySelect}
       />
 
       {/* 4 Feature Pillars Banner */}
