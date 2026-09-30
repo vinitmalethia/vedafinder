@@ -1,8 +1,8 @@
 import React from 'react';
-import { ArrowRight, Sparkles, ShieldCheck, Heart, Leaf } from 'lucide-react';
+import { ArrowRight, Sparkles, ShieldCheck, Heart, Leaf, ShoppingBag, Eye } from 'lucide-react';
 import { PRODUCTS_CATALOG } from '../data/products';
 
-export default function CollectionsPage({ onSelectProduct, onQuickView, onAddToCart, onNavigate }) {
+export default function CollectionsPage({ onSelectProduct, onQuickView, onAddToCart, onBuyNow, onNavigate }) {
   const collections = [
     {
       id: 'bhasma-collection',
@@ -107,19 +107,44 @@ export default function CollectionsPage({ onSelectProduct, onQuickView, onAddToC
                     </p>
                   </div>
 
-                  <div className="pt-3 mt-3 border-t border-[#EAE2D2] flex items-center justify-between">
-                    <span className="font-serif font-bold text-lg text-[#183B2B]">₹{product.price}</span>
-                    
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        onClick={() => onQuickView(product)}
-                        className="p-2 rounded-full bg-white hover:bg-[#EAE0CB] text-[#183B2B] transition-colors border border-[#DFCFA8]"
-                        title="View Details"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => onAddToCart({
+                  {/* Price, Weight & Quick View */}
+                  <div className="pt-2.5 mt-2.5 border-t border-[#EAE2D2] flex items-baseline justify-between gap-1">
+                    <div>
+                      <span className="text-[9px] text-[#7A8B81] uppercase block">{product.weight}</span>
+                      <span className="font-serif font-bold text-base sm:text-lg text-[#183B2B]">₹{product.price}</span>
+                    </div>
+
+                    <button
+                      onClick={() => onQuickView(product)}
+                      className="p-1.5 rounded-full bg-white hover:bg-[#EAE0CB] text-[#183B2B] transition-colors border border-[#DFCFA8]"
+                      title="View Details"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  {/* Dual Action Buttons: Add to Cart & Buy Now */}
+                  <div className="grid grid-cols-2 gap-1.5 mt-2.5">
+                    <button
+                      onClick={() => onAddToCart({
+                        id: product.id,
+                        name: product.name,
+                        category: product.category,
+                        size: product.weight,
+                        price: product.price,
+                        quantity: 1,
+                        image: product.image
+                      }, false)}
+                      className="py-1.5 px-1.5 rounded-xl bg-white hover:bg-[#F0E6D2] text-[#183B2B] border border-[#C5A059]/60 font-semibold text-[11px] flex items-center justify-center gap-1 transition-all active:scale-95 shadow-sm"
+                      title="Add to Cart"
+                    >
+                      <ShoppingBag className="w-3 h-3 text-[#8C682D] shrink-0" />
+                      <span className="truncate">Add to Cart</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        const item = {
                           id: product.id,
                           name: product.name,
                           category: product.category,
@@ -127,12 +152,19 @@ export default function CollectionsPage({ onSelectProduct, onQuickView, onAddToC
                           price: product.price,
                           quantity: 1,
                           image: product.image
-                        })}
-                        className="px-3.5 py-1.5 rounded-full bg-[#183B2B] hover:bg-[#2A5E44] text-white text-xs font-semibold flex items-center gap-1 shadow transition-all"
-                      >
-                        <span>Add</span>
-                      </button>
-                    </div>
+                        };
+                        if (onBuyNow) {
+                          onBuyNow(item);
+                        } else {
+                          onAddToCart(item, true);
+                        }
+                      }}
+                      className="py-1.5 px-1.5 rounded-xl bg-[#183B2B] hover:bg-[#25553D] text-white font-semibold text-[11px] flex items-center justify-center gap-1 transition-all active:scale-95 shadow-md hover:shadow-lg"
+                      title="Buy Now"
+                    >
+                      <Sparkles className="w-3 h-3 text-[#E0B86C] shrink-0" />
+                      <span className="truncate">Buy Now</span>
+                    </button>
                   </div>
                 </div>
               ))}

@@ -5,7 +5,7 @@ import FeaturesBanner from '../components/FeaturesBanner';
 import ShopSection from '../components/ShopSection';
 import AboutSection from '../components/AboutSection';
 
-export default function HomePage({ onNavigate, onQuickView, onAddToCart }) {
+export default function HomePage({ onNavigate, onQuickView, onAddToCart, onBuyNow }) {
   const handleCategorySelect = (category) => {
     onNavigate('Shop', category.id);
   };
@@ -37,6 +37,7 @@ export default function HomePage({ onNavigate, onQuickView, onAddToCart }) {
         onNavigate={onNavigate}
         onQuickView={onQuickView}
         onAddToCart={onAddToCart}
+        onBuyNow={onBuyNow}
       />
 
       {/* About Section */}

@@ -2,27 +2,39 @@ import React, { useState } from 'react';
 import { X, Star, ShieldCheck, Check, ShoppingBag, Sparkles } from 'lucide-react';
 import { VedaFinderLogo } from './VedaLogoBrand';
 
-export default function QuickViewModal({ product, isOpen, onClose, onAddToCart }) {
+export default function QuickViewModal({ product, isOpen, onClose, onAddToCart, onBuyNow }) {
   const [quantity, setQuantity] = useState(1);
   const [addedAnimation, setAddedAnimation] = useState(false);
 
   if (!isOpen || !product) return null;
 
+  const getProductPayload = () => ({
+    id: product.id || 'prod-' + Date.now(),
+    name: product.name,
+    category: product.category || 'Herbal Formulation',
+    size: product.weight || product.productWeight || 'Standard Pack',
+    price: product.price || 499,
+    quantity: quantity,
+    image: product.image || '/products/nar-ojas.png'
+  });
+
   const handleAdd = () => {
-    onAddToCart({
-      id: product.id || 'prod-' + Date.now(),
-      name: product.name,
-      category: product.category || 'Herbal Formulation',
-      size: product.weight || product.productWeight || 'Standard Pack',
-      price: product.price || 499,
-      quantity: quantity,
-      image: product.image || '/products/nar-ojas.png'
-    });
+    onAddToCart(getProductPayload(), false);
     setAddedAnimation(true);
     setTimeout(() => {
       setAddedAnimation(false);
       onClose();
-    }, 900);
+    }, 800);
+  };
+
+  const handleBuyNow = () => {
+    const payload = getProductPayload();
+    if (onBuyNow) {
+      onBuyNow(payload);
+    } else {
+      onAddToCart(payload, true);
+    }
+    onClose();
   };
 
   return (
@@ -108,20 +120,20 @@ export default function QuickViewModal({ product, isOpen, onClose, onAddToCart }
               )}
             </div>
 
-            {/* Actions: Quantity & Add to Cart */}
-            <div className="space-y-4 pt-2">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center border border-[#D5C9B3] rounded-full px-3 py-1.5 bg-white">
+            {/* Actions: Quantity & Add to Cart & Buy Now */}
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center border border-[#D5C9B3] rounded-full px-3 py-1.5 bg-white shrink-0">
                   <button 
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="text-[#5B6D62] hover:text-[#183B2B] font-bold px-1"
+                    className="text-[#5B6D62] hover:text-[#183B2B] font-bold px-1.5"
                   >
                     -
                   </button>
-                  <span className="font-bold text-sm text-[#183B2B] px-3">{quantity}</span>
+                  <span className="font-bold text-sm text-[#183B2B] px-2">{quantity}</span>
                   <button 
                     onClick={() => setQuantity(quantity + 1)}
-                    className="text-[#5B6D62] hover:text-[#183B2B] font-bold px-1"
+                    className="text-[#5B6D62] hover:text-[#183B2B] font-bold px-1.5"
                   >
                     +
                   </button>
@@ -130,21 +142,30 @@ export default function QuickViewModal({ product, isOpen, onClose, onAddToCart }
                 <button
                   onClick={handleAdd}
                   disabled={addedAnimation}
-                  className="flex-1 py-3 px-6 rounded-full bg-[#183B2B] hover:bg-[#25553D] text-white font-medium text-sm flex items-center justify-center gap-2 shadow-lg transition-all hover:scale-[1.02]"
+                  className="flex-1 py-2.5 sm:py-3 px-4 rounded-full bg-[#FAF5EC] hover:bg-[#F0E6D2] text-[#183B2B] border border-[#C5A059]/70 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition-all hover:scale-[1.01] active:scale-95"
                 >
                   {addedAnimation ? (
                     <>
-                      <Check className="w-4 h-4 text-[#8DE8A4]" />
-                      <span>Added to Ayurvedic Cart!</span>
+                      <Check className="w-4 h-4 text-emerald-600" />
+                      <span>Added to Cart!</span>
                     </>
                   ) : (
                     <>
-                      <ShoppingBag className="w-4 h-4" />
-                      <span>Add to Cart • ₹{(product.price || 449) * quantity}</span>
+                      <ShoppingBag className="w-4 h-4 text-[#8C682D]" />
+                      <span>Add to Cart</span>
                     </>
                   )}
                 </button>
               </div>
+
+              {/* Instant Buy Now Button */}
+              <button
+                onClick={handleBuyNow}
+                className="w-full py-3 px-6 rounded-full bg-[#183B2B] hover:bg-[#25553D] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#183B2B]/20 transition-all hover:scale-[1.01] active:scale-95 border border-[#2B563F]"
+              >
+                <Sparkles className="w-4 h-4 text-[#E0B86C]" />
+                <span>Buy Now • Instant Checkout (₹{(product.price || 449) * quantity})</span>
+              </button>
 
               <div className="flex items-center justify-between text-[11px] text-[#6E8075] pt-2 border-t border-[#EAE1D1]">
                 <span className="flex items-center gap-1">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Star, ShoppingBag, Eye, Sparkles, Search, ArrowUpDown, X } from 'lucide-react';
 import { PRODUCTS_CATALOG } from '../data/products';
 
-export default function ShopPage({ initialCategory = 'all', onQuickView, onAddToCart }) {
+export default function ShopPage({ initialCategory = 'all', onQuickView, onAddToCart, onBuyNow }) {
   const [activeCategory, setActiveCategory] = useState(initialCategory || 'all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('featured');
@@ -210,8 +210,8 @@ export default function ShopPage({ initialCategory = 'all', onQuickView, onAddTo
                   </div>
                 </div>
 
-                {/* Price & Action Buttons */}
-                <div className="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-[#EAE2D2] flex items-center justify-between gap-1">
+                {/* Price, Weight & Quick View */}
+                <div className="pt-2.5 sm:pt-3 mt-2.5 sm:mt-3 border-t border-[#EAE2D2] flex items-baseline justify-between gap-1">
                   <div>
                     <span className="text-[9px] sm:text-[10px] text-[#7A8B81] uppercase block truncate max-w-[80px] sm:max-w-none">{product.weight}</span>
                     <div className="flex items-baseline gap-1">
@@ -222,17 +222,37 @@ export default function ShopPage({ initialCategory = 'all', onQuickView, onAddTo
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1 sm:gap-2">
-                    <button
-                      onClick={() => onQuickView(product)}
-                      className="p-1.5 sm:p-2.5 rounded-full bg-[#FAF5EC] hover:bg-[#EAE0CB] text-[#183B2B] transition-colors border border-[#DFCFA8]"
-                      title="Quick Details"
-                    >
-                      <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    </button>
+                  <button
+                    onClick={() => onQuickView(product)}
+                    className="p-1.5 sm:p-2 rounded-full bg-[#FAF5EC] hover:bg-[#EAE0CB] text-[#183B2B] transition-colors border border-[#DFCFA8]"
+                    title="Quick Details"
+                  >
+                    <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  </button>
+                </div>
 
-                    <button
-                      onClick={() => onAddToCart({
+                {/* Dual Action Buttons: Add to Cart & Buy Now */}
+                <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mt-2.5 sm:mt-3">
+                  <button
+                    onClick={() => onAddToCart({
+                      id: product.id,
+                      name: product.name,
+                      category: product.category,
+                      size: product.weight,
+                      price: product.price,
+                      quantity: 1,
+                      image: product.image
+                    }, false)}
+                    className="py-1.5 sm:py-2 px-1.5 sm:px-2 rounded-xl bg-[#FAF5EC] hover:bg-[#F0E6D2] text-[#183B2B] border border-[#C5A059]/60 font-semibold text-[11px] sm:text-xs flex items-center justify-center gap-1 transition-all active:scale-95 shadow-sm hover:border-[#183B2B]"
+                    title="Add to Cart"
+                  >
+                    <ShoppingBag className="w-3.5 h-3.5 text-[#8C682D] shrink-0" />
+                    <span className="truncate">Add to Cart</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      const item = {
                         id: product.id,
                         name: product.name,
                         category: product.category,
@@ -240,13 +260,19 @@ export default function ShopPage({ initialCategory = 'all', onQuickView, onAddTo
                         price: product.price,
                         quantity: 1,
                         image: product.image
-                      })}
-                      className="p-1.5 sm:p-2.5 rounded-full bg-[#183B2B] hover:bg-[#2A5E44] text-white transition-all shadow-md hover:scale-105 active:scale-95"
-                      title="Add to Cart"
-                    >
-                      <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    </button>
-                  </div>
+                      };
+                      if (onBuyNow) {
+                        onBuyNow(item);
+                      } else {
+                        onAddToCart(item, true);
+                      }
+                    }}
+                    className="py-1.5 sm:py-2 px-1.5 sm:px-2 rounded-xl bg-[#183B2B] hover:bg-[#25553D] text-white font-semibold text-[11px] sm:text-xs flex items-center justify-center gap-1 transition-all active:scale-95 shadow-md hover:shadow-lg"
+                    title="Buy Now"
+                  >
+                    <Sparkles className="w-3 h-3 text-[#E0B86C] shrink-0" />
+                    <span className="truncate">Buy Now</span>
+                  </button>
                 </div>
 
               </div>

@@ -63,7 +63,7 @@ export default function App() {
     setIsSearchOpen(true);
   };
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (product, openDrawer = true) => {
     setCartItems(prev => {
       const existing = prev.find(item => item.name === product.name);
       if (existing) {
@@ -86,7 +86,13 @@ export default function App() {
         }
       ];
     });
-    setIsCartOpen(true);
+    if (openDrawer) {
+      setIsCartOpen(true);
+    }
+  };
+
+  const handleBuyNow = (product) => {
+    handleAddToCart(product, true);
   };
 
   const handleLogout = async () => {
@@ -160,6 +166,7 @@ export default function App() {
             initialCategory={shopCategoryFilter}
             onQuickView={(p) => setQuickViewProduct(p)}
             onAddToCart={handleAddToCart}
+            onBuyNow={handleBuyNow}
           />
         );
       case 'Collections':
@@ -168,6 +175,7 @@ export default function App() {
             onNavigate={handleNavigate}
             onQuickView={(p) => setQuickViewProduct(p)}
             onAddToCart={handleAddToCart}
+            onBuyNow={handleBuyNow}
           />
         );
       case 'About Us':
@@ -192,6 +200,7 @@ export default function App() {
             onNavigate={handleNavigate}
             onQuickView={(p) => setQuickViewProduct(p)}
             onAddToCart={handleAddToCart}
+            onBuyNow={handleBuyNow}
           />
         );
     }
@@ -241,6 +250,7 @@ export default function App() {
         product={quickViewProduct}
         onClose={() => setQuickViewProduct(null)}
         onAddToCart={handleAddToCart}
+        onBuyNow={handleBuyNow}
       />
 
       {/* Customer Account & Orders Modal */}
