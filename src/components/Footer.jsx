@@ -119,7 +119,7 @@ export default function Footer({ onNavigate }) {
               <li><button onClick={() => handleNav('Blog')} className="hover:text-white transition-colors">Agni & Digestion Guide</button></li>
               <li><button onClick={() => handleNav('Blog')} className="hover:text-white transition-colors">Sahasraputi Abhrak Science</button></li>
               <li><button onClick={() => handleNav('Blog')} className="hover:text-white transition-colors">Pitta Cooling with Pishti</button></li>
-              <li><button onClick={() => handleNav('Contact')} className="hover:text-white transition-colors">Consult a Vaidya</button></li>
+              <li><button onClick={() => handleNav('Contact')} className="hover:text-white transition-colors">Consult a Doctor</button></li>
               <li><button onClick={() => handleNav('About Us')} className="hover:text-white transition-colors">Our 5,000 Year Roots</button></li>
             </ul>
           </div>

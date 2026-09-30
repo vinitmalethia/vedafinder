@@ -27,7 +27,7 @@ Ayurvedic digestive formulations like Agnisip tea work by gently stimulating sto
       id: 'sahasraputi-bhasma',
       title: 'Sahasraputi Abhrak Bhasma: Ancient Indian Nano-Medicine Unveiled',
       snippet: 'What happens when biotite mica is incinerated 1,000 times in cow-dung pits with medicinal herbs? A look into the world’s most potent cellular rejuvenator.',
-      author: 'Vaidya Ananya Joshi',
+      author: 'Dr. Ananya Joshi',
       date: 'Sept 2026',
       readTime: '6 min read',
       category: 'Rasashastra',
@@ -66,7 +66,7 @@ Take 125mg Moti Pishti with raw organic honey or milk in the evening for restful
       id: 'male-vitality-ojas',
       title: 'Restoring Ojas: The Ayurvedic Science of Strength, Stamina & Vigor',
       snippet: 'Understanding the ultimate essence of the seven Dhatus and how purified Shilajit, Swarna Makshik, and Ashwagandha restore masculine endurance.',
-      author: 'Vaidya S. Bhattacharya',
+      author: 'Dr. S. Bhattacharya',
       date: 'Aug 2026',
       readTime: '5 min read',
       category: 'Rasayana & Vitality',
@@ -96,7 +96,7 @@ Consistent use for 60-90 days transforms physical endurance and mental clarity.`
             Ayurvedic Wisdom & Research
           </h1>
           <p className="text-[#596E61] text-sm sm:text-base">
-            In-depth guides on classical Rasashastra, dosha balance, and time-tested healing protocols written by certified Vaidyas.
+            In-depth guides on classical Rasashastra, dosha balance, and time-tested healing protocols written by certified Doctors.
           </p>
         </div>
 

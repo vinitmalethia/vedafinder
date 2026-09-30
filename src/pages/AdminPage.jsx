@@ -592,7 +592,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
                 A
               </div>
               <div className="hidden sm:flex flex-col text-left">
-                <span className="text-xs font-bold text-[#174D3A] leading-tight">Vaidya Admin</span>
+                <span className="text-xs font-bold text-[#174D3A] leading-tight">Doctor Admin</span>
                 <span className="text-[10px] text-[#7A8C81] leading-tight">Master Dispensary</span>
               </div>
             </div>

@@ -437,7 +437,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess, initialAdminMode
                       title="Staff & Administrative Access"
                     >
                       <KeyRound className="w-3 h-3 text-[#B0BFB5] group-hover:text-[#8C682D] transition-colors" />
-                      <span>{isAdminMode ? '← Return to Customer Sign In' : 'Vaidya & Staff Portal'}</span>
+                      <span>{isAdminMode ? '← Return to Customer Sign In' : 'Doctor & Staff Portal'}</span>
                     </button>
                   </div>
 

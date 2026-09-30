@@ -28,7 +28,7 @@ export default function ContactPage() {
     },
     {
       q: 'How should I consume Bhasmas and Pishtis?',
-      a: 'Classical formulations are recommended with suitable Anupanas (carrier substances) such as raw organic honey, warm cow milk, or pure A2 ghee, as directed by your Vaidya.'
+      a: 'Classical formulations are recommended with suitable Anupanas (carrier substances) such as raw organic honey, warm cow milk, or pure A2 ghee, as directed by your Doctor.'
     },
     {
       q: 'How long does standard delivery take?',
@@ -47,7 +47,7 @@ export default function ContactPage() {
             <span>Ayurvedic Support & Clinic</span>
           </div>
           <h1 className="font-serif text-4xl sm:text-5xl font-bold text-[#183B2B]">
-            Connect with Our Vaidyas
+            Connect with Our Doctors
           </h1>
           <p className="text-[#596D61] text-sm sm:text-base">
             Have questions about a classical formulation or need personalized dosage guidance? Our team of senior Ayurvedic physicians is here to assist you.
@@ -81,7 +81,7 @@ export default function ContactPage() {
                   <div>
                     <h4 className="font-bold text-[#183B2B]">Doctor Consultations & Orders</h4>
                     <p className="text-[#72857A]">support@vedafinder.com</p>
-                    <p className="text-[11px] text-[#8C682D]">vaidya@vedafinder.com</p>
+                    <p className="text-[11px] text-[#8C682D]">doctor@vedafinder.com</p>
                   </div>
                 </div>
 
@@ -98,7 +98,7 @@ export default function ContactPage() {
 
               <div className="p-4 rounded-2xl bg-[#F8F2E6] border border-[#E4D5B9] text-xs text-[#526559] space-y-1">
                 <span className="font-bold text-[#183B2B] flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-[#8C682D]" /> Free Vaidya Consultation
+                  <ShieldCheck className="w-4 h-4 text-[#8C682D]" /> Free Doctor Consultation
                 </span>
                 <p className="text-[11px] leading-relaxed">
                   Every order includes free telephonic guidance with an Ayurvedic doctor to customize your Anupana and dosage.
@@ -112,7 +112,7 @@ export default function ContactPage() {
             <div className="bg-white rounded-3xl p-8 sm:p-10 border border-[#E6DCC7] shadow-xl space-y-6">
               <div className="space-y-1">
                 <h3 className="font-serif font-bold text-2xl text-[#183B2B]">
-                  Request Vaidya Guidance or Send an Enquiry
+                  Request Doctor Guidance or Send an Enquiry
                 </h3>
                 <p className="text-xs sm:text-sm text-[#6A7C71]">
                   Fill in your health concerns below. Our senior physician will reach out within 2-4 hours.
