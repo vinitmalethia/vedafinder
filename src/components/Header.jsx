@@ -122,7 +122,7 @@ export default function Header({
           {/* Right Action Items: Search Input, Profile & Cart */}
           <div className="flex items-center space-x-2 sm:space-x-3">
             
-            {/* Pill Search Input */}
+            {/* Pill Search Input (Desktop Only) */}
             <div className="relative hidden xl:block">
               <form onSubmit={handleSearchSubmit} className="relative">
                 <input
@@ -142,15 +142,6 @@ export default function Header({
                 </button>
               </form>
             </div>
-
-            {/* Mobile Search Button */}
-            <button
-              onClick={() => onOpenSearch && onOpenSearch('')}
-              aria-label="Open Search"
-              className="xl:hidden w-10 h-10 rounded-full border border-[#D5C9B3] bg-white/80 hover:bg-[#F2ECE1] flex items-center justify-center text-[#2C3E35] transition-all shadow-sm"
-            >
-              <Search className="w-4 h-4 text-[#374D41]" />
-            </button>
 
             {/* Customer Profile Button matching user reference design */}
             {user ? (
@@ -219,6 +210,24 @@ export default function Header({
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-[#EAE2D2] bg-[#FAF7F2] px-4 pt-3 pb-6 space-y-2 animate-fadeIn">
+            
+            {/* Search bar inside mobile drawer */}
+            <form onSubmit={handleSearchSubmit} className="relative mb-3">
+              <input
+                type="text"
+                placeholder="Search remedies, herbs, doshas..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-4 pr-10 py-2.5 rounded-full text-sm bg-white border border-[#D5C9B3] text-[#2C3E35] placeholder-[#8A9990] focus:outline-none focus:ring-2 focus:ring-[#183B2B]/20 shadow-sm"
+              />
+              <button
+                type="submit"
+                aria-label="Search"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#687B70] hover:text-[#183B2B]"
+              >
+                <Search className="w-4 h-4" />
+              </button>
+            </form>
             
             {/* If logged in on mobile, show customer banner that opens Account Modal */}
             {user ? (
