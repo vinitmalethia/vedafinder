@@ -623,7 +623,7 @@ export default function TheSutraPage({ onNavigate }) {
                   {currentQuiz.title}
                 </h2>
                 <p className="text-xs sm:text-sm text-[#6B7E72]">
-                  Theme: <strong className="font-serif text-[#8C682D]">{currentQuiz.sanskritTheme}</strong> • {currentQuiz.questions?.length || 5} Classical Questions
+                  Theme: <strong className="font-serif text-[#8C682D]">{currentQuiz.sanskritTheme}</strong> • {currentQuiz.questions?.length || 1} Classical Samhita Challenge
                 </p>
               </div>
 
@@ -746,10 +746,10 @@ export default function TheSutraPage({ onNavigate }) {
                     <div className="flex items-start justify-between gap-4 mb-4">
                       <div className="flex items-center gap-3">
                         <span className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#DFCFA8] text-[#183B2B] font-serif font-bold text-sm flex items-center justify-center">
-                          {idx + 1}
+                          {String(idx + 1).padStart(2, '0')}
                         </span>
                         <span className="text-xs font-bold uppercase tracking-wider text-[#8C682D]">
-                          QUESTION {idx + 1} OF {currentQuiz.questions.length}
+                          QUESTION {String(idx + 1).padStart(2, '0')} / {String(currentQuiz.questions?.length || 1).padStart(2, '0')}
                         </span>
                       </div>
 
@@ -841,10 +841,10 @@ export default function TheSutraPage({ onNavigate }) {
                     <span>RECORD YOUR ENTRY</span>
                   </div>
                   <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#183B2B]">
-                    Submit Answers & Claim Your Sunday Reward
+                    Submit Your Answer & Claim Your Sunday Reward
                   </h3>
                   <p className="text-xs sm:text-sm text-[#6B7E72]">
-                    Your answers, score, and unlocked reward will be forwarded directly to the Veda Finder WhatsApp desk (<strong>+91 9888335557</strong>) to verify your rank in the Sunday Hall of Fame.
+                    Your answer, score, and unlocked reward will be forwarded directly to the Veda Finder WhatsApp desk (<strong>+91 9888335557</strong>) to verify your rank in the Sunday Hall of Fame.
                   </p>
                 </div>
 
@@ -916,7 +916,7 @@ export default function TheSutraPage({ onNavigate }) {
                   <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#E3D8C3]">
                     <div className="text-xs text-[#6B7E72] flex items-center gap-2">
                       <Check className="w-4 h-4 text-emerald-600" />
-                      <span>{Object.keys(userAnswers).length} of {currentQuiz.questions?.length || 5} questions answered</span>
+                      <span>{Object.keys(userAnswers).length} of {currentQuiz.questions?.length || 1} question answered</span>
                     </div>
 
                     <button
@@ -924,7 +924,7 @@ export default function TheSutraPage({ onNavigate }) {
                       className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-[#183B2B] to-[#122E21] hover:from-[#1F4D38] hover:to-[#183B2B] text-[#FAF7F2] font-bold text-sm sm:text-base border border-[#C59A4E]/40 shadow-xl hover:shadow-2xl transition-all"
                     >
                       <Send className="w-4 h-4 text-[#E6C887]" />
-                      <span>SUBMIT YOUR ANSWERS →</span>
+                      <span>SUBMIT YOUR ANSWER →</span>
                     </button>
                   </div>
                 </form>

@@ -80,7 +80,7 @@ export default function SutraSection({ onExplore }) {
                 </div>
                 <div>
                   <span className="text-[10px] uppercase font-bold text-[#8FAFA0] block">FORMAT</span>
-                  <span className="text-xs sm:text-sm font-bold text-white">5 Samhita MCQs</span>
+                  <span className="text-xs sm:text-sm font-bold text-white">1 Samhita MCQ</span>
                 </div>
               </div>
 
