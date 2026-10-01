@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, User, ShoppingBag, Menu, X, ChevronDown, ShieldCheck, Instagram } from 'lucide-react';
+import { Search, User, ShoppingBag, Menu, X, ChevronDown, ShieldCheck, Instagram, Facebook } from 'lucide-react';
 import { VedaFinderLogo } from './VedaLogoBrand';
 
 export default function Header({ 
@@ -67,7 +67,7 @@ export default function Header({
             )}
           </div>
 
-          {/* Center / Right Announcements */}
+          {/* Center / Right Announcements & Social Links */}
           <div className="hidden sm:flex items-center gap-3 text-[#E8DFC8] text-[11px]">
             {user && (
               <span className="flex items-center gap-1 text-[#C59A4E]">
@@ -82,9 +82,21 @@ export default function Header({
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-[#E0B86C] transition-colors flex items-center gap-1"
+              title="Instagram @vedafinder"
             >
               <Instagram className="w-3.5 h-3.5 text-[#E0B86C]" />
-              <span>@vedafinder</span>
+              <span>Instagram</span>
+            </a>
+            <span className="text-[#C59A4E]/60 hidden lg:inline">|</span>
+            <a 
+              href="https://www.facebook.com/share/1HrZ6ZNtL7/?mibextid=wwXIfr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#E0B86C] transition-colors flex items-center gap-1"
+              title="Facebook Veda Finder"
+            >
+              <Facebook className="w-3.5 h-3.5 text-[#E0B86C]" />
+              <span>Facebook</span>
             </a>
           </div>
 
@@ -305,7 +317,7 @@ export default function Header({
               </div>
             )}
 
-            <div className="pt-2 border-t border-[#E8DFC9]">
+            <div className="pt-2 border-t border-[#E8DFC9] space-y-1">
               <a
                 href="https://www.instagram.com/vedafinder?stkn=YTczbDZxcG5udWh2"
                 target="_blank"
@@ -314,6 +326,16 @@ export default function Header({
               >
                 <Instagram className="w-4 h-4 text-[#8C682D]" />
                 <span>Instagram: @vedafinder</span>
+              </a>
+
+              <a
+                href="https://www.facebook.com/share/1HrZ6ZNtL7/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full text-left py-2.5 px-4 rounded-full text-sm font-medium text-[#3E5246] hover:bg-[#EDE5D5] flex items-center gap-2 transition-colors"
+              >
+                <Facebook className="w-4 h-4 text-[#8C682D]" />
+                <span>Facebook: Veda Finder</span>
               </a>
             </div>
           </div>

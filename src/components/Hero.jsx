@@ -156,7 +156,7 @@ export default function Hero({ onShopClick, onQuickView }) {
                 </div>
                 <div className="flex flex-col min-w-0">
                   <span className="text-[10px] sm:text-xs font-bold text-[#183B2B] leading-tight truncate">Free Express</span>
-                  <span className="text-[9px] sm:text-[10px] text-[#697B70] leading-tight truncate">COD Available</span>
+                  <span className="text-[9px] sm:text-[10px] text-[#697B70] leading-tight truncate">Instant UPI</span>
                 </div>
               </div>
 

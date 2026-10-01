@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, ArrowRight, Phone, Instagram } from 'lucide-react';
+import { Mail, ArrowRight, Phone, Instagram, Facebook } from 'lucide-react';
 import { VedaFinderLogo } from './VedaLogoBrand';
 
 export default function Footer({ onNavigate }) {
@@ -86,6 +86,17 @@ export default function Footer({ onNavigate }) {
                   className="hover:text-white transition-colors"
                 >
                   Instagram: @vedafinder
+                </a>
+              </div>
+              <div className="flex items-center gap-2">
+                <Facebook className="w-3.5 h-3.5 text-[#E6C887]" />
+                <a 
+                  href="https://www.facebook.com/share/1HrZ6ZNtL7/?mibextid=wwXIfr" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hover:text-white transition-colors"
+                >
+                  Facebook: Veda Finder
                 </a>
               </div>
             </div>

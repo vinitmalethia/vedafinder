@@ -7,7 +7,6 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
   const [customerPincode, setCustomerPincode] = useState('');
-  const [paymentMode, setPaymentMode] = useState('COD'); // 'COD' | 'UPI'
   const [lastOrder, setLastOrder] = useState(null);
 
   if (!isOpen) return null;
@@ -60,7 +59,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
       `• *Name:* ${customerName.trim()}`,
       `• *Phone:* ${customerPhone.trim()}`,
       `• *Address:* ${customerAddress.trim()}${customerPincode ? ` - ${customerPincode.trim()}` : ''}`,
-      `• *Payment Mode:* ${paymentMode === 'COD' ? 'Cash On Delivery (COD)' : 'Online Payment / UPI'}`,
+      `• *Payment Mode:* Online Payment / UPI (GPay, PhonePe, Paytm)`,
       ``,
       `📦 *Items Ordered:*`,
       itemsSummary,
@@ -252,11 +251,6 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
             {/* STEP 2: CHECKOUT FORM */}
             {checkoutStep === 'checkout' && (
               <form onSubmit={handlePlaceOrder} id="checkout-form" className="space-y-4">
-                <div className="p-3 bg-[#FAF3E6] rounded-2xl border border-[#E2D4BC] text-xs text-[#526659] flex items-center gap-2">
-                  <Truck className="w-4 h-4 text-[#8C682D] shrink-0" />
-                  <span>Express Dispatch within 24h across India.</span>
-                </div>
-
                 <div className="space-y-1">
                   <label className="block text-xs font-bold text-[#183B2B] uppercase tracking-wider">
                     Full Name <span className="text-red-500">*</span>
@@ -312,34 +306,22 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
                   />
                 </div>
 
-                {/* Payment Selection */}
+                {/* Payment Selection - UPI Only */}
                 <div className="space-y-1.5 pt-1">
                   <label className="block text-xs font-bold text-[#183B2B] uppercase tracking-wider">
-                    Payment Preference
+                    Payment Method
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMode('COD')}
-                      className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
-                        paymentMode === 'COD' 
-                          ? 'bg-[#183B2B] text-white border-[#183B2B] shadow-sm' 
-                          : 'bg-white text-[#526659] border-[#D5C9B3] hover:border-[#183B2B]'
-                      }`}
-                    >
-                      <span>💵 Cash on Delivery</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMode('UPI')}
-                      className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
-                        paymentMode === 'UPI' 
-                          ? 'bg-[#183B2B] text-white border-[#183B2B] shadow-sm' 
-                          : 'bg-white text-[#526659] border-[#D5C9B3] hover:border-[#183B2B]'
-                      }`}
-                    >
-                      <span>📱 UPI / Online</span>
-                    </button>
+                  <div className="p-3 rounded-2xl bg-[#FAF6EE] border border-[#DFCFA8] flex items-center justify-between shadow-sm">
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-lg">📱</span>
+                      <div>
+                        <p className="text-xs font-bold text-[#183B2B]">UPI & Online Payment</p>
+                        <p className="text-[10px] text-[#6E7F75]">Google Pay • PhonePe • Paytm • QR Code</p>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#183B2B] text-[#FAF6F0] shadow-sm">
+                      UPI Active
+                    </span>
                   </div>
                 </div>
 
@@ -388,7 +370,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
                   </div>
                   <div className="flex justify-between border-b pb-1.5">
                     <span className="text-[#6A7C71]">Payment:</span>
-                    <span className="font-medium text-[#183B2B]">{paymentMode === 'COD' ? 'Cash on Delivery' : 'Online / UPI'}</span>
+                    <span className="font-medium text-[#183B2B]">Online / UPI</span>
                   </div>
                   <div>
                     <span className="text-[#6A7C71] block">Deliver to:</span>

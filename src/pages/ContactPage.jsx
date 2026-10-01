@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, ShieldCheck, CheckCircle2, Sparkles, HelpCircle, Instagram } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send, ShieldCheck, CheckCircle2, Sparkles, HelpCircle, Instagram, Facebook } from 'lucide-react';
 import { VedaFinderLogo } from '../components/VedaLogoBrand';
 
 export default function ContactPage() {
@@ -122,6 +122,23 @@ export default function ContactPage() {
                       className="text-[#8C682D] hover:text-[#183B2B] font-medium underline transition-colors"
                     >
                       @vedafinder
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#FAF5EB] flex items-center justify-center text-[#8C682D] shrink-0 border border-[#DFCFA8]">
+                    <Facebook className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#183B2B]">Connect on Facebook</h4>
+                    <a 
+                      href="https://www.facebook.com/share/1HrZ6ZNtL7/?mibextid=wwXIfr" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-[#8C682D] hover:text-[#183B2B] font-medium underline transition-colors"
+                    >
+                      Veda Finder Official
                     </a>
                   </div>
                 </div>
