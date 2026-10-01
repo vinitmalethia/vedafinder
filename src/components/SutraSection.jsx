@@ -78,7 +78,7 @@ export default function SutraSection({ onExplore }) {
                 </div>
                 <div>
                   <span className="text-[10px] uppercase font-bold text-[#8FAFA0] block">REWARDS</span>
-                  <span className="text-xs sm:text-sm font-bold text-white">Hampers & Books</span>
+                  <span className="text-xs sm:text-sm font-bold text-white">Free Products & Coupons</span>
                 </div>
               </div>
 

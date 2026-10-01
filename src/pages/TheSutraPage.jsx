@@ -62,7 +62,7 @@ const PAST_ARCHIVES = [
   }
 ];
 
-// Hall of Fame Winners
+// Hall of Fame Winners with Free Product & Coupon Rewards
 const HALL_OF_FAME = [
   {
     rank: 1,
@@ -70,7 +70,7 @@ const HALL_OF_FAME = [
     score: '5/5 (100%)',
     time: '2m 14s',
     city: 'All India Institute of Ayurveda, New Delhi',
-    prize: 'Gold Medalist • ₹5,000 Hamper + Samhita Hardcover',
+    prize: '100% FREE Product Gift (Abhrak Bhasma 1000 Puti) + Gold Certificate',
     badge: '🥇 Sunday Rank 1'
   },
   {
@@ -79,7 +79,7 @@ const HALL_OF_FAME = [
     score: '5/5 (100%)',
     time: '2m 48s',
     city: 'National Institute of Ayurveda (NIA), Jaipur',
-    prize: 'Silver Medalist • ₹3,000 Veda Finder Hamper',
+    prize: '100% FREE Product Gift (Nar Ojas Vitality) + Silver Certificate',
     badge: '🥈 Sunday Rank 2'
   },
   {
@@ -88,9 +88,20 @@ const HALL_OF_FAME = [
     score: '5/5 (100%)',
     time: '3m 10s',
     city: 'Institute of Medical Sciences, BHU Varanasi',
-    prize: 'Bronze Medalist • ₹2,000 Wellness Voucher',
+    prize: 'Exclusive 25% OFF Reward Coupon + Bronze Certificate',
     badge: '🥉 Sunday Rank 3'
   }
+];
+
+// Random Classical Products for Free Reward Gifts
+const RANDOM_FREE_PRODUCTS = [
+  'Abhrak Bhasma (1,000 Puti) 10GM',
+  'Nar Ojas Vitality Rasayana (90 Caps)',
+  'Praval Pishti Shuddha 10GM',
+  'Moti Pishti Authentic Bhasma 10GM',
+  'Agnisip Digestive Herbal Tea (20 Pyramid Bags)',
+  'Godanti Bhasma 10GM',
+  'Loha Bhasma Shuddha 10GM'
 ];
 
 export default function TheSutraPage({ onNavigate }) {
@@ -160,7 +171,12 @@ export default function TheSutraPage({ onNavigate }) {
       ``,
       `🏆 *Score Summary:*`,
       `• *Total Score:* ${result.score} / ${result.total} (${result.percentage}%)`,
-      `• *Result Status:* ${result.percentage >= 80 ? '🌟 High Honor / Award Qualified' : 'Completed Participation'}`,
+      `• *Result Status:* ${result.percentage >= 80 ? '🌟 Qualified for Free Product Gift & Gold Honors' : 'Completed Participation'}`,
+      ``,
+      `🎁 *REWARD UNLOCKED:*`,
+      result.percentage >= 80 
+        ? `• *Free Product Gift:* 100% Free ${result.randomProduct} (or Coupon: ${result.couponCode})`
+        : `• *Reward Coupon Code:* ${result.couponCode} (10% OFF on all remedies)`,
       ``,
       `📝 *QUESTIONS & ANSWERS SUBMISSION:*`,
       `───────────────────────────────`,
@@ -168,7 +184,7 @@ export default function TheSutraPage({ onNavigate }) {
       `───────────────────────────────`,
       ``,
       `🌿 *Submitted via Veda Finder — The Sutra Platform*`,
-      `Please record my answers and rank for the Sunday Hall of Fame. Dhanyavaad!`
+      `Please record my answers, rank for the Sunday Hall of Fame, and process my reward claim. Dhanyavaad!`
     ].join('\n');
   };
 
@@ -191,6 +207,9 @@ export default function TheSutraPage({ onNavigate }) {
     const total = currentQuiz.questions?.length || 5;
     const percentage = Math.round((correctCount / total) * 100);
     const tokenId = `SUTRA-W${currentQuiz.week || 42}-` + Math.floor(1000 + Math.random() * 9000);
+    const isWinner = percentage >= 80;
+    const randomProduct = RANDOM_FREE_PRODUCTS[Math.floor(Math.random() * RANDOM_FREE_PRODUCTS.length)];
+    const couponCode = isWinner ? 'SUTRA20' : 'SUTRA10';
 
     const result = {
       score: correctCount,
@@ -200,7 +219,10 @@ export default function TheSutraPage({ onNavigate }) {
       name: registration.name.trim(),
       phone: registration.phone.trim(),
       role: registration.role,
-      institution: registration.institution.trim() || 'Ayurveda Seeker'
+      institution: registration.institution.trim() || 'Ayurveda Seeker',
+      isWinner: isWinner,
+      randomProduct: randomProduct,
+      couponCode: couponCode
     };
 
     setScoreResult(result);
@@ -383,7 +405,7 @@ export default function TheSutraPage({ onNavigate }) {
                   <div className="p-3 rounded-xl bg-white/10 border border-white/10">
                     <span className="text-[10px] text-[#A6C4B4] block">Status</span>
                     <strong className={`text-base ${scoreResult.percentage >= 80 ? 'text-emerald-400' : 'text-amber-300'}`}>
-                      {scoreResult.percentage >= 80 ? 'Honor Pass' : 'Completed'}
+                      {scoreResult.percentage >= 80 ? 'Honor Pass (Winner)' : 'Completed'}
                     </strong>
                   </div>
                   <div className="p-3 rounded-xl bg-white/10 border border-white/10">
@@ -392,6 +414,32 @@ export default function TheSutraPage({ onNavigate }) {
                       {scoreResult.percentage >= 80 ? 'Verified Gold' : 'Participation'}
                     </strong>
                   </div>
+                </div>
+
+                {/* Unlocked Reward Box */}
+                <div className="p-4 rounded-2xl bg-[#FAF3E6]/10 border border-[#C59A4E]/50 max-w-lg mx-auto space-y-2 text-center">
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-[#E6C887] block">
+                    {scoreResult.isWinner ? '🎁 100% FREE AYURVEDIC PRODUCT UNLOCKED' : '🎟️ STORE REWARD COUPON UNLOCKED'}
+                  </span>
+                  {scoreResult.isWinner ? (
+                    <div className="space-y-1">
+                      <p className="font-serif font-bold text-lg text-white">
+                        {scoreResult.randomProduct}
+                      </p>
+                      <p className="text-xs text-[#B2CEC0]">
+                        You unlocked a complimentary product gift (or coupon <span className="font-mono text-[#E6C887] font-bold">{scoreResult.couponCode}</span>). Send your answers on WhatsApp to claim free delivery!
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      <p className="font-mono font-bold text-lg text-[#E6C887]">
+                        COUPON: {scoreResult.couponCode}
+                      </p>
+                      <p className="text-xs text-[#B2CEC0]">
+                        Enjoy 10% instant discount on all authentic classical remedies in the Veda Finder store.
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* WhatsApp Submission Button */}
@@ -721,53 +769,56 @@ export default function TheSutraPage({ onNavigate }) {
                 EXCELLENCE RECOGNITION
               </span>
               <h2 className="font-serif font-bold text-3xl text-[#183B2B]">
-                Rewards, Certificates & Honours
+                Rewards, Free Products & Coupons
               </h2>
               <p className="text-xs sm:text-sm text-[#5C7063]">
-                Empowering the next generation of Vaidyas and scholars with real accolades.
+                Empowering the next generation of Vaidyas and scholars with authentic Ayurvedic rewards and accolades.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E3D8C3] shadow-md space-y-4 text-center">
-                <div className="w-14 h-14 rounded-full bg-[#FAF3E6] border border-[#DFCFA8] flex items-center justify-center mx-auto text-[#8C682D]">
-                  <Medal className="w-7 h-7" />
+              {/* Card 1: 100% Free Random Product */}
+              <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-[#C59A4E]/60 shadow-lg space-y-4 text-center relative overflow-hidden">
+                <div className="absolute top-0 right-0 bg-[#C59A4E] text-[#0E2419] text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-bl-xl">
+                  Grand Prize
                 </div>
-                <h3 className="font-serif font-bold text-lg text-[#183B2B]">
-                  Weekly Rank 1 Winner
+                <div className="w-14 h-14 rounded-full bg-[#FAF3E6] border border-[#DFCFA8] flex items-center justify-center mx-auto text-[#8C682D] shadow-inner">
+                  <Gift className="w-7 h-7 text-[#8C682D]" />
+                </div>
+                <h3 className="font-serif font-bold text-xl text-[#183B2B]">
+                  100% Free Product Gift
                 </h3>
-                <p className="text-xs text-[#526659] leading-relaxed">
-                  • ₹5,000 Veda Finder Classical Formulations Hamper<br/>
-                  • Hardcover Classical Samhita Granth<br/>
-                  • Gold Digital Certificate of Mastery
+                <p className="text-xs text-[#526659] leading-relaxed text-left space-y-1.5 pt-1">
+                  <span className="block">• <strong>Random Formulation Gift:</strong> High scorers receive a classical remedy picked randomly from our dispensary (Abhrak Bhasma 1000 Puti, Nar Ojas Vitality, Praval Pishti, Moti Pishti, or Agnisip Tea).</span>
+                  <span className="block">• <strong>Free Delivery:</strong> Shipped directly to your doorstep with zero shipping or packaging fee.</span>
                 </p>
               </div>
 
+              {/* Card 2: Guaranteed Reward Coupon */}
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E3D8C3] shadow-md space-y-4 text-center">
                 <div className="w-14 h-14 rounded-full bg-[#FAF3E6] border border-[#DFCFA8] flex items-center justify-center mx-auto text-[#8C682D]">
-                  <Trophy className="w-7 h-7" />
+                  <Sparkles className="w-7 h-7 text-[#8C682D]" />
                 </div>
-                <h3 className="font-serif font-bold text-lg text-[#183B2B]">
-                  Ranks 2 & 3 Runners Up
+                <h3 className="font-serif font-bold text-xl text-[#183B2B]">
+                  Reward Coupon Code
                 </h3>
-                <p className="text-xs text-[#526659] leading-relaxed">
-                  • ₹3,000 & ₹2,000 Formulation Gift Hampers<br/>
-                  • Silver & Bronze Verified Certificates<br/>
-                  • Exclusive Ayurvedic Wisdom Journal Access
+                <p className="text-xs text-[#526659] leading-relaxed text-left space-y-1.5 pt-1">
+                  <span className="block">• <strong>Guaranteed for Participants:</strong> Receive an exclusive store discount coupon code (<code className="bg-[#FAF3E6] text-[#8C682D] font-bold px-1.5 py-0.5 rounded">SUTRA20</code> / <code className="bg-[#FAF3E6] text-[#8C682D] font-bold px-1.5 py-0.5 rounded">SUTRA10</code>).</span>
+                  <span className="block">• <strong>Instant Store Discount:</strong> Save on any pure Bhasmas, Pishtis, Vitality Rasayanas, and teas.</span>
                 </p>
               </div>
 
+              {/* Card 3: Certificate of Merit & Hall of Fame */}
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E3D8C3] shadow-md space-y-4 text-center">
                 <div className="w-14 h-14 rounded-full bg-[#FAF3E6] border border-[#DFCFA8] flex items-center justify-center mx-auto text-[#8C682D]">
-                  <Award className="w-7 h-7" />
+                  <Award className="w-7 h-7 text-[#8C682D]" />
                 </div>
-                <h3 className="font-serif font-bold text-lg text-[#183B2B]">
-                  All Scorers (80%+)
+                <h3 className="font-serif font-bold text-xl text-[#183B2B]">
+                  Certificates & Honours
                 </h3>
-                <p className="text-xs text-[#526659] leading-relaxed">
-                  • Official Certificate of Ayurvedic Knowledge<br/>
-                  • Special 15% discount on all Veda Finder products<br/>
-                  • Invitation to Veda Wisdom Masterclasses
+                <p className="text-xs text-[#526659] leading-relaxed text-left space-y-1.5 pt-1">
+                  <span className="block">• <strong>Verified Digital Certificate:</strong> Official Gold/Merit Certificate recognizing your deep Samhita knowledge.</span>
+                  <span className="block">• <strong>Sunday Hall of Fame:</strong> Permanent ranking on our All-India Ayurvedic Scholar Leaderboard.</span>
                 </p>
               </div>
             </div>
