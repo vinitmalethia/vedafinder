@@ -1,5 +1,6 @@
 import React from 'react';
 import { Sparkles, Trophy, BookOpen, Clock, ArrowRight, Award, CheckCircle2, Flame } from 'lucide-react';
+import sutraLogo from '../assets/the-sutra-logo.jpg';
 
 export default function SutraSection({ onExplore }) {
   return (
@@ -27,20 +28,31 @@ export default function SutraSection({ onExplore }) {
               <span>VEDA FINDER PRESENTS</span>
             </div>
 
-            {/* Main Title & Subtitles */}
-            <div className="space-y-3">
-              <h2 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-none">
-                THE SUTRA
-              </h2>
-              <p className="font-serif text-lg sm:text-2xl text-[#E6C887] font-medium tracking-wide">
-                The Ayurveda Knowledge Challenge
-              </p>
-              
-              {/* Hindi Sacred Tagline */}
-              <div className="pt-1">
-                <span className="inline-block font-serif text-base sm:text-xl text-[#F3E5C8] italic font-semibold px-4 py-1 rounded-full bg-[#1B4331]/60 border border-[#C59A4E]/30">
-                  ज्ञान की खोज। आयुर्वेद के साथ।
-                </span>
+            {/* Main Title & Subtitles with Emblem */}
+            <div className="flex flex-col items-center justify-center gap-4">
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#C59A4E] to-[#E6C887] rounded-full blur-sm opacity-70 group-hover:opacity-100 transition duration-300" />
+                <img 
+                  src={sutraLogo} 
+                  alt="THE SUTRA" 
+                  className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full object-cover shadow-2xl border-2 border-[#E6C887]"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <h2 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-none">
+                  THE SUTRA
+                </h2>
+                <p className="font-serif text-lg sm:text-2xl text-[#E6C887] font-medium tracking-wide">
+                  The Ayurveda Knowledge Challenge
+                </p>
+                
+                {/* Hindi Sacred Tagline */}
+                <div className="pt-1">
+                  <span className="inline-block font-serif text-base sm:text-xl text-[#F3E5C8] italic font-semibold px-4 py-1 rounded-full bg-[#1B4331]/60 border border-[#C59A4E]/30">
+                    ज्ञान की खोज। आयुर्वेद के साथ।
+                  </span>
+                </div>
               </div>
             </div>
 
