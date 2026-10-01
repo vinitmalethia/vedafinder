@@ -212,8 +212,8 @@ export const PRODUCTS_CATALOG = [
     hindiName: 'नर ओज कैप्सूल - नर में ओज, जीवन में तेज',
     category: 'Capsules',
     categoryId: 'capsules',
-    price: 899,
-    originalPrice: 1299,
+    price: 4270,
+    originalPrice: 4999,
     weight: '90 Capsules',
     rating: 4.98,
     reviewsCount: 680,
@@ -278,7 +278,7 @@ export const CATEGORIES = [
     count: '1 Formulation',
     image: '/products/nar-ojas.png',
     items: [
-      { name: 'Nar Ojas Capsules (90 Caps)', price: 899, image: '/products/nar-ojas.png', rating: 4.98 }
+      { name: 'Nar Ojas Capsules (90 Caps)', price: 4270, image: '/products/nar-ojas.png', rating: 4.98 }
     ]
   },
   {
