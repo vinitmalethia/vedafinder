@@ -18,6 +18,7 @@ export default function Header({
   const navLinks = [
     { name: 'Home', id: 'Home' },
     { name: 'Shop', id: 'Shop' },
+    { name: 'The Sutra', id: 'The Sutra', badge: 'Sunday' },
     { name: 'About Us', id: 'About Us' },
     { name: 'Blog', id: 'Blog' },
     { name: 'Contact', id: 'Contact' }
@@ -133,7 +134,16 @@ export default function Header({
                   {isActive && (
                     <span className="absolute inset-0 rounded-full ring-1 ring-[#C59A4E]/30 pointer-events-none" />
                   )}
-                  <span className="relative z-10">{link.name}</span>
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    <span>{link.name}</span>
+                    {link.badge && (
+                      <span className={`text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded-full ${
+                        isActive ? 'bg-[#C59A4E] text-[#122A1E]' : 'bg-[#EAE0CB] text-[#8C682D]'
+                      }`}>
+                        {link.badge}
+                      </span>
+                    )}
+                  </span>
                 </button>
               );
             })}
@@ -295,13 +305,20 @@ export default function Header({
               <button
                 key={link.id}
                 onClick={() => handleNavClick(link.id)}
-                className={`w-full text-left py-2.5 px-4 rounded-full text-sm font-medium transition-all ${
+                className={`w-full text-left py-2.5 px-4 rounded-full text-sm font-medium transition-all flex items-center justify-between ${
                   activeNav === link.id 
                     ? 'bg-[#183B2B] text-white shadow' 
                     : 'text-[#3E5246] hover:bg-[#EDE5D5]'
                 }`}
               >
-                {link.name}
+                <span>{link.name}</span>
+                {link.badge && (
+                  <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full ${
+                    activeNav === link.id ? 'bg-[#C59A4E] text-[#122A1E]' : 'bg-[#EAE0CB] text-[#8C682D]'
+                  }`}>
+                    {link.badge}
+                  </span>
+                )}
               </button>
             ))}
             

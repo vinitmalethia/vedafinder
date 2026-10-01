@@ -10,6 +10,7 @@ import CollectionsPage from './pages/CollectionsPage';
 import AboutPage from './pages/AboutPage';
 import BlogPage from './pages/BlogPage';
 import ContactPage from './pages/ContactPage';
+import TheSutraPage from './pages/TheSutraPage';
 import LoginPage from './pages/LoginPage';
 import AdminPage from './pages/AdminPage';
 import CustomerAccountModal from './components/CustomerAccountModal';
@@ -17,7 +18,16 @@ import { INITIAL_CART } from './data/products';
 import { auth, logoutUser, onAuthStateChanged } from './firebase/config';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('Home');
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname.toLowerCase();
+      const hash = window.location.hash.toLowerCase();
+      if (path === '/the-sutra' || hash === '#the-sutra') {
+        return 'The Sutra';
+      }
+    }
+    return 'Home';
+  });
   const [shopCategoryFilter, setShopCategoryFilter] = useState('all');
   const [cartItems, setCartItems] = useState(() => {
     try {
@@ -73,9 +83,17 @@ export default function App() {
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   const handleNavigate = (page, category = 'all') => {
-    setCurrentPage(page);
+    const targetPage = (page === '/the-sutra' || page === 'the-sutra') ? 'The Sutra' : page;
+    setCurrentPage(targetPage);
     if (category) {
       setShopCategoryFilter(category);
+    }
+    if (typeof window !== 'undefined') {
+      if (targetPage === 'The Sutra') {
+        window.history.pushState({}, '', '/the-sutra');
+      } else if (window.location.pathname === '/the-sutra') {
+        window.history.pushState({}, '', '/');
+      }
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -215,6 +233,11 @@ export default function App() {
       case 'Contact':
         return (
           <ContactPage />
+        );
+      case 'The Sutra':
+      case '/the-sutra':
+        return (
+          <TheSutraPage onNavigate={handleNavigate} />
         );
       default:
         return (

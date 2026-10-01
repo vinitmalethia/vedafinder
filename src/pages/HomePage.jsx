@@ -3,6 +3,7 @@ import Hero from '../components/Hero';
 import FeaturesBanner from '../components/FeaturesBanner';
 import ShopSection from '../components/ShopSection';
 import AboutSection from '../components/AboutSection';
+import SutraSection from '../components/SutraSection';
 
 export default function HomePage({ onNavigate, onQuickView, onAddToCart, onBuyNow }) {
   const handleHeroShopClick = () => {
@@ -30,8 +31,11 @@ export default function HomePage({ onNavigate, onQuickView, onAddToCart, onBuyNo
         onBuyNow={onBuyNow}
       />
 
-      {/* About Section */}
+      {/* About Section (Features Sacred Raw Botanicals) */}
       <AboutSection onLearnMore={() => onNavigate('About Us')} />
+
+      {/* THE SUTRA – The Ayurveda Knowledge Challenge (Placed after Sacred Raw Botanicals and before VEDA WISDOM CIRCLE) */}
+      <SutraSection onExplore={() => onNavigate('The Sutra')} />
     </div>
   );
 }
