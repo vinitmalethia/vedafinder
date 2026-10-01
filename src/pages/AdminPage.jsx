@@ -1,22 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, Package, ShoppingCart, Users, FolderTree, 
   Ticket, Star, BookOpen, Settings, LogOut, Search, Bell, 
   ChevronRight, ChevronDown, Plus, Edit2, Trash2, Eye, X, 
   Check, ArrowRight, ShieldCheck, Filter, ArrowLeft, TrendingUp,
   BarChart3, AlertTriangle, Clock, Calendar, DollarSign, Upload,
-  Sparkles, CheckCircle2, Tag, Layers, RefreshCw, Menu
+  Sparkles, CheckCircle2, Tag, Layers, RefreshCw, Menu, Award,
+  HelpCircle, Save, CheckCircle
 } from 'lucide-react';
 import { VedaFinderLogo } from '../components/VedaLogoBrand';
 import { BotanicalBranch } from '../components/AyurvedicIcons';
+import { 
+  getStoredSutraQuiz, 
+  saveStoredSutraQuiz, 
+  DEFAULT_SUTRA_QUIZ 
+} from '../data/sutraQuizData';
 
-export default function AdminPage({ onLogout, onNavigate }) {
+export default function AdminPage({ 
+  orders: passedOrders = [], 
+  setOrders: setPassedOrders,
+  currentUser,
+  onLogout, 
+  onNavigate 
+}) {
   const [activeTab, setActiveTab] = useState('Dashboard');
   const [dateRange, setDateRange] = useState('This Month');
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  // Orders State (synced from prop or localStorage)
+  const [orders, setOrders] = useState(() => {
+    if (passedOrders && passedOrders.length > 0) return passedOrders;
+    try {
+      const saved = localStorage.getItem('vf_customer_orders');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Sync orders when props change
+  useEffect(() => {
+    if (passedOrders && passedOrders.length > 0) {
+      setOrders(passedOrders);
+    }
+  }, [passedOrders]);
+
+  // The Sutra Quiz State
+  const [sutraQuiz, setSutraQuiz] = useState(getStoredSutraQuiz);
+  const [quizSuccessToast, setQuizSuccessToast] = useState('');
+  const [editingQuestionId, setEditingQuestionId] = useState(null);
 
   // Products State
   const [products, setProducts] = useState([
@@ -29,7 +64,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
       price: 497,
       originalPrice: 650,
       stock: 35,
-      salesCount: 410,
+      salesCount: 0,
       status: 'In Stock',
       image: '/products/abhrak-bhasma.png',
       indicates: 'Cough, Acidity, Anemia, Debility',
@@ -45,7 +80,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
       price: 190,
       originalPrice: 260,
       stock: 45,
-      salesCount: 280,
+      salesCount: 0,
       status: 'In Stock',
       image: '/products/abhrak-bhasma-100.png',
       indicates: 'Cough, Acidity, Anemia, Anorexia',
@@ -61,7 +96,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
       price: 108,
       originalPrice: 150,
       stock: 55,
-      salesCount: 310,
+      salesCount: 0,
       status: 'In Stock',
       image: '/products/godanti-bhasma.png',
       indicates: 'Vitiated Blood, Cough, Headache, Fever',
@@ -77,7 +112,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
       price: 430,
       originalPrice: 580,
       stock: 65,
-      salesCount: 380,
+      salesCount: 0,
       status: 'In Stock',
       image: '/products/praval-pishti.png',
       indicates: 'Calcium Deficiency, Cough, Hyperacidity',
@@ -93,7 +128,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
       price: 865,
       originalPrice: 1150,
       stock: 14,
-      salesCount: 520,
+      salesCount: 0,
       status: 'In Stock',
       image: '/products/moti-pishti.png',
       indicates: 'Chronic Fever, Bleeding Disorders, Pitta Shamak',
@@ -109,7 +144,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
       price: 213,
       originalPrice: 299,
       stock: 28,
-      salesCount: 270,
+      salesCount: 0,
       status: 'In Stock',
       image: '/products/vang-bhasma.png',
       indicates: 'Urinary System Debility, Stamina',
@@ -125,7 +160,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
       price: 130,
       originalPrice: 180,
       stock: 50,
-      salesCount: 340,
+      salesCount: 0,
       status: 'In Stock',
       image: '/products/loha-bhasma.png',
       indicates: 'Anaemia, Spleen & Liver Enlargement',
@@ -141,7 +176,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
       price: 799,
       originalPrice: 999,
       stock: 85,
-      salesCount: 740,
+      salesCount: 0,
       status: 'In Stock',
       image: '/products/agnisip-tea.png',
       indicates: 'Gut Agni, Bloating, Digestive Balance',
@@ -157,7 +192,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
       price: 6700,
       originalPrice: 7999,
       stock: 8,
-      salesCount: 350,
+      salesCount: 0,
       status: 'Low Stock',
       image: '/products/chandi-bhasma.png',
       indicates: 'Memory Support, Low Immunity, Stress',
@@ -173,7 +208,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
       price: 4270,
       originalPrice: 4999,
       stock: 120,
-      salesCount: 680,
+      salesCount: 0,
       status: 'In Stock',
       image: '/products/nar-ojas.png',
       indicates: 'Strength, Stamina, Stress Relief, Recovery',
@@ -189,7 +224,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
       price: 320,
       originalPrice: 420,
       stock: 40,
-      salesCount: 295,
+      salesCount: 0,
       status: 'In Stock',
       image: '/products/trivang-bhasma.png',
       indicates: 'Reproductive Health, Urinary Disorders, Prameha',
@@ -198,10 +233,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
     }
   ]);
 
-  // Orders State
-  const [orders, setOrders] = useState([]);
-
-  // Modal States
+  // Modals
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [viewingOrder, setViewingOrder] = useState(null);
@@ -223,6 +255,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
 
   const sidebarLinks = [
     { name: 'Dashboard', icon: LayoutDashboard },
+    { name: 'The Sutra Quiz', icon: Award },
     { name: 'Products', icon: Package },
     { name: 'Orders', icon: ShoppingCart },
     { name: 'Customers', icon: Users },
@@ -234,6 +267,13 @@ export default function AdminPage({ onLogout, onNavigate }) {
     { name: 'Analytics', icon: BarChart3 },
     { name: 'Settings', icon: Settings },
   ];
+
+  // Dynamic Metrics Calculated from Real Orders & Real Products
+  const totalSales = orders.reduce((sum, o) => sum + (Number(o.amount) || Number(o.total) || 0), 0);
+  const totalOrdersCount = orders.length;
+  const uniqueSeekers = new Set(orders.map(o => o.phone || o.customer || o.email || o.customerEmail).filter(Boolean)).size;
+  const productsCount = products.length;
+  const lowStockItems = products.filter(p => p.stock < 15);
 
   // Save Product handler
   const handleSaveProduct = (e) => {
@@ -288,6 +328,92 @@ export default function AdminPage({ onLogout, onNavigate }) {
     }
   };
 
+  // The Sutra Quiz Management Handlers
+  const handleQuizHeaderChange = (field, value) => {
+    setSutraQuiz(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleUpdateQuestion = (qId, updatedFields) => {
+    setSutraQuiz(prev => ({
+      ...prev,
+      questions: prev.questions.map(q => q.id === qId ? { ...q, ...updatedFields } : q)
+    }));
+  };
+
+  const handleUpdateOption = (qId, optionKey, newText) => {
+    setSutraQuiz(prev => ({
+      ...prev,
+      questions: prev.questions.map(q => {
+        if (q.id === qId) {
+          return {
+            ...q,
+            options: q.options.map(opt => opt.key === optionKey ? { ...opt, text: newText } : opt)
+          };
+        }
+        return q;
+      })
+    }));
+  };
+
+  const handleAddNewQuestion = () => {
+    const nextIdx = (sutraQuiz.questions?.length || 0) + 1;
+    const newQ = {
+      id: 'q-' + Date.now(),
+      subject: 'Classical Samhita Chikitsa',
+      question: `Question ${nextIdx}: Enter your Ayurvedic challenge question here...`,
+      options: [
+        { key: 'A', text: 'Option A Text' },
+        { key: 'B', text: 'Option B Text' },
+        { key: 'C', text: 'Option C Text' },
+        { key: 'D', text: 'Option D Text' }
+      ],
+      correct: 'A',
+      explanation: 'Add classical Sanskrit shloka reference and explanation here.'
+    };
+
+    setSutraQuiz(prev => ({
+      ...prev,
+      totalQuestions: (prev.questions?.length || 0) + 1,
+      questions: [...(prev.questions || []), newQ]
+    }));
+    setEditingQuestionId(newQ.id);
+  };
+
+  const handleDeleteQuestion = (qId) => {
+    if (window.confirm('Are you sure you want to delete this MCQ question?')) {
+      setSutraQuiz(prev => {
+        const remaining = prev.questions.filter(q => q.id !== qId);
+        return {
+          ...prev,
+          totalQuestions: remaining.length,
+          questions: remaining
+        };
+      });
+    }
+  };
+
+  const handleSaveQuizToLive = () => {
+    saveStoredSutraQuiz(sutraQuiz);
+    setQuizSuccessToast('✨ The Sutra Challenge Quiz has been successfully saved & updated live on website!');
+    setTimeout(() => {
+      setQuizSuccessToast('');
+    }, 4500);
+  };
+
+  const handleResetQuizToDefault = () => {
+    if (window.confirm('Reset all questions to default classical Week 42 questions?')) {
+      setSutraQuiz(DEFAULT_SUTRA_QUIZ);
+      saveStoredSutraQuiz(DEFAULT_SUTRA_QUIZ);
+      setQuizSuccessToast('🌿 Quiz restored to default classical questions and saved live!');
+      setTimeout(() => {
+        setQuizSuccessToast('');
+      }, 4500);
+    }
+  };
+
   const filteredProducts = products.filter(p => {
     const matchCat = categoryFilter === 'All' || p.category === categoryFilter;
     const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -295,8 +421,6 @@ export default function AdminPage({ onLogout, onNavigate }) {
       (p.indicates && p.indicates.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchCat && matchSearch;
   });
-
-  const lowStockItems = products.filter(p => p.stock < 20);
 
   // Status Badge Helper
   const getStatusBadge = (status) => {
@@ -310,7 +434,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
       case 'Cancelled':
         return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#FDE8E8] text-[#C53030] border border-[#F9C2C2]">Cancelled</span>;
       default:
-        return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#FAF7F2] text-[#183B2B]">{status}</span>;
+        return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#FAF7F2] text-[#183B2B]">{status || 'Active'}</span>;
     }
   };
 
@@ -350,6 +474,11 @@ export default function AdminPage({ onLogout, onNavigate }) {
                 >
                   <Icon className={`w-4 h-4 ${isActive ? 'text-[#E6C887]' : 'text-[#8EA89C]'}`} />
                   <span>{item.name}</span>
+                  {item.name === 'The Sutra Quiz' && (
+                    <span className="ml-auto text-[9px] uppercase font-bold bg-[#C59A4E] text-[#112F22] px-1.5 py-0.5 rounded-full">
+                      New
+                    </span>
+                  )}
                 </button>
               );
             })}
@@ -378,7 +507,6 @@ export default function AdminPage({ onLogout, onNavigate }) {
           />
           <div className="fixed inset-y-0 left-0 w-72 max-w-[85vw] bg-[#112F22] text-[#E8DFC8] flex flex-col justify-between p-4 shadow-2xl z-10 border-r border-[#1B4432] animate-slideIn">
             <div>
-              {/* Top Brand Logo & Close button */}
               <div className="p-2 pb-4 border-b border-[#1A4230] flex items-center justify-between">
                 <button onClick={() => { setMobileSidebarOpen(false); onNavigate('Home'); }} className="text-left focus:outline-none">
                   <VedaFinderLogo variant="light" size="sm" showTagline={true} />
@@ -391,7 +519,6 @@ export default function AdminPage({ onLogout, onNavigate }) {
                 </button>
               </div>
 
-              {/* Navigation Links */}
               <nav className="py-4 space-y-1">
                 {sidebarLinks.map((item) => {
                   const Icon = item.icon;
@@ -417,7 +544,6 @@ export default function AdminPage({ onLogout, onNavigate }) {
               </nav>
             </div>
 
-            {/* Logout at Bottom */}
             <div className="pt-3 border-t border-[#1A4230]">
               <button
                 onClick={() => {
@@ -440,7 +566,6 @@ export default function AdminPage({ onLogout, onNavigate }) {
         {/* Top Header Bar */}
         <header className="h-16 sm:h-20 bg-[#FAF7F2] border-b border-[#E7DECD] px-3 sm:px-8 flex items-center justify-between sticky top-0 z-20 shadow-sm gap-2 sm:gap-4">
           
-          {/* Mobile Sidebar Hamburger Toggle & Search */}
           <div className="flex items-center gap-2 flex-1 max-w-md">
             <button
               onClick={() => setMobileSidebarOpen(true)}
@@ -450,86 +575,36 @@ export default function AdminPage({ onLogout, onNavigate }) {
               <Menu className="w-5 h-5" />
             </button>
 
-            {/* Search bar */}
-            <div className="relative flex-1">
+            <div className="relative w-full">
+              <Search className="w-4 h-4 text-[#8A9C91] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Search dispensary..."
+                placeholder="Search dispensary formulations, orders, questions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm bg-white border border-[#DCD3C0] text-[#174D3A] placeholder-[#8A9C91] focus:outline-none focus:ring-2 focus:ring-[#174D3A]/20 focus:border-[#174D3A] shadow-inner"
+                className="w-full pl-10 pr-4 py-2 sm:py-2.5 rounded-full bg-white border border-[#DCD3C0] text-xs sm:text-sm text-[#174D3A] placeholder-[#8A9C91] focus:outline-none focus:ring-2 focus:ring-[#174D3A]/20 shadow-inner"
               />
-              <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#8C682D] absolute left-3 top-1/2 -translate-y-1/2" />
             </div>
           </div>
 
-          {/* Right Header Actions */}
-          <div className="flex items-center gap-2 sm:gap-4">
-            
-            {/* Date Filter Dropdown */}
-            <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#DCD3C0] text-xs font-semibold text-[#174D3A] shadow-sm">
-              <Calendar className="w-3.5 h-3.5 text-[#8C682D]" />
-              <select
-                value={dateRange}
-                onChange={(e) => setDateRange(e.target.value)}
-                className="bg-transparent focus:outline-none cursor-pointer"
-              >
-                <option>Today</option>
-                <option>This Week</option>
-                <option>This Month</option>
-                <option>This Quarter</option>
-                <option>Year 2026</option>
-              </select>
-            </div>
-
-            {/* Back to Store Button */}
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             <button
               onClick={() => onNavigate('Home')}
-              className="inline-flex items-center gap-1 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white hover:bg-[#EFE7D8] text-[#174D3A] border border-[#DCD3C0] text-[11px] sm:text-xs font-semibold shadow-sm transition-all"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white border border-[#DCD3C0] text-[11px] sm:text-xs font-semibold text-[#174D3A] hover:bg-[#FAF7F2] shadow-sm flex items-center gap-1.5 transition-colors"
             >
-              <ArrowLeft className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              <span className="hidden sm:inline">Storefront</span>
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Storefront</span>
             </button>
 
-            {/* Notification Bell */}
-            <div className="relative">
-              <button 
-                onClick={() => setNotificationOpen(!notificationOpen)}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white border border-[#DCD3C0] flex items-center justify-center text-[#2C3E35] hover:bg-[#FAF7F2] transition-colors shadow-sm"
-              >
-                <Bell className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#4E6155]" />
-                <span className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white" />
-              </button>
-
-              {notificationOpen && (
-                <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-white rounded-2xl shadow-xl border border-[#E5DCBF] p-4 z-50 text-xs space-y-3 animate-fadeIn">
-                  <div className="flex items-center justify-between border-b pb-2">
-                    <span className="font-bold text-[#174D3A]">Dispensary Alerts</span>
-                    <span className="text-[10px] text-[#8C682D]">3 New</span>
-                  </div>
-                  <div className="space-y-2">
-                    <p className="text-[#4E6155] p-2 bg-[#FAF7F2] rounded-lg">
-                      ⚠️ <strong>Low Stock:</strong> Chandi is down to 8 units.
-                    </p>
-                    <p className="text-[#4E6155] p-2 bg-[#FAF7F2] rounded-lg">
-                      📋 <strong>System:</strong> No new orders yet.
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Admin Profile */}
             <div className="flex items-center gap-2 pl-1 sm:pl-2">
               <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#174D3A] text-white flex items-center justify-center font-bold text-xs shadow-sm">
                 A
               </div>
               <div className="hidden sm:flex flex-col text-left">
-                <span className="text-xs font-bold text-[#174D3A] leading-tight">Doctor Admin</span>
-                <span className="text-[10px] text-[#7A8C81] leading-tight">Master Dispensary</span>
+                <span className="text-xs font-bold text-[#174D3A] leading-tight">Master Admin</span>
+                <span className="text-[10px] text-[#7A8C81] leading-tight">Veda Finder Portal</span>
               </div>
             </div>
-
           </div>
 
         </header>
@@ -538,7 +613,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
         <main className="p-3 sm:p-8 space-y-6 sm:space-y-8 flex-1">
           
           {/* ========================================================================= */}
-          {/* TAB 1: DASHBOARD OVERVIEW */}
+          {/* TAB 1: DASHBOARD OVERVIEW (LIVE CLEAN DATA) */}
           {/* ========================================================================= */}
           {activeTab === 'Dashboard' && (
             <div className="space-y-6 sm:space-y-8">
@@ -551,11 +626,19 @@ export default function AdminPage({ onLogout, onNavigate }) {
                     <span className="text-2xl">🌿</span>
                   </h1>
                   <p className="text-xs sm:text-sm text-[#5B6D62]">
-                    Here is what's happening across your Ayurvedic dispensary for {dateRange}.
+                    Here is the live dispensary performance and customer metrics for {dateRange}.
                   </p>
                 </div>
 
                 <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setActiveTab('The Sutra Quiz')}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#FAF3E6] border border-[#DFCFA8] text-[#8C682D] text-xs font-bold shadow-sm hover:bg-[#F2E7D0] transition-all"
+                  >
+                    <Award className="w-4 h-4 text-[#8C682D]" />
+                    <span>Manage The Sutra Quiz</span>
+                  </button>
+
                   <button
                     onClick={() => {
                       setEditingProduct(null);
@@ -582,7 +665,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
                 </div>
               </div>
 
-              {/* 4 Metric KPI Cards: 2x2 on mobile, 4 columns on lg */}
+              {/* 4 Metric KPI Cards (REAL LIVE DATA) */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
                 
                 {/* Total Sales */}
@@ -594,9 +677,11 @@ export default function AdminPage({ onLogout, onNavigate }) {
                     <div className="min-w-0">
                       <span className="text-[10px] sm:text-xs text-[#708277] font-medium block truncate">Total Sales</span>
                       <span className="font-serif font-bold text-lg sm:text-3xl text-[#174D3A] leading-tight block truncate">
-                        ₹ 1.48L
+                        ₹ {totalSales.toLocaleString('en-IN')}
                       </span>
-                      <span className="text-[9px] sm:text-[11px] text-emerald-700 font-semibold block truncate">+28%</span>
+                      <span className="text-[9px] sm:text-[11px] text-[#8C682D] font-semibold block truncate">
+                        {totalSales > 0 ? 'Live Revenue' : 'Awaiting Orders'}
+                      </span>
                     </div>
                   </div>
                   <div className="hidden sm:flex w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E3D8C4] items-center justify-center text-[#73857B] group-hover:bg-[#174D3A] group-hover:text-white transition-colors">
@@ -613,9 +698,11 @@ export default function AdminPage({ onLogout, onNavigate }) {
                     <div className="min-w-0">
                       <span className="text-[10px] sm:text-xs text-[#708277] font-medium block truncate">Total Orders</span>
                       <span className="font-serif font-bold text-lg sm:text-3xl text-[#174D3A] leading-tight block truncate">
-                        128
+                        {totalOrdersCount}
                       </span>
-                      <span className="text-[9px] sm:text-[11px] text-[#55695C] font-semibold block truncate">+18 mo</span>
+                      <span className="text-[9px] sm:text-[11px] text-[#55695C] font-semibold block truncate">
+                        {totalOrdersCount > 0 ? 'Placed by customers' : '0 Orders this month'}
+                      </span>
                     </div>
                   </div>
                   <div className="hidden sm:flex w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E3D8C4] items-center justify-center text-[#73857B] group-hover:bg-[#174D3A] group-hover:text-white transition-colors">
@@ -632,9 +719,11 @@ export default function AdminPage({ onLogout, onNavigate }) {
                     <div className="min-w-0">
                       <span className="text-[10px] sm:text-xs text-[#708277] font-medium block truncate">Seekers</span>
                       <span className="font-serif font-bold text-lg sm:text-3xl text-[#174D3A] leading-tight block truncate">
-                        1,280
+                        {uniqueSeekers}
                       </span>
-                      <span className="text-[9px] sm:text-[11px] text-[#55695C] font-semibold block truncate">+96 new</span>
+                      <span className="text-[9px] sm:text-[11px] text-[#55695C] font-semibold block truncate">
+                        {uniqueSeekers > 0 ? 'Unique Buyers' : '0 Registered'}
+                      </span>
                     </div>
                   </div>
                   <div className="hidden sm:flex w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E3D8C4] items-center justify-center text-[#73857B] group-hover:bg-[#174D3A] group-hover:text-white transition-colors">
@@ -649,11 +738,11 @@ export default function AdminPage({ onLogout, onNavigate }) {
                       <Package className="w-4 h-4 sm:w-5 sm:h-5 text-[#246A42]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-[10px] sm:text-xs text-[#708277] font-medium block truncate">Products</span>
+                      <span className="text-[10px] sm:text-xs text-[#708277] font-medium block truncate">Catalog</span>
                       <span className="font-serif font-bold text-lg sm:text-3xl text-[#174D3A] leading-tight block truncate">
-                        {products.length}
+                        {productsCount}
                       </span>
-                      <span className="text-[9px] sm:text-[11px] text-emerald-700 font-semibold block truncate">AYUSH Mark</span>
+                      <span className="text-[9px] sm:text-[11px] text-emerald-700 font-semibold block truncate">AYUSH Active</span>
                     </div>
                   </div>
                   <div className="hidden sm:flex w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E3D8C4] items-center justify-center text-[#73857B] group-hover:bg-[#174D3A] group-hover:text-white transition-colors">
@@ -663,81 +752,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
 
               </div>
 
-              {/* Sales Overview Graph Card (Clean SVG Trend Line) */}
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E6DCC8] shadow-sm space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#EFE5D3] pb-4">
-                  <div>
-                    <h2 className="font-serif font-bold text-xl text-[#174D3A]">
-                      Sales Overview & Revenue Trend
-                    </h2>
-                    <p className="text-xs text-[#708277]">Monthly performance and seasonal Ayurvedic demand</p>
-                  </div>
-                  <div className="flex items-center gap-4 text-xs">
-                    <span className="flex items-center gap-1.5 font-semibold text-[#174D3A]">
-                      <span className="w-3 h-3 rounded-full bg-[#174D3A]" /> Revenue (₹)
-                    </span>
-                    <span className="flex items-center gap-1.5 font-semibold text-[#8C682D]">
-                      <span className="w-3 h-3 rounded-full bg-[#C59A4E]" /> Order Count
-                    </span>
-                  </div>
-                </div>
-
-                {/* SVG Visual Graph */}
-                <div className="h-48 w-full pt-4">
-                  <svg viewBox="0 0 800 180" className="w-full h-full overflow-visible">
-                    <defs>
-                      <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#174D3A" stopOpacity="0.25" />
-                        <stop offset="100%" stopColor="#174D3A" stopOpacity="0.0" />
-                      </linearGradient>
-                    </defs>
-
-                    {/* Grid lines */}
-                    <line x1="0" y1="30" x2="800" y2="30" stroke="#EFE7D8" strokeDasharray="4 4" />
-                    <line x1="0" y1="80" x2="800" y2="80" stroke="#EFE7D8" strokeDasharray="4 4" />
-                    <line x1="0" y1="130" x2="800" y2="130" stroke="#EFE7D8" strokeDasharray="4 4" />
-
-                    {/* Area under curve */}
-                    <path
-                      d="M 0 140 Q 150 120 250 80 T 500 50 T 800 20 L 800 160 L 0 160 Z"
-                      fill="url(#revenueGrad)"
-                    />
-
-                    {/* Trend Line */}
-                    <path
-                      d="M 0 140 Q 150 120 250 80 T 500 50 T 800 20"
-                      fill="none"
-                      stroke="#174D3A"
-                      strokeWidth="3.5"
-                      strokeLinecap="round"
-                    />
-
-                    {/* Accent Order count Line */}
-                    <path
-                      d="M 0 155 Q 150 135 250 110 T 500 85 T 800 60"
-                      fill="none"
-                      stroke="#C59A4E"
-                      strokeWidth="2.5"
-                      strokeDasharray="6 4"
-                    />
-
-                    {/* Data Points */}
-                    <circle cx="250" cy="80" r="5" fill="#174D3A" stroke="#FFF" strokeWidth="2" />
-                    <circle cx="500" cy="50" r="5" fill="#174D3A" stroke="#FFF" strokeWidth="2" />
-                    <circle cx="800" cy="20" r="6" fill="#174D3A" stroke="#C59A4E" strokeWidth="2.5" />
-                  </svg>
-                  <div className="flex justify-between text-[11px] text-[#7A8C80] font-medium pt-2">
-                    <span>May</span>
-                    <span>Jun</span>
-                    <span>Jul</span>
-                    <span>Aug</span>
-                    <span>Sep (Peak)</span>
-                    <span>Oct (Forecast)</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Side by Side: Recent Orders Table & Top-Selling Formulations */}
+              {/* Side by Side: Live Orders Table & Top Formulations */}
               <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
                 
                 {/* Recent Orders (7 cols on xl) */}
@@ -756,55 +771,69 @@ export default function AdminPage({ onLogout, onNavigate }) {
                     </button>
                   </div>
 
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs">
-                      <thead>
-                        <tr className="border-b border-[#EAE1D0] text-[#7A8C81] uppercase text-[10px] tracking-wider font-bold">
-                          <th className="pb-3 pl-1">Order ID</th>
-                          <th className="pb-3">Customer</th>
-                          <th className="pb-3">Amount</th>
-                          <th className="pb-3">Status</th>
-                          <th className="pb-3 text-right pr-1">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#F2EADB]">
-                        {orders.slice(0, 5).map((ord) => (
-                          <tr key={ord.id} className="hover:bg-[#FAF7F2] transition-colors">
-                            <td className="py-3 pl-1 font-mono font-bold text-xs text-[#174D3A]">
-                              {ord.id}
-                            </td>
-                            <td className="py-3 font-semibold text-xs text-[#174D3A]">
-                              {ord.customer}
-                            </td>
-                            <td className="py-3 font-serif font-bold text-xs text-[#174D3A]">
-                              ₹{ord.amount}
-                            </td>
-                            <td className="py-3">
-                              {getStatusBadge(ord.status)}
-                            </td>
-                            <td className="py-3 text-right pr-1">
-                              <button
-                                onClick={() => setViewingOrder(ord)}
-                                className="p-1.5 rounded-md text-[#5B6F63] hover:text-[#174D3A] hover:bg-[#EAE0CB] transition-colors"
-                                title="View Details"
-                              >
-                                <Eye className="w-3.5 h-3.5" />
-                              </button>
-                            </td>
+                  {orders.length === 0 ? (
+                    <div className="py-12 text-center text-[#73857B] space-y-3">
+                      <div className="w-12 h-12 rounded-full bg-[#FAF7F2] border border-[#E6DCC8] flex items-center justify-center mx-auto text-[#8C682D]">
+                        <ShoppingCart className="w-6 h-6 text-[#8C682D]" />
+                      </div>
+                      <div className="space-y-1">
+                        <p className="font-bold text-sm text-[#174D3A]">No Customer Orders Placed Yet</p>
+                        <p className="text-xs text-[#7A8C81] max-w-sm mx-auto">
+                          Orders placed via the online store or WhatsApp checkout will appear here automatically.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs">
+                        <thead>
+                          <tr className="border-b border-[#EAE1D0] text-[#7A8C81] uppercase text-[10px] tracking-wider font-bold">
+                            <th className="pb-3 pl-1">Order ID</th>
+                            <th className="pb-3">Customer</th>
+                            <th className="pb-3">Amount</th>
+                            <th className="pb-3">Status</th>
+                            <th className="pb-3 text-right pr-1">Action</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody className="divide-y divide-[#F2EADB]">
+                          {orders.slice(0, 5).map((ord) => (
+                            <tr key={ord.id} className="hover:bg-[#FAF7F2] transition-colors">
+                              <td className="py-3 pl-1 font-mono font-bold text-xs text-[#174D3A]">
+                                {ord.id}
+                              </td>
+                              <td className="py-3 font-semibold text-xs text-[#174D3A]">
+                                {ord.customer || ord.customerName || 'Customer'}
+                              </td>
+                              <td className="py-3 font-serif font-bold text-xs text-[#174D3A]">
+                                ₹{ord.amount || ord.total}
+                              </td>
+                              <td className="py-3">
+                                {getStatusBadge(ord.status)}
+                              </td>
+                              <td className="py-3 text-right pr-1">
+                                <button
+                                  onClick={() => setViewingOrder(ord)}
+                                  className="p-1.5 rounded-md text-[#5B6F63] hover:text-[#174D3A] hover:bg-[#EAE0CB] transition-colors"
+                                  title="View Details"
+                                >
+                                  <Eye className="w-3.5 h-3.5" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </div>
 
-                {/* Top-Selling & Low-Stock Alerts (5 cols on xl) */}
+                {/* Top Formulations & Low-Stock Alerts (5 cols on xl) */}
                 <div className="xl:col-span-5 space-y-6">
                   
-                  {/* Top-Selling Products */}
+                  {/* Formulations List */}
                   <div className="bg-white rounded-3xl p-6 border border-[#E6DCC8] shadow-sm space-y-4">
                     <div className="flex items-center justify-between border-b border-[#EFE5D3] pb-3">
-                      <h3 className="font-serif font-bold text-lg text-[#174D3A]">Top-Selling Formulations</h3>
+                      <h3 className="font-serif font-bold text-lg text-[#174D3A]">Active Formulations</h3>
                       <Sparkles className="w-4 h-4 text-[#8C682D]" />
                     </div>
 
@@ -818,7 +847,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
                             </div>
                             <div>
                               <span className="font-semibold text-[#174D3A] block truncate max-w-[140px]">{p.name}</span>
-                              <span className="text-[10px] text-[#7A8C81]">{p.salesCount || 100}+ orders</span>
+                              <span className="text-[10px] text-[#7A8C81]">{p.category} • {p.stock} units</span>
                             </div>
                           </div>
                           <span className="font-serif font-bold text-sm text-[#174D3A]">₹{p.price}</span>
@@ -834,12 +863,16 @@ export default function AdminPage({ onLogout, onNavigate }) {
                       <span>Low Stock Dispensary Alert ({lowStockItems.length})</span>
                     </div>
                     <div className="space-y-2 text-xs text-[#526659]">
-                      {lowStockItems.map((item) => (
-                        <div key={item.id} className="flex items-center justify-between bg-white p-2 rounded-xl border border-[#E6DCC7]">
-                          <span className="font-semibold text-[#174D3A]">{item.name}</span>
-                          <span className="font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">{item.stock} left</span>
-                        </div>
-                      ))}
+                      {lowStockItems.length === 0 ? (
+                        <p className="text-xs text-emerald-800 font-medium">All dispensary stocks are currently healthy.</p>
+                      ) : (
+                        lowStockItems.map((item) => (
+                          <div key={item.id} className="flex items-center justify-between bg-white p-2 rounded-xl border border-[#E6DCC7]">
+                            <span className="font-semibold text-[#174D3A]">{item.name}</span>
+                            <span className="font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">{item.stock} left</span>
+                          </div>
+                        ))
+                      )}
                     </div>
                   </div>
 
@@ -851,7 +884,292 @@ export default function AdminPage({ onLogout, onNavigate }) {
           )}
 
           {/* ========================================================================= */}
-          {/* TAB 2: PRODUCT MANAGEMENT */}
+          {/* TAB 2: THE SUTRA QUIZ & QUESTIONS MANAGER (FULL EDITING SUITE) */}
+          {/* ========================================================================= */}
+          {activeTab === 'The Sutra Quiz' && (
+            <div className="space-y-6 animate-fadeIn">
+              
+              {/* Success Toast */}
+              {quizSuccessToast && (
+                <div className="p-4 rounded-2xl bg-emerald-900 text-emerald-100 border border-emerald-500 shadow-xl flex items-center justify-between gap-3 animate-fadeIn">
+                  <div className="flex items-center gap-2.5">
+                    <CheckCircle className="w-5 h-5 text-emerald-300 shrink-0" />
+                    <span className="text-xs sm:text-sm font-semibold">{quizSuccessToast}</span>
+                  </div>
+                  <button onClick={() => setQuizSuccessToast('')} className="text-emerald-300 hover:text-white">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/* Header Box */}
+              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E6DCC8] shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C682D] bg-[#FAF3E6] px-3 py-1 rounded-full border border-[#E2D2B5]">
+                      WEEK {sutraQuiz.week || 42} QUIZ MANAGER
+                    </span>
+                    <span className="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                      LIVE ON /the-sutra
+                    </span>
+                  </div>
+                  <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#174D3A]">
+                    The Sutra Knowledge Challenge Manager
+                  </h2>
+                  <p className="text-xs text-[#6A7C71]">
+                    Customize the weekly theme, modify questions, update MCQ options (A, B, C, D), and change correct answers whenever you want.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <button
+                    onClick={handleResetQuizToDefault}
+                    className="px-4 py-2.5 rounded-full bg-[#FAF7F2] hover:bg-[#EFE5D3] text-[#55695C] border border-[#D5C9B3] text-xs font-semibold transition-all flex items-center gap-1.5"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    <span>Reset to Default</span>
+                  </button>
+
+                  <button
+                    onClick={handleAddNewQuestion}
+                    className="px-4 py-2.5 rounded-full bg-[#174D3A] hover:bg-[#20634B] text-white text-xs font-semibold shadow-md transition-all flex items-center gap-1.5"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add Question</span>
+                  </button>
+
+                  <button
+                    onClick={handleSaveQuizToLive}
+                    className="px-6 py-2.5 rounded-full bg-[#C59A4E] hover:bg-[#B3873B] text-[#0E2419] text-xs font-bold shadow-lg transition-all flex items-center gap-1.5 transform hover:scale-105"
+                  >
+                    <Save className="w-4 h-4" />
+                    <span>Save & Publish Live</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Quiz General Settings Card */}
+              <div className="bg-white rounded-3xl p-6 border border-[#E6DCC8] shadow-sm space-y-4">
+                <h3 className="font-serif font-bold text-lg text-[#174D3A] border-b border-[#F0E6D5] pb-2">
+                  1. Challenge Metadata & Schedule
+                </h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+                  <div>
+                    <label className="block font-bold text-[#174D3A] uppercase tracking-wider mb-1">Week Number</label>
+                    <input
+                      type="number"
+                      value={sutraQuiz.week || 42}
+                      onChange={(e) => handleQuizHeaderChange('week', Number(e.target.value))}
+                      className="w-full px-3.5 py-2 rounded-xl bg-[#FAF7F2] border border-[#D5C9B3] text-sm text-[#174D3A] font-bold focus:outline-none focus:border-[#174D3A]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-[#174D3A] uppercase tracking-wider mb-1">Challenge Title</label>
+                    <input
+                      type="text"
+                      value={sutraQuiz.title || ''}
+                      onChange={(e) => handleQuizHeaderChange('title', e.target.value)}
+                      className="w-full px-3.5 py-2 rounded-xl bg-[#FAF7F2] border border-[#D5C9B3] text-xs text-[#174D3A] font-semibold focus:outline-none focus:border-[#174D3A]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-[#174D3A] uppercase tracking-wider mb-1">Sanskrit Theme</label>
+                    <input
+                      type="text"
+                      value={sutraQuiz.sanskritTheme || ''}
+                      onChange={(e) => handleQuizHeaderChange('sanskritTheme', e.target.value)}
+                      className="w-full px-3.5 py-2 rounded-xl bg-[#FAF7F2] border border-[#D5C9B3] text-xs text-[#8C682D] font-bold focus:outline-none focus:border-[#174D3A]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-[#174D3A] uppercase tracking-wider mb-1">Duration & Live Until</label>
+                    <input
+                      type="text"
+                      value={sutraQuiz.liveUntil || 'Sunday 10:00 PM IST'}
+                      onChange={(e) => handleQuizHeaderChange('liveUntil', e.target.value)}
+                      className="w-full px-3.5 py-2 rounded-xl bg-[#FAF7F2] border border-[#D5C9B3] text-xs text-[#174D3A] focus:outline-none focus:border-[#174D3A]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Questions & Options List Card */}
+              <div className="space-y-5">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-serif font-bold text-xl text-[#174D3A]">
+                    2. Manage Questions & Options ({(sutraQuiz.questions || []).length} MCQs)
+                  </h3>
+                  <button
+                    onClick={handleAddNewQuestion}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#8C682D] hover:text-[#174D3A]"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add Another Question</span>
+                  </button>
+                </div>
+
+                {(sutraQuiz.questions || []).map((q, idx) => (
+                  <div 
+                    key={q.id || idx}
+                    className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E3D8C3] shadow-md space-y-5 hover:border-[#8C682D]/70 transition-all"
+                  >
+                    {/* Question Header & Controls */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F0E6D5] pb-4">
+                      <div className="flex items-center gap-3">
+                        <span className="w-8 h-8 rounded-full bg-[#174D3A] text-white flex items-center justify-center font-serif font-bold text-sm shadow">
+                          {idx + 1}
+                        </span>
+                        <div>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C682D] block">
+                            QUESTION #{idx + 1}
+                          </span>
+                          <input
+                            type="text"
+                            value={q.subject || ''}
+                            onChange={(e) => handleUpdateQuestion(q.id, { subject: e.target.value })}
+                            placeholder="Subject / Samhita Reference (e.g. Charaka Samhita)"
+                            className="text-xs font-bold text-[#174D3A] bg-transparent border-b border-dashed border-[#D5C9B3] focus:outline-none focus:border-[#174D3A] w-64"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF3E6] border border-[#E4D5B9] text-xs font-bold text-[#8C682D]">
+                          <span>Correct Key:</span>
+                          <select
+                            value={q.correct}
+                            onChange={(e) => handleUpdateQuestion(q.id, { correct: e.target.value })}
+                            className="bg-white text-emerald-800 font-bold border border-[#D5C9B3] rounded-lg px-2 py-0.5 focus:outline-none cursor-pointer"
+                          >
+                            <option value="A">Option A</option>
+                            <option value="B">Option B</option>
+                            <option value="C">Option C</option>
+                            <option value="D">Option D</option>
+                          </select>
+                        </div>
+
+                        <button
+                          onClick={() => handleDeleteQuestion(q.id)}
+                          className="p-2 rounded-full text-red-600 hover:bg-red-50 transition-colors"
+                          title="Delete Question"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Question Textarea */}
+                    <div className="space-y-1">
+                      <label className="block text-xs font-bold text-[#174D3A] uppercase tracking-wider">
+                        Question Description:
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={q.question}
+                        onChange={(e) => handleUpdateQuestion(q.id, { question: e.target.value })}
+                        className="w-full p-3 rounded-2xl bg-[#FAF7F2] border border-[#D5C9B3] text-sm text-[#174D3A] font-serif font-medium focus:outline-none focus:border-[#174D3A]"
+                      />
+                    </div>
+
+                    {/* 4 Options Grid (A, B, C, D) */}
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold text-[#174D3A] uppercase tracking-wider">
+                        Options (Select the radio button to mark as the correct answer):
+                      </label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {['A', 'B', 'C', 'D'].map((key) => {
+                          const optionObj = q.options?.find(o => o.key === key) || { key, text: '' };
+                          const isCorrect = q.correct === key;
+
+                          return (
+                            <div 
+                              key={key}
+                              className={`p-3 rounded-2xl border transition-all flex items-center gap-3 ${
+                                isCorrect 
+                                  ? 'bg-emerald-50/80 border-emerald-500 shadow-sm' 
+                                  : 'bg-[#FAF7F2] border-[#E0D5C1]'
+                              }`}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => handleUpdateQuestion(q.id, { correct: key })}
+                                className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0 transition-all ${
+                                  isCorrect 
+                                    ? 'bg-emerald-600 text-white shadow-md' 
+                                    : 'bg-white border border-[#C5B79F] text-[#5B6D62] hover:bg-[#174D3A] hover:text-white'
+                                }`}
+                                title={`Click to set Option ${key} as Correct Answer`}
+                              >
+                                {key}
+                              </button>
+
+                              <input
+                                type="text"
+                                value={optionObj.text}
+                                onChange={(e) => handleUpdateOption(q.id, key, e.target.value)}
+                                placeholder={`Enter text for Option ${key}`}
+                                className="flex-1 bg-transparent text-xs sm:text-sm text-[#174D3A] font-medium focus:outline-none"
+                              />
+
+                              {isCorrect && (
+                                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full shrink-0 flex items-center gap-1">
+                                  <Check className="w-3 h-3" /> Correct
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Explanation / Reference */}
+                    <div className="space-y-1 pt-1">
+                      <label className="block text-xs font-bold text-[#8C682D] uppercase tracking-wider flex items-center gap-1.5">
+                        <BookOpen className="w-3.5 h-3.5" />
+                        <span>Classical Shloka Reference & Explanation (Revealed to participants after quiz):</span>
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={q.explanation || ''}
+                        onChange={(e) => handleUpdateQuestion(q.id, { explanation: e.target.value })}
+                        placeholder="e.g. Reference: Charaka Samhita Chikitsasthana 1/1..."
+                        className="w-full p-3 rounded-2xl bg-[#F6F2E8] border border-[#DFCFA8] text-xs text-[#485B50] focus:outline-none focus:border-[#174D3A]"
+                      />
+                    </div>
+
+                  </div>
+                ))}
+
+                {/* Bottom Save CTA Bar */}
+                <div className="p-6 rounded-3xl bg-[#112F22] text-[#E8DFC8] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl border border-[#C59A4E]/30">
+                  <div>
+                    <h4 className="font-serif font-bold text-lg text-white">
+                      Ready to update The Sutra Challenge?
+                    </h4>
+                    <p className="text-xs text-[#B4D0C2]">
+                      Saving will immediately update all questions, options, and explanations live on the website.
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={handleSaveQuizToLive}
+                    className="px-8 py-3.5 rounded-full bg-[#C59A4E] hover:bg-[#B3873B] text-[#0E2419] font-bold text-sm shadow-xl transition-all flex items-center gap-2 transform hover:scale-105 shrink-0"
+                  >
+                    <Save className="w-4 h-4" />
+                    <span>Save & Publish Live Changes</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* TAB 3: PRODUCT MANAGEMENT */}
           {/* ========================================================================= */}
           {activeTab === 'Products' && (
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E6DCC8] shadow-sm space-y-6">
@@ -993,7 +1311,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
           )}
 
           {/* ========================================================================= */}
-          {/* TAB 3: ORDER MANAGEMENT */}
+          {/* TAB 4: ORDER MANAGEMENT (LIVE CUSTOMER ORDERS) */}
           {/* ========================================================================= */}
           {activeTab === 'Orders' && (
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E6DCC8] shadow-sm space-y-6">
@@ -1004,78 +1322,98 @@ export default function AdminPage({ onLogout, onNavigate }) {
                 </div>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs sm:text-sm">
-                  <thead>
-                    <tr className="border-b border-[#EAE1D0] text-[#8C682D] uppercase text-[10px] tracking-wider font-bold">
-                      <th className="pb-3 pl-2">Order ID</th>
-                      <th className="pb-3">Customer</th>
-                      <th className="pb-3">Products</th>
-                      <th className="pb-3">Amount</th>
-                      <th className="pb-3">Payment</th>
-                      <th className="pb-3">Status</th>
-                      <th className="pb-3">Date</th>
-                      <th className="pb-3 text-right pr-2">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#F2EADB]">
-                    {orders.map((ord) => (
-                      <tr key={ord.id} className="hover:bg-[#FAF7F2] transition-colors">
-                        <td className="py-3.5 pl-2 font-mono font-bold text-xs text-[#174D3A]">{ord.id}</td>
-                        <td className="py-3.5 font-semibold text-xs text-[#174D3A]">{ord.customer}</td>
-                        <td className="py-3.5 text-xs text-[#4E6155] max-w-[200px] truncate">{ord.products}</td>
-                        <td className="py-3.5 font-serif font-bold text-sm text-[#174D3A]">₹{ord.amount}</td>
-                        <td className="py-3.5 text-xs text-[#708277]">{ord.paymentStatus}</td>
-                        <td className="py-3.5">{getStatusBadge(ord.status)}</td>
-                        <td className="py-3.5 text-[11px] text-[#7A8C81]">{ord.date}</td>
-                        <td className="py-3.5 text-right pr-2">
-                          <button
-                            onClick={() => setViewingOrder(ord)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#FAF7F2] hover:bg-[#174D3A] text-[#174D3A] hover:text-white border border-[#D5C9B3] text-xs font-semibold transition-all"
-                          >
-                            <Eye className="w-3.5 h-3.5" />
-                            <span>View</span>
-                          </button>
-                        </td>
+              {orders.length === 0 ? (
+                <div className="py-16 text-center text-[#73857B] space-y-3">
+                  <div className="w-14 h-14 rounded-full bg-[#FAF7F2] border border-[#E6DCC8] flex items-center justify-center mx-auto text-[#8C682D]">
+                    <ShoppingCart className="w-7 h-7 text-[#8C682D]" />
+                  </div>
+                  <h3 className="font-serif font-bold text-lg text-[#174D3A]">No Customer Orders Found</h3>
+                  <p className="text-xs text-[#7A8C81] max-w-sm mx-auto">
+                    New customer orders placed through the website or UPI gateway will appear here.
+                  </p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs sm:text-sm">
+                    <thead>
+                      <tr className="border-b border-[#EAE1D0] text-[#8C682D] uppercase text-[10px] tracking-wider font-bold">
+                        <th className="pb-3 pl-2">Order ID</th>
+                        <th className="pb-3">Customer</th>
+                        <th className="pb-3">Products</th>
+                        <th className="pb-3">Amount</th>
+                        <th className="pb-3">Payment</th>
+                        <th className="pb-3">Status</th>
+                        <th className="pb-3">Date</th>
+                        <th className="pb-3 text-right pr-2">Action</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="divide-y divide-[#F2EADB]">
+                      {orders.map((ord) => (
+                        <tr key={ord.id} className="hover:bg-[#FAF7F2] transition-colors">
+                          <td className="py-3.5 pl-2 font-mono font-bold text-xs text-[#174D3A]">{ord.id}</td>
+                          <td className="py-3.5 font-semibold text-xs text-[#174D3A]">{ord.customer || ord.customerName || 'Customer'}</td>
+                          <td className="py-3.5 text-xs text-[#4E6155] max-w-[200px] truncate">{ord.products || 'Ayurvedic Formulations'}</td>
+                          <td className="py-3.5 font-serif font-bold text-sm text-[#174D3A]">₹{ord.amount || ord.total}</td>
+                          <td className="py-3.5 text-xs text-[#708277]">{ord.paymentStatus || 'Paid (UPI/Razorpay)'}</td>
+                          <td className="py-3.5">{getStatusBadge(ord.status || 'Processing')}</td>
+                          <td className="py-3.5 text-[11px] text-[#7A8C81]">{ord.date || 'Recent'}</td>
+                          <td className="py-3.5 text-right pr-2">
+                            <button
+                              onClick={() => setViewingOrder(ord)}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#FAF7F2] hover:bg-[#174D3A] text-[#174D3A] hover:text-white border border-[#D5C9B3] text-xs font-semibold transition-all"
+                            >
+                              <Eye className="w-3.5 h-3.5" />
+                              <span>View</span>
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           )}
 
           {/* ========================================================================= */}
-          {/* TAB 4: ANALYTICS */}
+          {/* TAB 5: ANALYTICS & INTELLIGENCE */}
           {/* ========================================================================= */}
           {activeTab === 'Analytics' && (
             <div className="space-y-6">
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E6DCC8] shadow-sm space-y-6">
                 <div className="border-b border-[#EFE5D3] pb-4">
                   <h2 className="font-serif font-bold text-2xl text-[#174D3A]">Dispensary Analytics & Intelligence</h2>
-                  <p className="text-xs text-[#708277]">Ayurvedic category distribution, retention, and fulfillment metrics</p>
+                  <p className="text-xs text-[#708277]">Ayurvedic category distribution, catalog health, and live customer metrics</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8DEC9]">
-                    <span className="text-xs text-[#708277] block">Bhasma Share</span>
-                    <span className="font-serif font-bold text-2xl text-[#174D3A]">45.2%</span>
-                    <span className="text-[11px] text-emerald-700 font-semibold block">Top Category</span>
+                    <span className="text-xs text-[#708277] block">Bhasma Formulations</span>
+                    <span className="font-serif font-bold text-2xl text-[#174D3A]">
+                      {products.filter(p => p.category === 'Bhasma').length} items
+                    </span>
+                    <span className="text-[11px] text-emerald-700 font-semibold block">Primary Category</span>
                   </div>
                   <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8DEC9]">
-                    <span className="text-xs text-[#708277] block">Pishti Share</span>
-                    <span className="font-serif font-bold text-2xl text-[#174D3A]">25.8%</span>
-                    <span className="text-[11px] text-emerald-700 font-semibold block">High Repeat Rate</span>
+                    <span className="text-xs text-[#708277] block">Pishti Formulations</span>
+                    <span className="font-serif font-bold text-2xl text-[#174D3A]">
+                      {products.filter(p => p.category === 'Pishti').length} items
+                    </span>
+                    <span className="text-[11px] text-emerald-700 font-semibold block">Pearl & Coral</span>
                   </div>
                   <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8DEC9]">
-                    <span className="text-xs text-[#708277] block">Capsules & Vitality</span>
-                    <span className="font-serif font-bold text-2xl text-[#174D3A]">19.4%</span>
-                    <span className="text-[11px] text-emerald-700 font-semibold block">Nar Ojas Leading</span>
+                    <span className="text-xs text-[#708277] block">Vitality Capsules</span>
+                    <span className="font-serif font-bold text-2xl text-[#174D3A]">
+                      {products.filter(p => p.category === 'Capsules').length} items
+                    </span>
+                    <span className="text-[11px] text-emerald-700 font-semibold block">Nar Ojas Premium</span>
                   </div>
                   <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8DEC9]">
                     <span className="text-xs text-[#708277] block">Herbal Teas</span>
-                    <span className="font-serif font-bold text-2xl text-[#174D3A]">9.6%</span>
-                    <span className="text-[11px] text-emerald-700 font-semibold block">Growing</span>
+                    <span className="font-serif font-bold text-2xl text-[#174D3A]">
+                      {products.filter(p => p.category === 'Herbal Tea').length} items
+                    </span>
+                    <span className="text-[11px] text-emerald-700 font-semibold block">Agnisip Digestive</span>
                   </div>
                 </div>
               </div>
@@ -1083,7 +1421,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
           )}
 
           {/* ========================================================================= */}
-          {/* TAB 5: OTHER SIDEBAR TABS (Customers, Categories, Reviews, etc.) */}
+          {/* TAB 6: OTHER SIDEBAR TABS */}
           {/* ========================================================================= */}
           {['Customers', 'Categories', 'Inventory', 'Coupons & Offers', 'Reviews', 'Blog', 'Settings'].includes(activeTab) && (
             <div className="bg-white rounded-3xl p-8 border border-[#E6DCC8] shadow-sm space-y-4 text-center py-16">
@@ -1126,7 +1464,6 @@ export default function AdminPage({ onLogout, onNavigate }) {
 
             <form onSubmit={handleSaveProduct} className="space-y-4 text-xs">
               
-              {/* Product Names */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-bold text-[#174D3A] uppercase tracking-wider mb-1">Product Name (English)</label>
@@ -1152,7 +1489,6 @@ export default function AdminPage({ onLogout, onNavigate }) {
                 </div>
               </div>
 
-              {/* Category, SKU, Stock */}
               <div className="grid grid-cols-3 gap-3">
                 <div>
                   <label className="block font-bold text-[#174D3A] uppercase tracking-wider mb-1">Category</label>
@@ -1192,7 +1528,6 @@ export default function AdminPage({ onLogout, onNavigate }) {
                 </div>
               </div>
 
-              {/* Pricing */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block font-bold text-[#174D3A] uppercase tracking-wider mb-1">Sale Price (₹)</label>
@@ -1218,7 +1553,6 @@ export default function AdminPage({ onLogout, onNavigate }) {
                 </div>
               </div>
 
-              {/* Product Benefits & Indications */}
               <div>
                 <label className="block font-bold text-[#174D3A] uppercase tracking-wider mb-1">Therapeutic Indications</label>
                 <input
@@ -1230,7 +1564,6 @@ export default function AdminPage({ onLogout, onNavigate }) {
                 />
               </div>
 
-              {/* Key Ingredients */}
               <div>
                 <label className="block font-bold text-[#174D3A] uppercase tracking-wider mb-1">Key Ayurvedic Ingredients</label>
                 <input
@@ -1242,7 +1575,6 @@ export default function AdminPage({ onLogout, onNavigate }) {
                 />
               </div>
 
-              {/* Usage / Anupana Instructions */}
               <div>
                 <label className="block font-bold text-[#174D3A] uppercase tracking-wider mb-1">Usage & Anupana (Carrier)</label>
                 <input
@@ -1254,7 +1586,6 @@ export default function AdminPage({ onLogout, onNavigate }) {
                 />
               </div>
 
-              {/* Image Selection */}
               <div>
                 <label className="block font-bold text-[#174D3A] uppercase tracking-wider mb-1">Select 3D Pack Photo</label>
                 <select
@@ -1281,7 +1612,7 @@ export default function AdminPage({ onLogout, onNavigate }) {
                   onClick={() => setIsAddModalOpen(false)}
                   className="px-5 py-2.5 rounded-full border border-[#D5C9B3] text-[#55695D] hover:bg-white"
                 >
-                  Save as Draft
+                  Cancel
                 </button>
                 <button
                   type="submit"
@@ -1315,25 +1646,25 @@ export default function AdminPage({ onLogout, onNavigate }) {
             <div className="space-y-3 text-xs">
               <div className="p-3 bg-white rounded-xl border border-[#E7DCBF]">
                 <span className="text-[#8C682D] font-bold block mb-0.5">Customer Information</span>
-                <p className="text-sm font-semibold text-[#174D3A]">{viewingOrder.customer}</p>
-                <p className="text-[#6D8074]">{viewingOrder.email}</p>
-                <p className="text-[#6D8074]">{viewingOrder.phone}</p>
-                <p className="text-[11px] text-[#8C682D] mt-1">{viewingOrder.date}</p>
+                <p className="text-sm font-semibold text-[#174D3A]">{viewingOrder.customer || viewingOrder.customerName || 'Customer'}</p>
+                <p className="text-[#6D8074]">{viewingOrder.email || viewingOrder.customerEmail || 'Not provided'}</p>
+                <p className="text-[#6D8074]">{viewingOrder.phone || 'WhatsApp Verified'}</p>
+                <p className="text-[11px] text-[#8C682D] mt-1">{viewingOrder.date || 'Recent'}</p>
               </div>
 
               <div className="p-3 bg-white rounded-xl border border-[#E7DCBF]">
                 <span className="text-[#8C682D] font-bold block mb-0.5">Formulations</span>
-                <p className="text-sm text-[#2C3E35] font-medium">{viewingOrder.products}</p>
+                <p className="text-sm text-[#2C3E35] font-medium">{viewingOrder.products || 'Ayurvedic Formulations'}</p>
               </div>
 
               <div className="p-3 bg-white rounded-xl border border-[#E7DCBF] flex items-center justify-between">
                 <div>
                   <span className="text-[#8C682D] font-bold block">Status</span>
-                  <div className="mt-1">{getStatusBadge(viewingOrder.status)}</div>
+                  <div className="mt-1">{getStatusBadge(viewingOrder.status || 'Processing')}</div>
                 </div>
                 <div className="text-right">
                   <span className="text-[#8C682D] font-bold block">Total Amount</span>
-                  <span className="font-serif font-bold text-lg text-[#174D3A]">₹{viewingOrder.amount}</span>
+                  <span className="font-serif font-bold text-lg text-[#174D3A]">₹{viewingOrder.amount || viewingOrder.total}</span>
                 </div>
               </div>
             </div>

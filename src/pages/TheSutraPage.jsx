@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Sparkles, 
   Trophy, 
@@ -22,83 +22,7 @@ import {
   Check
 } from 'lucide-react';
 import { VedaFinderLogo } from '../components/VedaLogoBrand';
-
-// Sample Live Weekly Quiz Data (Week 42)
-const CURRENT_QUIZ = {
-  week: 42,
-  title: 'Rasashastra, Dravyaguna & Classical Chikitsa Mastery',
-  sanskritTheme: 'रसशास्त्रं द्रव्यविवेकश्च',
-  duration: '15 Mins',
-  totalQuestions: 5,
-  liveUntil: 'Sunday 10:00 PM IST',
-  questions: [
-    {
-      id: 'q1',
-      subject: 'Charaka Samhita — Sutrasthana',
-      question: 'According to Acharya Charaka, which of the following is considered the supreme Rasayana among all botanical substances?',
-      options: [
-        { key: 'A', text: 'Amalaki (Phyllanthus emblica)' },
-        { key: 'B', text: 'Haritaki (Terminalia chebula)' },
-        { key: 'C', text: 'Guduchi (Tinospora cordifolia)' },
-        { key: 'D', text: 'Ashwagandha (Withania somnifera)' }
-      ],
-      correct: 'B',
-      explanation: 'In Charaka Samhita Chikitsasthana 1/1, Haritaki is hailed as "Pathya" and revered like a mother (माता इव हितकारिणी) for having 5 Rasas (excluding Lavana) and Tridoshahara Rasayana potency.'
-    },
-    {
-      id: 'q2',
-      subject: 'Rasashastra — Bhasma Pariksha',
-      question: 'Which classical test determines that a Bhasma has attained nano-particle fineness capable of floating on water surface?',
-      options: [
-        { key: 'A', text: 'Rekhapurnatwa (रेखापूर्णत्व)' },
-        { key: 'B', text: 'Varitaratwa (वारितरत्व)' },
-        { key: 'C', text: 'Apunarbhava (अपुनर्भव)' },
-        { key: 'D', text: 'Niruttha (निरुत्थ)' }
-      ],
-      correct: 'B',
-      explanation: 'Varitaratwa is the test where incinerated micro-fine Bhasma floats without sinking on still water due to reduced specific gravity and surface tension.'
-    },
-    {
-      id: 'q3',
-      subject: 'Dravyaguna — Virya & Vipaka',
-      question: 'What is the specific Vipaka (post-digestive effect) of Amalaki, despite its predominantly Amla (sour) Rasa?',
-      options: [
-        { key: 'A', text: 'Amla Vipaka (अम्ल विपाक)' },
-        { key: 'B', text: 'Katu Vipaka (कटु विपाक)' },
-        { key: 'C', text: 'Madhura Vipaka (मधुर विपाक)' },
-        { key: 'D', text: 'Lavana Vipaka (लवण विपाक)' }
-      ],
-      correct: 'C',
-      explanation: 'Amalaki is an exception (Apavada) — though sour in taste, it undergoes Madhura Vipaka and Sheet Virya, making it supreme for Pitta cooling without increasing acidity.'
-    },
-    {
-      id: 'q4',
-      subject: 'Sushruta Samhita — Shalya Tantra',
-      question: 'According to Acharya Sushruta, which Srotas is considered the seat of Ojas and Prana carrying vessels?',
-      options: [
-        { key: 'A', text: 'Hridaya (Heart)' },
-        { key: 'B', text: 'Nabhi (Umbilicus)' },
-        { key: 'C', text: 'Murdha (Head / Shira)' },
-        { key: 'D', text: 'Basti (Urinary Bladder)' }
-      ],
-      correct: 'A',
-      explanation: 'Hridaya is the Mahaphala and primary seat of Para Ojas (8 drops), Sadhaka Pitta, Avalambaka Kapha, and Pranavaha Srotas Moola.'
-    },
-    {
-      id: 'q5',
-      subject: 'Agni & Dosha Siddhanta',
-      question: 'Which type of Agni is characterized by alternating between intense digestion (Tikshnagni) and sluggish digestion (Mandagni)?',
-      options: [
-        { key: 'A', text: 'Samagni (समाग्नि)' },
-        { key: 'B', text: 'Vishamagni (विषमाग्नि)' },
-        { key: 'C', text: 'Atyagni (अत्याग्नि / भस्मक)' },
-        { key: 'D', text: 'Mandaagni (मन्दाग्नि)' }
-      ],
-      correct: 'B',
-      explanation: 'Vishamagni is caused by Vata dosha vitiation, resulting in unpredictable digestive capability where food is sometimes digested properly and sometimes produces Ama and bloating.'
-    }
-  ]
-};
+import { getStoredSutraQuiz } from '../data/sutraQuizData';
 
 // Past Archives Data
 const PAST_ARCHIVES = [
@@ -171,6 +95,7 @@ const HALL_OF_FAME = [
 
 export default function TheSutraPage({ onNavigate }) {
   const [activeTab, setActiveTab] = useState('quiz'); // 'quiz' | 'archives' | 'winners' | 'rewards'
+  const [currentQuiz, setCurrentQuiz] = useState(getStoredSutraQuiz);
   const [userAnswers, setUserAnswers] = useState({});
   const [registration, setRegistration] = useState({
     name: '',
@@ -181,6 +106,23 @@ export default function TheSutraPage({ onNavigate }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [scoreResult, setScoreResult] = useState(null);
 
+  // Sync dynamically with quiz updates from Admin Panel
+  useEffect(() => {
+    const handleQuizUpdate = (e) => {
+      if (e.detail) {
+        setCurrentQuiz(e.detail);
+      } else {
+        setCurrentQuiz(getStoredSutraQuiz());
+      }
+    };
+    window.addEventListener('vf_sutra_quiz_updated', handleQuizUpdate);
+    window.addEventListener('storage', handleQuizUpdate);
+    return () => {
+      window.removeEventListener('vf_sutra_quiz_updated', handleQuizUpdate);
+      window.removeEventListener('storage', handleQuizUpdate);
+    };
+  }, []);
+
   const handleSelectOption = (questionId, optionKey) => {
     if (isSubmitted) return;
     setUserAnswers(prev => ({
@@ -190,10 +132,10 @@ export default function TheSutraPage({ onNavigate }) {
   };
 
   const formatWhatsAppMessage = (result, answers) => {
-    const questionLines = CURRENT_QUIZ.questions.map((q, idx) => {
+    const questionLines = (currentQuiz.questions || []).map((q, idx) => {
       const chosenKey = answers[q.id];
-      const chosenOption = q.options.find(o => o.key === chosenKey);
-      const correctOption = q.options.find(o => o.key === q.correct);
+      const chosenOption = q.options?.find(o => o.key === chosenKey);
+      const correctOption = q.options?.find(o => o.key === q.correct);
       const isRight = chosenKey === q.correct;
       const statusMark = isRight ? '✅ Correct' : chosenKey ? '❌ Incorrect' : '⚠️ Unanswered';
 
@@ -208,7 +150,7 @@ export default function TheSutraPage({ onNavigate }) {
     return [
       `📜 *THE SUTRA — Ayurveda Knowledge Challenge Submission*`,
       `*Token ID:* ${result.tokenId}`,
-      `*Week:* ${CURRENT_QUIZ.week} (${CURRENT_QUIZ.title})`,
+      `*Week:* ${currentQuiz.week} (${currentQuiz.title})`,
       ``,
       `👤 *Participant Details:*`,
       `• *Name:* ${result.name}`,
@@ -240,15 +182,15 @@ export default function TheSutraPage({ onNavigate }) {
 
     // Evaluate score
     let correctCount = 0;
-    CURRENT_QUIZ.questions.forEach(q => {
+    (currentQuiz.questions || []).forEach(q => {
       if (userAnswers[q.id] === q.correct) {
         correctCount++;
       }
     });
 
-    const total = CURRENT_QUIZ.questions.length;
+    const total = currentQuiz.questions?.length || 5;
     const percentage = Math.round((correctCount / total) * 100);
-    const tokenId = 'SUTRA-W42-' + Math.floor(1000 + Math.random() * 9000);
+    const tokenId = `SUTRA-W${currentQuiz.week || 42}-` + Math.floor(1000 + Math.random() * 9000);
 
     const result = {
       score: correctCount,
@@ -392,24 +334,24 @@ export default function TheSutraPage({ onNavigate }) {
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E3D8C3] shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div className="space-y-1">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#8C682D] bg-[#FAF3E6] px-3 py-1 rounded-full border border-[#E4D5B9]">
-                  WEEK {CURRENT_QUIZ.week} CHALLENGE
+                  WEEK {currentQuiz.week || 42} CHALLENGE
                 </span>
                 <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#183B2B] pt-1">
-                  {CURRENT_QUIZ.title}
+                  {currentQuiz.title}
                 </h2>
                 <p className="text-xs text-[#6B7E72]">
-                  Theme: <strong className="font-serif text-[#8C682D]">{CURRENT_QUIZ.sanskritTheme}</strong> • 5 High-Yield Classical Samhita Questions
+                  Theme: <strong className="font-serif text-[#8C682D]">{currentQuiz.sanskritTheme}</strong> • {currentQuiz.questions?.length || 5} Classical Samhita Questions
                 </p>
               </div>
 
               <div className="flex items-center gap-3 shrink-0">
                 <div className="p-3 rounded-2xl bg-[#FAF7F2] border border-[#DFCFA8] text-center">
                   <span className="text-[10px] uppercase font-bold text-[#8C682D] block">QUESTIONS</span>
-                  <span className="text-base font-bold text-[#183B2B]">{CURRENT_QUIZ.totalQuestions} MCQs</span>
+                  <span className="text-base font-bold text-[#183B2B]">{currentQuiz.questions?.length || 5} MCQs</span>
                 </div>
                 <div className="p-3 rounded-2xl bg-[#FAF7F2] border border-[#DFCFA8] text-center">
                   <span className="text-[10px] uppercase font-bold text-[#8C682D] block">PASS CRITERIA</span>
-                  <span className="text-base font-bold text-emerald-800">80%+ (4/5)</span>
+                  <span className="text-base font-bold text-emerald-800">80%+</span>
                 </div>
               </div>
             </div>
@@ -426,7 +368,7 @@ export default function TheSutraPage({ onNavigate }) {
                     {scoreResult.tokenId}
                   </span>
                   <h3 className="font-serif font-bold text-3xl text-white">
-                    {scoreResult.score >= 4 ? '🎉 Excellent Vedic Knowledge!' : 'Thank you for Participating!'}
+                    {scoreResult.score >= (currentQuiz.questions?.length || 5) * 0.8 ? '🎉 Excellent Vedic Knowledge!' : 'Thank you for Participating!'}
                   </h3>
                   <p className="text-sm text-[#B4CDC1] max-w-md mx-auto">
                     {scoreResult.name}, you scored <strong>{scoreResult.score} out of {scoreResult.total}</strong> ({scoreResult.percentage}%).
@@ -440,14 +382,14 @@ export default function TheSutraPage({ onNavigate }) {
                   </div>
                   <div className="p-3 rounded-xl bg-white/10 border border-white/10">
                     <span className="text-[10px] text-[#A6C4B4] block">Status</span>
-                    <strong className={`text-base ${scoreResult.score >= 4 ? 'text-emerald-400' : 'text-amber-300'}`}>
-                      {scoreResult.score >= 4 ? 'Honor Pass' : 'Completed'}
+                    <strong className={`text-base ${scoreResult.percentage >= 80 ? 'text-emerald-400' : 'text-amber-300'}`}>
+                      {scoreResult.percentage >= 80 ? 'Honor Pass' : 'Completed'}
                     </strong>
                   </div>
                   <div className="p-3 rounded-xl bg-white/10 border border-white/10">
                     <span className="text-[10px] text-[#A6C4B4] block">Certificate</span>
                     <strong className="text-base text-[#E6C887]">
-                      {scoreResult.score >= 4 ? 'Verified Gold' : 'Participation'}
+                      {scoreResult.percentage >= 80 ? 'Verified Gold' : 'Participation'}
                     </strong>
                   </div>
                 </div>
@@ -475,7 +417,7 @@ export default function TheSutraPage({ onNavigate }) {
 
             {/* Questions List */}
             <div className="space-y-6">
-              {CURRENT_QUIZ.questions.map((q, idx) => {
+              {(currentQuiz.questions || []).map((q, idx) => {
                 const selectedKey = userAnswers[q.id];
                 const isCorrect = isSubmitted && selectedKey === q.correct;
                 const isWrong = isSubmitted && selectedKey && selectedKey !== q.correct;

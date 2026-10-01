@@ -166,6 +166,8 @@ export default function App() {
     return (
       <AdminPage 
         currentUser={user}
+        orders={customerOrders}
+        setOrders={setCustomerOrders}
         onLogout={handleLogout}
         onNavigate={handleNavigate}
       />
