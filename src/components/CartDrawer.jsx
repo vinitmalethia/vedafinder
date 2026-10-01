@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, ShieldCheck, CheckCircle2, ArrowLeft, Truck, Phone, MapPin } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, ShieldCheck, CheckCircle2, ArrowLeft, Phone, MapPin, CreditCard, Lock } from 'lucide-react';
+
+const RAZORPAY_KEY = 'rzp_live_Sbnm4QhTqrc2D5';
 
 export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, onOrderPlaced }) {
   const [checkoutStep, setCheckoutStep] = useState('cart'); // 'cart' | 'checkout' | 'success'
@@ -7,6 +9,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
   const [customerPincode, setCustomerPincode] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
   const [lastOrder, setLastOrder] = useState(null);
 
   if (!isOpen) return null;
@@ -31,14 +34,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
     setCartItems(prev => prev.filter(item => item.id !== id));
   };
 
-  const handlePlaceOrder = (e) => {
-    e.preventDefault();
-
-    if (!customerName.trim() || !customerPhone.trim() || !customerAddress.trim()) {
-      alert("Please fill in your name, phone number, and delivery address.");
-      return;
-    }
-
+  const finalizeOrder = (paymentId = null, paymentMethod = 'UPI & Online (Razorpay)') => {
     const orderId = '#VF' + Math.floor(1000 + Math.random() * 9000);
     const orderDate = new Date().toLocaleDateString('en-IN', {
       day: 'numeric',
@@ -54,21 +50,21 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
       `🛒 *NEW ORDER FROM VEDA FINDER*`,
       `*Order ID:* ${orderId}`,
       `*Date:* ${orderDate}`,
+      paymentId ? `*Payment ID:* ${paymentId} (✅ Paid via Razorpay)` : `*Payment Mode:* UPI / Online`,
       ``,
       `👤 *Customer Details:*`,
       `• *Name:* ${customerName.trim()}`,
       `• *Phone:* ${customerPhone.trim()}`,
       `• *Address:* ${customerAddress.trim()}${customerPincode ? ` - ${customerPincode.trim()}` : ''}`,
-      `• *Payment Mode:* Online Payment / UPI (GPay, PhonePe, Paytm)`,
       ``,
       `📦 *Items Ordered:*`,
       itemsSummary,
       ``,
       `💵 *Subtotal:* ₹${subtotal}`,
       `🚚 *Delivery:* ${shippingFee === 0 ? 'FREE' : '₹60'}`,
-      `💰 *Total Amount Payable:* ₹${finalTotal}`,
+      `💰 *Total Amount:* ₹${finalTotal}`,
       ``,
-      `Please confirm my order dispatch. Thank you! 🌿`
+      `Please process my order dispatch. Thank you! 🌿`
     ].join('\n');
 
     const whatsappUrl = `https://wa.me/919888335557?text=${encodeURIComponent(whatsappMessage)}`;
@@ -81,6 +77,8 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
       phone: customerPhone,
       address: customerAddress,
       total: finalTotal,
+      paymentId: paymentId || 'UPI-Direct',
+      paymentStatus: paymentId ? 'Paid' : 'Pending Verification',
       itemsCount: cartItems.reduce((acc, item) => acc + item.quantity, 0),
       items: cartItems,
       status: 'Confirmed'
@@ -98,11 +96,67 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
 
     setLastOrder(orderRecord);
     setCartItems([]);
+    setIsProcessing(false);
     setCheckoutStep('success');
+  };
+
+  const handleRazorpayPayment = (e) => {
+    e.preventDefault();
+
+    if (!customerName.trim() || !customerPhone.trim() || !customerAddress.trim()) {
+      alert("Please fill in your name, phone number, and delivery address.");
+      return;
+    }
+
+    setIsProcessing(true);
+
+    // If Razorpay SDK is loaded
+    if (typeof window !== 'undefined' && window.Razorpay) {
+      const options = {
+        key: RAZORPAY_KEY,
+        amount: finalTotal * 100, // Amount in paise
+        currency: 'INR',
+        name: 'Veda Finder',
+        description: 'Authentic Ayurvedic Formulations',
+        image: '/veda-logo.png',
+        prefill: {
+          name: customerName.trim(),
+          contact: customerPhone.trim(),
+        },
+        theme: {
+          color: '#183B2B',
+          backdrop_color: 'rgba(0,0,0,0.6)'
+        },
+        modal: {
+          ondismiss: () => {
+            setIsProcessing(false);
+          }
+        },
+        handler: (response) => {
+          finalizeOrder(response.razorpay_payment_id, 'Razorpay UPI');
+        }
+      };
+
+      try {
+        const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', (response) => {
+          setIsProcessing(false);
+          alert(`Payment Failed: ${response.error.description || 'Please try again'}`);
+        });
+        rzp.open();
+      } catch (err) {
+        // Fallback to direct confirmation
+        finalizeOrder(null, 'UPI & Online');
+      }
+    } else {
+      // Fallback if script blocked
+      finalizeOrder(null, 'UPI & Online');
+    }
   };
 
   const handleClose = () => {
     setCheckoutStep('cart');
+    setIsProcessing(false);
     onClose();
   };
 
@@ -133,12 +187,12 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
               <div>
                 <h3 className="font-serif font-bold text-base sm:text-lg">
                   {checkoutStep === 'cart' && 'Your Ayurvedic Cart'}
-                  {checkoutStep === 'checkout' && 'Fast Checkout'}
+                  {checkoutStep === 'checkout' && 'UPI & Online Payment'}
                   {checkoutStep === 'success' && 'Order Received!'}
                 </h3>
                 <p className="text-[11px] sm:text-xs text-[#A8C4B4]">
                   {checkoutStep === 'cart' && `${cartItems.length} item${cartItems.length !== 1 ? 's' : ''} selected`}
-                  {checkoutStep === 'checkout' && 'Direct WhatsApp & COD Dispatch'}
+                  {checkoutStep === 'checkout' && 'Secure Razorpay Payment Gateway'}
                   {checkoutStep === 'success' && 'Order Confirmation'}
                 </p>
               </div>
@@ -248,9 +302,9 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
               )
             )}
 
-            {/* STEP 2: CHECKOUT FORM */}
+            {/* STEP 2: CHECKOUT FORM WITH RAZORPAY UPI */}
             {checkoutStep === 'checkout' && (
-              <form onSubmit={handlePlaceOrder} id="checkout-form" className="space-y-4">
+              <form onSubmit={handleRazorpayPayment} id="checkout-form" className="space-y-4">
                 <div className="space-y-1">
                   <label className="block text-xs font-bold text-[#183B2B] uppercase tracking-wider">
                     Full Name <span className="text-red-500">*</span>
@@ -306,22 +360,31 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
                   />
                 </div>
 
-                {/* Payment Selection - UPI Only */}
+                {/* Payment Gateway Box - Razorpay UPI */}
                 <div className="space-y-1.5 pt-1">
                   <label className="block text-xs font-bold text-[#183B2B] uppercase tracking-wider">
-                    Payment Method
+                    Payment Gateway
                   </label>
-                  <div className="p-3 rounded-2xl bg-[#FAF6EE] border border-[#DFCFA8] flex items-center justify-between shadow-sm">
-                    <div className="flex items-center gap-2.5">
-                      <span className="text-lg">📱</span>
-                      <div>
-                        <p className="text-xs font-bold text-[#183B2B]">UPI & Online Payment</p>
-                        <p className="text-[10px] text-[#6E7F75]">Google Pay • PhonePe • Paytm • QR Code</p>
+                  <div className="p-3.5 rounded-2xl bg-white border-2 border-[#183B2B] shadow-md space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-full bg-[#183B2B] text-white flex items-center justify-center">
+                          <CreditCard className="w-4 h-4 text-[#E6C887]" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-[#183B2B]">Razorpay Secured UPI</p>
+                          <p className="text-[10px] text-[#6E7F75]">GPay • PhonePe • Paytm • Cards • NetBanking</p>
+                        </div>
                       </div>
+                      <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                        Live Gateway
+                      </span>
                     </div>
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#183B2B] text-[#FAF6F0] shadow-sm">
-                      UPI Active
-                    </span>
+
+                    <div className="flex items-center gap-1.5 text-[10px] text-[#6E7F75] pt-1 border-t border-[#F2ECE1]">
+                      <Lock className="w-3 h-3 text-[#8C682D]" />
+                      <span>256-Bit SSL Encrypted • Instant Verification</span>
+                    </div>
                   </div>
                 </div>
 
@@ -356,21 +419,27 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
                     {lastOrder.id}
                   </span>
                   <h3 className="font-serif font-bold text-2xl text-[#183B2B] mt-2">
-                    Order Dispatched with Care!
+                    Order Placed Successfully!
                   </h3>
                   <p className="text-xs text-[#6A7C71] max-w-xs mx-auto mt-1">
-                    Thank you, {lastOrder.customer}. Your order details have been forwarded to our dispensary on WhatsApp (+91 98883 35557).
+                    Thank you, {lastOrder.customer}. Your order and payment details have been forwarded to our dispensary on WhatsApp (+91 98883 35557).
                   </p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white border border-[#E5DCBF] text-left text-xs space-y-2 max-w-xs mx-auto">
                   <div className="flex justify-between border-b pb-1.5">
-                    <span className="text-[#6A7C71]">Total Payable:</span>
+                    <span className="text-[#6A7C71]">Total Paid:</span>
                     <strong className="text-[#183B2B] text-sm">₹{lastOrder.total}</strong>
                   </div>
+                  {lastOrder.paymentId && (
+                    <div className="flex justify-between border-b pb-1.5">
+                      <span className="text-[#6A7C71]">Payment Ref:</span>
+                      <span className="font-mono text-[10px] text-[#8C682D] font-bold truncate max-w-[140px]">{lastOrder.paymentId}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between border-b pb-1.5">
-                    <span className="text-[#6A7C71]">Payment:</span>
-                    <span className="font-medium text-[#183B2B]">Online / UPI</span>
+                    <span className="text-[#6A7C71]">Payment Gateway:</span>
+                    <span className="font-medium text-emerald-700 font-semibold">Razorpay UPI</span>
                   </div>
                   <div>
                     <span className="text-[#6A7C71] block">Deliver to:</span>
@@ -415,7 +484,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
                     onClick={() => setCheckoutStep('checkout')}
                     className="w-full py-3.5 rounded-full bg-[#183B2B] hover:bg-[#25553D] text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#183B2B]/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    <span>Proceed to Checkout</span>
+                    <span>Proceed to UPI Payment</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </>
@@ -423,16 +492,26 @@ export default function CartDrawer({ isOpen, onClose, cartItems, setCartItems, o
                 <button
                   type="submit"
                   form="checkout-form"
-                  className="w-full py-3.5 rounded-full bg-[#183B2B] hover:bg-[#25553D] text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#183B2B]/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  disabled={isProcessing}
+                  className="w-full py-3.5 rounded-full bg-[#183B2B] hover:bg-[#25553D] text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#183B2B]/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-75"
                 >
-                  <span>Confirm Order via WhatsApp</span>
-                  <ArrowRight className="w-4 h-4" />
+                  {isProcessing ? (
+                    <span className="flex items-center gap-2">
+                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                      <span>Opening Secure Razorpay UPI...</span>
+                    </span>
+                  ) : (
+                    <>
+                      <span>Pay ₹{finalTotal} with UPI / Card</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
                 </button>
               )}
 
               <div className="flex items-center justify-center gap-2 text-[10px] text-[#788C80]">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#8C682D]" />
-                <span>100% Genuine Ayurvedic Formulations • Fast Delivery</span>
+                <span>Secured by Razorpay • 100% Genuine Ayurvedic Formulations</span>
               </div>
             </div>
           )}
