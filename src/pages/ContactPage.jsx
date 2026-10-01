@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, ShieldCheck, CheckCircle2, Sparkles, HelpCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send, ShieldCheck, CheckCircle2, Sparkles, HelpCircle, Instagram } from 'lucide-react';
 import { VedaFinderLogo } from '../components/VedaLogoBrand';
 
 export default function ContactPage() {
@@ -83,7 +83,7 @@ export default function ContactPage() {
                     <Phone className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-[#183B2B]">Ayurvedic Helpline</h4>
+                    <h4 className="font-bold text-[#183B2B]">Helpline No</h4>
                     <p className="text-[#72857A]">+91 98883 35557</p>
                     <p className="text-[11px] text-[#8C682D]">Mon - Sat: 9:00 AM - 7:00 PM IST</p>
                   </div>
@@ -104,8 +104,25 @@ export default function ContactPage() {
                     <MapPin className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-[#183B2B]">Veda Finder Ayurvedic Dispensary</h4>
+                    <h4 className="font-bold text-[#183B2B]">Veda Finder</h4>
                     <p className="text-[#72857A]">Hisar, Haryana</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#FAF5EB] flex items-center justify-center text-[#8C682D] shrink-0 border border-[#DFCFA8]">
+                    <Instagram className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#183B2B]">Follow Us on Instagram</h4>
+                    <a 
+                      href="https://www.instagram.com/vedafinder?stkn=YTczbDZxcG5udWh2" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-[#8C682D] hover:text-[#183B2B] font-medium underline transition-colors"
+                    >
+                      @vedafinder
+                    </a>
                   </div>
                 </div>
               </div>

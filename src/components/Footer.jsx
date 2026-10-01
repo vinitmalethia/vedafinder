@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, ArrowRight, Phone } from 'lucide-react';
+import { Mail, ArrowRight, Phone, Instagram } from 'lucide-react';
 import { VedaFinderLogo } from './VedaLogoBrand';
 
 export default function Footer({ onNavigate }) {
@@ -68,14 +68,25 @@ export default function Footer({ onNavigate }) {
               Discover time-tested Ayurvedic formulations crafted with revered Himalayan herbs, mineral pishtis, classical bhasmas, and nourishing wellness teas.
             </p>
 
-            <div className="space-y-1 text-xs text-[#9BB5A6] pt-2">
+            <div className="space-y-2 text-xs text-[#9BB5A6] pt-2">
               <div className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-[#E6C887]" />
-                <span>Ayurvedic Helpline: +91 98883 35557</span>
+                <span>Helpline No: +91 98883 35557</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-[#E6C887]" />
                 <span>Help@vedafinder.com</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Instagram className="w-3.5 h-3.5 text-[#E6C887]" />
+                <a 
+                  href="https://www.instagram.com/vedafinder?stkn=YTczbDZxcG5udWh2" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hover:text-white transition-colors"
+                >
+                  Instagram: @vedafinder
+                </a>
               </div>
             </div>
           </div>

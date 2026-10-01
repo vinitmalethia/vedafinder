@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, User, ShoppingBag, Menu, X, ChevronDown, ShieldCheck } from 'lucide-react';
+import { Search, User, ShoppingBag, Menu, X, ChevronDown, ShieldCheck, Instagram } from 'lucide-react';
 import { VedaFinderLogo } from './VedaLogoBrand';
 
 export default function Header({ 
@@ -77,7 +77,15 @@ export default function Header({
             <span className="text-[#C59A4E]/60 hidden md:inline">|</span>
             <span className="hidden md:inline">100% Pure & Lab Tested</span>
             <span className="text-[#C59A4E]/60 hidden lg:inline">|</span>
-            <span className="hidden lg:inline">COD Available Across India</span>
+            <a 
+              href="https://www.instagram.com/vedafinder?stkn=YTczbDZxcG5udWh2"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#E0B86C] transition-colors flex items-center gap-1"
+            >
+              <Instagram className="w-3.5 h-3.5 text-[#E0B86C]" />
+              <span>@vedafinder</span>
+            </a>
           </div>
 
         </div>
@@ -296,6 +304,18 @@ export default function Header({
                 </button>
               </div>
             )}
+
+            <div className="pt-2 border-t border-[#E8DFC9]">
+              <a
+                href="https://www.instagram.com/vedafinder?stkn=YTczbDZxcG5udWh2"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full text-left py-2.5 px-4 rounded-full text-sm font-medium text-[#3E5246] hover:bg-[#EDE5D5] flex items-center gap-2 transition-colors"
+              >
+                <Instagram className="w-4 h-4 text-[#8C682D]" />
+                <span>Instagram: @vedafinder</span>
+              </a>
+            </div>
           </div>
         )}
 
