@@ -298,54 +298,56 @@ export default function TheSutraPage({ onNavigate }) {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center justify-center gap-2 p-1.5 bg-[#EFE8DA] rounded-full max-w-2xl mx-auto border border-[#D5C9B3] shadow-inner text-xs sm:text-sm font-semibold overflow-x-auto">
-          <button
-            onClick={() => setActiveTab('quiz')}
-            className={`px-5 py-2.5 rounded-full transition-all flex items-center gap-2 whitespace-nowrap ${
-              activeTab === 'quiz' 
-                ? 'bg-[#183B2B] text-white shadow-md' 
-                : 'text-[#4A5D51] hover:text-[#183B2B]'
-            }`}
-          >
-            <BookOpen className="w-4 h-4" />
-            <span>Weekly Quiz (MCQ)</span>
-          </button>
+        <div className="flex justify-center w-full px-2">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 p-1.5 bg-[#EFE8DA] rounded-full max-w-full border border-[#D5C9B3] shadow-inner text-xs sm:text-sm font-semibold overflow-x-auto no-scrollbar">
+            <button
+              onClick={() => setActiveTab('quiz')}
+              className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0 ${
+                activeTab === 'quiz' 
+                  ? 'bg-[#183B2B] text-white shadow-md' 
+                  : 'text-[#4A5D51] hover:text-[#183B2B] hover:bg-[#E4DBCB]/60'
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span>Weekly Quiz (MCQ)</span>
+            </button>
 
-          <button
-            onClick={() => setActiveTab('winners')}
-            className={`px-5 py-2.5 rounded-full transition-all flex items-center gap-2 whitespace-nowrap ${
-              activeTab === 'winners' 
-                ? 'bg-[#183B2B] text-white shadow-md' 
-                : 'text-[#4A5D51] hover:text-[#183B2B]'
-            }`}
-          >
-            <Trophy className="w-4 h-4" />
-            <span>Hall of Fame</span>
-          </button>
+            <button
+              onClick={() => setActiveTab('winners')}
+              className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0 ${
+                activeTab === 'winners' 
+                  ? 'bg-[#183B2B] text-white shadow-md' 
+                  : 'text-[#4A5D51] hover:text-[#183B2B] hover:bg-[#E4DBCB]/60'
+              }`}
+            >
+              <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span>Hall of Fame</span>
+            </button>
 
-          <button
-            onClick={() => setActiveTab('archives')}
-            className={`px-5 py-2.5 rounded-full transition-all flex items-center gap-2 whitespace-nowrap ${
-              activeTab === 'archives' 
-                ? 'bg-[#183B2B] text-white shadow-md' 
-                : 'text-[#4A5D51] hover:text-[#183B2B]'
-            }`}
-          >
-            <HelpCircle className="w-4 h-4" />
-            <span>Previous Questions</span>
-          </button>
+            <button
+              onClick={() => setActiveTab('archives')}
+              className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0 ${
+                activeTab === 'archives' 
+                  ? 'bg-[#183B2B] text-white shadow-md' 
+                  : 'text-[#4A5D51] hover:text-[#183B2B] hover:bg-[#E4DBCB]/60'
+              }`}
+            >
+              <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span>Previous Questions</span>
+            </button>
 
-          <button
-            onClick={() => setActiveTab('rewards')}
-            className={`px-5 py-2.5 rounded-full transition-all flex items-center gap-2 whitespace-nowrap ${
-              activeTab === 'rewards' 
-                ? 'bg-[#183B2B] text-white shadow-md' 
-                : 'text-[#4A5D51] hover:text-[#183B2B]'
-            }`}
-          >
-            <Gift className="w-4 h-4" />
-            <span>Rewards & Badges</span>
-          </button>
+            <button
+              onClick={() => setActiveTab('rewards')}
+              className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0 ${
+                activeTab === 'rewards' 
+                  ? 'bg-[#183B2B] text-white shadow-md' 
+                  : 'text-[#4A5D51] hover:text-[#183B2B] hover:bg-[#E4DBCB]/60'
+              }`}
+            >
+              <Gift className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span>Rewards & Badges</span>
+            </button>
+          </div>
         </div>
 
         {/* TAB 1: WEEKLY AYURVEDA QUIZ */}
