@@ -189,6 +189,47 @@ export default function TheSutraPage({ onNavigate }) {
     }));
   };
 
+  const formatWhatsAppMessage = (result, answers) => {
+    const questionLines = CURRENT_QUIZ.questions.map((q, idx) => {
+      const chosenKey = answers[q.id];
+      const chosenOption = q.options.find(o => o.key === chosenKey);
+      const correctOption = q.options.find(o => o.key === q.correct);
+      const isRight = chosenKey === q.correct;
+      const statusMark = isRight ? '✅ Correct' : chosenKey ? '❌ Incorrect' : '⚠️ Unanswered';
+
+      return [
+        `*Q${idx + 1}: ${q.question}*`,
+        `👉 *Participant Answer:* ${chosenKey ? `${chosenKey}) ${chosenOption?.text || ''}` : 'Not Answered'}`,
+        `🎯 *Correct Classical Answer:* ${q.correct}) ${correctOption?.text || ''}`,
+        `📌 *Result:* ${statusMark}`
+      ].join('\n');
+    }).join('\n\n');
+
+    return [
+      `📜 *THE SUTRA — Ayurveda Knowledge Challenge Submission*`,
+      `*Token ID:* ${result.tokenId}`,
+      `*Week:* ${CURRENT_QUIZ.week} (${CURRENT_QUIZ.title})`,
+      ``,
+      `👤 *Participant Details:*`,
+      `• *Name:* ${result.name}`,
+      `• *WhatsApp:* ${result.phone}`,
+      `• *Category:* ${result.role}`,
+      `• *Institution/City:* ${result.institution}`,
+      ``,
+      `🏆 *Score Summary:*`,
+      `• *Total Score:* ${result.score} / ${result.total} (${result.percentage}%)`,
+      `• *Result Status:* ${result.percentage >= 80 ? '🌟 High Honor / Award Qualified' : 'Completed Participation'}`,
+      ``,
+      `📝 *QUESTIONS & ANSWERS SUBMISSION:*`,
+      `───────────────────────────────`,
+      questionLines,
+      `───────────────────────────────`,
+      ``,
+      `🌿 *Submitted via Veda Finder — The Sutra Platform*`,
+      `Please record my answers and rank for the Sunday Hall of Fame. Dhanyavaad!`
+    ].join('\n');
+  };
+
   const handleQuizSubmit = (e) => {
     e.preventDefault();
 
@@ -222,31 +263,18 @@ export default function TheSutraPage({ onNavigate }) {
 
     setScoreResult(result);
     setIsSubmitted(true);
-    window.scrollTo({ top: 400, behavior: 'smooth' });
+    window.scrollTo({ top: 380, behavior: 'smooth' });
+
+    // Open WhatsApp directly with the forwarded questions and answers
+    const msg = formatWhatsAppMessage(result, userAnswers);
+    const url = `https://wa.me/919888335557?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
   };
 
   const handleSendToWhatsApp = () => {
     if (!scoreResult) return;
-
-    const message = [
-      `📜 *THE SUTRA — Knowledge Challenge Submission*`,
-      `*Token ID:* ${scoreResult.tokenId}`,
-      `*Week:* ${CURRENT_QUIZ.week} (${CURRENT_QUIZ.title})`,
-      ``,
-      `👤 *Participant Details:*`,
-      `• *Name:* ${scoreResult.name}`,
-      `• *WhatsApp:* ${scoreResult.phone}`,
-      `• *Role:* ${scoreResult.role}`,
-      `• *Institution/City:* ${scoreResult.institution}`,
-      ``,
-      `🏆 *Score Summary:*`,
-      `• *Score:* ${scoreResult.score} / ${scoreResult.total} (${scoreResult.percentage}%)`,
-      `• *Status:* ${scoreResult.percentage >= 80 ? '🌟 Qualified for Certificate & Rewards' : 'Completed with Reverence'}`,
-      ``,
-      `Please register my score for the Sunday Hall of Fame. Namaste! 🌿`
-    ].join('\n');
-
-    const url = `https://wa.me/919888335557?text=${encodeURIComponent(message)}`;
+    const msg = formatWhatsAppMessage(scoreResult, userAnswers);
+    const url = `https://wa.me/919888335557?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
   };
 
@@ -431,7 +459,7 @@ export default function TheSutraPage({ onNavigate }) {
                     className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-[#25D366] hover:bg-[#1EBE5D] text-black font-bold text-sm shadow-xl flex items-center justify-center gap-2 transition-all transform hover:scale-105"
                   >
                     <Send className="w-4 h-4" />
-                    <span>Submit & Claim via WhatsApp (+91 98883 35557)</span>
+                    <span>Forward Answers to WhatsApp (+91 98883 35557)</span>
                   </button>
 
                   <button
@@ -615,7 +643,8 @@ export default function TheSutraPage({ onNavigate }) {
                     type="submit"
                     className="w-full py-4 rounded-full bg-[#183B2B] hover:bg-[#25553D] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all"
                   >
-                    <span>Submit The Sutra Challenge Answers</span>
+                    <Send className="w-4 h-4 text-[#25D366]" />
+                    <span>Submit & Forward Answers to WhatsApp (+91 98883 35557)</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
