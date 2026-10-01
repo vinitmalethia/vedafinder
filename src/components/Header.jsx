@@ -118,26 +118,26 @@ export default function Header({
           </button>
 
           {/* Desktop Navigation Links with Animated Oval Capsule */}
-          <nav className="hidden lg:flex items-center p-1.5 rounded-full bg-[#F2EADB]/70 border border-[#E2D6C0] shadow-inner space-x-1">
+          <nav className="hidden lg:flex items-center p-1 rounded-full bg-[#F2EADB]/80 border border-[#E2D6C0] shadow-inner space-x-0.5 xl:space-x-1 shrink-0">
             {navLinks.map((link) => {
               const isActive = activeNav === link.id;
               return (
                 <button
                   key={link.id}
                   onClick={() => handleNavClick(link.id)}
-                  className={`relative px-5 py-2 rounded-full font-medium text-sm transition-all duration-300 ease-out focus:outline-none ${
+                  className={`relative px-3.5 xl:px-4.5 py-1.5 xl:py-2 rounded-full font-medium text-xs xl:text-sm whitespace-nowrap transition-all duration-300 ease-out focus:outline-none flex items-center justify-center ${
                     isActive 
-                      ? 'bg-[#183B2B] text-white shadow-md scale-100 font-semibold' 
+                      ? 'bg-[#183B2B] text-white shadow-md font-semibold' 
                       : 'text-[#4E6155] hover:text-[#183B2B] hover:bg-white/60'
                   }`}
                 >
                   {isActive && (
                     <span className="absolute inset-0 rounded-full ring-1 ring-[#C59A4E]/30 pointer-events-none" />
                   )}
-                  <span className="relative z-10 flex items-center gap-1.5">
-                    <span>{link.name}</span>
+                  <span className="relative z-10 flex items-center gap-1.5 whitespace-nowrap">
+                    <span className="whitespace-nowrap">{link.name}</span>
                     {link.badge && (
-                      <span className={`text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded-full ${
+                      <span className={`text-[8.5px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded-full leading-none shrink-0 ${
                         isActive ? 'bg-[#C59A4E] text-[#122A1E]' : 'bg-[#EAE0CB] text-[#8C682D]'
                       }`}>
                         {link.badge}
