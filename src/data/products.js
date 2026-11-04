@@ -68,8 +68,8 @@ export const PRODUCTS_CATALOG = [
     hindiName: 'अभ्रक भस्म (१,००० पुटी) - १० ग्राम',
     category: 'Bhasma',
     categoryId: 'bhasma',
-    price: 497,
-    originalPrice: 650,
+    price: 447,
+    originalPrice: 497,
     weight: '10gm',
     rating: 4.95,
     reviewsCount: 410,
@@ -116,8 +116,8 @@ export const PRODUCTS_CATALOG = [
       'Keep away from children.'
     ],
     variations: [
-      { label: '5', weight: '5 GM', price: 290, originalPrice: 380 },
-      { label: '10', weight: '10 GM', price: 497, originalPrice: 650 }
+      { label: '5', weight: '5 GM', price: 261, originalPrice: 290 },
+      { label: '10', weight: '10 GM', price: 447, originalPrice: 497 }
     ]
   },
   {
@@ -126,8 +126,8 @@ export const PRODUCTS_CATALOG = [
     hindiName: 'अभ्रक भस्म (१०० पुटी) - १० ग्राम',
     category: 'Bhasma',
     categoryId: 'bhasma',
-    price: 190,
-    originalPrice: 260,
+    price: 171,
+    originalPrice: 190,
     weight: '10gm',
     rating: 4.88,
     reviewsCount: 280,
@@ -170,7 +170,7 @@ export const PRODUCTS_CATALOG = [
       'Use strictly per Ayurvedic physician instructions.'
     ],
     variations: [
-      { label: '10', weight: '10 GM', price: 190, originalPrice: 260 }
+      { label: '10', weight: '10 GM', price: 171, originalPrice: 190 }
     ]
   },
   {
@@ -179,8 +179,8 @@ export const PRODUCTS_CATALOG = [
     hindiName: 'गोदन्ती भस्म - १० ग्राम',
     category: 'Bhasma',
     categoryId: 'bhasma',
-    price: 108,
-    originalPrice: 150,
+    price: 97,
+    originalPrice: 108,
     weight: '10gm',
     rating: 4.89,
     reviewsCount: 310,
@@ -223,7 +223,7 @@ export const PRODUCTS_CATALOG = [
       'Consult Ayurvedic doctor for dosage in fever or children.'
     ],
     variations: [
-      { label: '10', weight: '10 GM', price: 108, originalPrice: 150 }
+      { label: '10', weight: '10 GM', price: 97, originalPrice: 108 }
     ]
   },
   {
@@ -232,8 +232,8 @@ export const PRODUCTS_CATALOG = [
     hindiName: 'प्रवाल पिष्टी - १० ग्राम',
     category: 'Pishti',
     categoryId: 'pishti',
-    price: 430,
-    originalPrice: 580,
+    price: 387,
+    originalPrice: 430,
     weight: '10gm',
     rating: 4.94,
     reviewsCount: 380,
@@ -278,7 +278,7 @@ export const PRODUCTS_CATALOG = [
       'Safe for extended Ayurvedic use under physician guidance.'
     ],
     variations: [
-      { label: '10', weight: '10 GM', price: 430, originalPrice: 580 }
+      { label: '10', weight: '10 GM', price: 387, originalPrice: 430 }
     ]
   },
   {
@@ -287,8 +287,8 @@ export const PRODUCTS_CATALOG = [
     hindiName: 'मोती पिष्टी भस्म - १० ग्राम',
     category: 'Pishti',
     categoryId: 'pishti',
-    price: 865,
-    originalPrice: 1150,
+    price: 779,
+    originalPrice: 865,
     weight: '10gm',
     rating: 4.97,
     reviewsCount: 520,
@@ -334,8 +334,8 @@ export const PRODUCTS_CATALOG = [
       'Consult doctor for precise dosage.'
     ],
     variations: [
-      { label: '5', weight: '5 GM', price: 460, originalPrice: 620 },
-      { label: '10', weight: '10 GM', price: 865, originalPrice: 1150 }
+      { label: '5', weight: '5 GM', price: 414, originalPrice: 460 },
+      { label: '10', weight: '10 GM', price: 779, originalPrice: 865 }
     ]
   },
   {
@@ -344,8 +344,8 @@ export const PRODUCTS_CATALOG = [
     hindiName: 'वंग भस्म - १० ग्राम',
     category: 'Bhasma',
     categoryId: 'bhasma',
-    price: 213,
-    originalPrice: 299,
+    price: 192,
+    originalPrice: 213,
     weight: '10gm',
     rating: 4.91,
     reviewsCount: 270,
@@ -379,7 +379,7 @@ export const PRODUCTS_CATALOG = [
       storage: 'Dry cool area'
     },
     safetyInfo: ['To be taken under Ayurvedic physician advice.'],
-    variations: [{ label: '10', weight: '10 GM', price: 213, originalPrice: 299 }]
+    variations: [{ label: '10', weight: '10 GM', price: 192, originalPrice: 213 }]
   },
   {
     id: 'prod-loha-bhasma',
@@ -387,8 +387,8 @@ export const PRODUCTS_CATALOG = [
     hindiName: 'लौह भस्म - १० ग्राम',
     category: 'Bhasma',
     categoryId: 'bhasma',
-    price: 130,
-    originalPrice: 180,
+    price: 117,
+    originalPrice: 130,
     weight: '10gm',
     rating: 4.93,
     reviewsCount: 390,
@@ -421,7 +421,7 @@ export const PRODUCTS_CATALOG = [
       storage: 'Keep in dry airtight jar'
     },
     safetyInfo: ['Take under doctor guidance.'],
-    variations: [{ label: '10', weight: '10 GM', price: 130, originalPrice: 180 }]
+    variations: [{ label: '10', weight: '10 GM', price: 117, originalPrice: 130 }]
   },
   {
     id: 'prod-agnisip-tea',
@@ -429,8 +429,8 @@ export const PRODUCTS_CATALOG = [
     hindiName: 'अग्निसिप - हर्बल डाइजेस्टिव टी (२० पिरामिड बैग)',
     category: 'Herbal Tea',
     categoryId: 'herbal-tea',
-    price: 799,
-    originalPrice: 999,
+    price: 719,
+    originalPrice: 799,
     weight: '20 Pyramid Tea Bags',
     rating: 4.96,
     reviewsCount: 740,
@@ -463,7 +463,7 @@ export const PRODUCTS_CATALOG = [
       storage: 'Store in cool dry place'
     },
     safetyInfo: ['Safe for regular daily consumption.'],
-    variations: [{ label: '20 Bags', weight: '20 Bags', price: 799, originalPrice: 999 }]
+    variations: [{ label: '20 Bags', weight: '20 Bags', price: 719, originalPrice: 799 }]
   },
   {
     id: 'prod-chandi-bhasma',
@@ -471,8 +471,8 @@ export const PRODUCTS_CATALOG = [
     hindiName: 'चांदी भस्म (रजत भस्म) - ५ ग्राम',
     category: 'Bhasma',
     categoryId: 'bhasma',
-    price: 6700,
-    originalPrice: 7999,
+    price: 6030,
+    originalPrice: 6700,
     weight: '5gm',
     rating: 4.98,
     reviewsCount: 350,
@@ -505,7 +505,7 @@ export const PRODUCTS_CATALOG = [
       storage: 'Airtight glass bottle'
     },
     safetyInfo: ['Use strictly under physician supervision.'],
-    variations: [{ label: '5', weight: '5 GM', price: 6700, originalPrice: 7999 }]
+    variations: [{ label: '5', weight: '5 GM', price: 6030, originalPrice: 6700 }]
   },
   {
     id: 'prod-nar-ojas',
@@ -513,8 +513,8 @@ export const PRODUCTS_CATALOG = [
     hindiName: 'नर ओज कैप्सूल - नर में ओज, जीवन में तेज',
     category: 'Capsules',
     categoryId: 'capsules',
-    price: 4270,
-    originalPrice: 4999,
+    price: 3843,
+    originalPrice: 4270,
     weight: '90 Capsules',
     rating: 4.98,
     reviewsCount: 680,
@@ -547,7 +547,7 @@ export const PRODUCTS_CATALOG = [
       storage: 'Store in cool and dry place'
     },
     safetyInfo: ['For adult men only.'],
-    variations: [{ label: '90 Caps', weight: '90 Capsules', price: 4270, originalPrice: 4999 }]
+    variations: [{ label: '90 Caps', weight: '90 Capsules', price: 3843, originalPrice: 4270 }]
   },
   {
     id: 'prod-trivang-bhasma',
@@ -555,8 +555,8 @@ export const PRODUCTS_CATALOG = [
     hindiName: 'त्रिवंग भस्म - १० ग्राम',
     category: 'Bhasma',
     categoryId: 'bhasma',
-    price: 320,
-    originalPrice: 420,
+    price: 288,
+    originalPrice: 320,
     weight: '10gm',
     rating: 4.90,
     reviewsCount: 295,
@@ -590,7 +590,7 @@ export const PRODUCTS_CATALOG = [
       storage: 'Dry cool place'
     },
     safetyInfo: ['Take under doctor guidance.'],
-    variations: [{ label: '10', weight: '10 GM', price: 320, originalPrice: 420 }]
+    variations: [{ label: '10', weight: '10 GM', price: 288, originalPrice: 320 }]
   }
 ];
 
@@ -603,13 +603,13 @@ export const CATEGORIES = [
     count: '7 Formulations',
     image: '/products/abhrak-bhasma.png',
     items: [
-      { name: 'Abhrak Bhasma 1000 10GM', price: 497, image: '/products/abhrak-bhasma.png', rating: 4.95 },
-      { name: 'Abhrak Bhasma 100 10GM', price: 190, image: '/products/abhrak-bhasma-100.png', rating: 4.88 },
-      { name: 'Loh Bhasma 10GM', price: 130, image: '/products/loha-bhasma.png', rating: 4.93 },
-      { name: 'Chandi', price: 6700, image: '/products/chandi-bhasma.png', rating: 4.98 },
-      { name: 'Godanti Bhasma 10GM', price: 108, image: '/products/godanti-bhasma.png', rating: 4.89 },
-      { name: 'Vang Bhasma 10GM', price: 213, image: '/products/vang-bhasma.png', rating: 4.91 },
-      { name: 'Trivang Bhasma 10GM', price: 320, image: '/products/trivang-bhasma.png', rating: 4.90 }
+      { name: 'Abhrak Bhasma 1000 10GM', price: 447, image: '/products/abhrak-bhasma.png', rating: 4.95 },
+      { name: 'Abhrak Bhasma 100 10GM', price: 171, image: '/products/abhrak-bhasma-100.png', rating: 4.88 },
+      { name: 'Loh Bhasma 10GM', price: 117, image: '/products/loha-bhasma.png', rating: 4.93 },
+      { name: 'Chandi', price: 6030, image: '/products/chandi-bhasma.png', rating: 4.98 },
+      { name: 'Godanti Bhasma 10GM', price: 97, image: '/products/godanti-bhasma.png', rating: 4.89 },
+      { name: 'Vang Bhasma 10GM', price: 192, image: '/products/vang-bhasma.png', rating: 4.91 },
+      { name: 'Trivang Bhasma 10GM', price: 288, image: '/products/trivang-bhasma.png', rating: 4.90 }
     ]
   },
   {
@@ -620,8 +620,8 @@ export const CATEGORIES = [
     count: '2 Formulations',
     image: '/products/moti-pishti.png',
     items: [
-      { name: 'Moti Pishti Bhasma 10GM', price: 865, image: '/products/moti-pishti.png', rating: 4.97 },
-      { name: 'Praval Pishti 10GM', price: 430, image: '/products/praval-pishti.png', rating: 4.94 }
+      { name: 'Moti Pishti Bhasma 10GM', price: 779, image: '/products/moti-pishti.png', rating: 4.97 },
+      { name: 'Praval Pishti 10GM', price: 387, image: '/products/praval-pishti.png', rating: 4.94 }
     ]
   },
   {
@@ -632,7 +632,7 @@ export const CATEGORIES = [
     count: '1 Formulation',
     image: '/products/nar-ojas.png',
     items: [
-      { name: 'Nar Ojas Capsules (90 Caps)', price: 4270, image: '/products/nar-ojas.png', rating: 4.98 }
+      { name: 'Nar Ojas Capsules (90 Caps)', price: 3843, image: '/products/nar-ojas.png', rating: 4.98 }
     ]
   },
   {
@@ -643,7 +643,7 @@ export const CATEGORIES = [
     count: 'Agnisip 20 Bags',
     image: '/products/agnisip-tea.png',
     items: [
-      { name: 'Agnisip', price: 799, image: '/products/agnisip-tea.png', rating: 4.96 }
+      { name: 'Agnisip', price: 719, image: '/products/agnisip-tea.png', rating: 4.96 }
     ]
   }
 ];

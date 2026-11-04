@@ -117,7 +117,12 @@ export default function CollectionsPage({ onSelectProduct, onQuickView, onAddToC
                   <div className="pt-2.5 mt-2.5 border-t border-[#EAE2D2] flex items-baseline justify-between gap-1">
                     <div onClick={() => (onSelectProduct || onQuickView)(product)} className="cursor-pointer">
                       <span className="text-[9px] text-[#7A8B81] uppercase block">{product.weight}</span>
-                      <span className="font-serif font-bold text-base sm:text-lg text-[#183B2B]">₹{product.price}</span>
+                      <div className="flex items-baseline gap-1">
+                        <span className="font-serif font-bold text-base sm:text-lg text-[#183B2B]">₹{product.price}</span>
+                        {product.originalPrice && (
+                          <span className="text-[10px] line-through text-[#9BA8A0]">₹{product.originalPrice}</span>
+                        )}
+                      </div>
                     </div>
 
                     <button
