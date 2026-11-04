@@ -2,7 +2,7 @@ import React from 'react';
 import { Star, ShoppingBag, Eye, Sparkles, ArrowRight } from 'lucide-react';
 import { PRODUCTS_CATALOG } from '../data/products';
 
-export default function ShopSection({ onQuickView, onAddToCart, onBuyNow, onNavigate, isHome = true, limit = 4 }) {
+export default function ShopSection({ onSelectProduct, onQuickView, onAddToCart, onBuyNow, onNavigate, isHome = true, limit = 4 }) {
   // On home page, showcase only 4 top featured products
   const featuredProducts = PRODUCTS_CATALOG.slice(0, limit);
 
@@ -44,7 +44,10 @@ export default function ShopSection({ onQuickView, onAddToCart, onBuyNow, onNavi
                 </div>
 
                 {/* 3D Product Box Pack Image */}
-                <div className="w-full h-36 sm:h-52 bg-gradient-to-b from-[#FAF6EE] to-[#F2EADC] rounded-xl flex items-center justify-center p-2 sm:p-3 border border-[#EFE5D3] group-hover:scale-105 transition-transform duration-300 relative overflow-hidden">
+                <div 
+                  onClick={() => (onSelectProduct || onQuickView)(product)}
+                  className="w-full h-36 sm:h-52 bg-gradient-to-b from-[#FAF6EE] to-[#F2EADC] rounded-xl flex items-center justify-center p-2 sm:p-3 border border-[#EFE5D3] group-hover:scale-105 transition-transform duration-300 relative overflow-hidden cursor-pointer"
+                >
                   <img 
                     src={product.image} 
                     alt={product.name}
@@ -53,7 +56,10 @@ export default function ShopSection({ onQuickView, onAddToCart, onBuyNow, onNavi
                 </div>
 
                 {/* Hindi & English Title */}
-                <h3 className="font-serif font-bold text-sm sm:text-base text-[#183B2B] mt-2 sm:mt-4 line-clamp-1 group-hover:text-[#8C682D] transition-colors">
+                <h3 
+                  onClick={() => (onSelectProduct || onQuickView)(product)}
+                  className="font-serif font-bold text-sm sm:text-base text-[#183B2B] mt-2 sm:mt-4 line-clamp-1 group-hover:text-[#8C682D] transition-colors cursor-pointer"
+                >
                   {product.name}
                 </h3>
                 <p className="text-[11px] sm:text-xs font-medium text-[#8C682D] italic truncate mt-0.5">
@@ -66,7 +72,7 @@ export default function ShopSection({ onQuickView, onAddToCart, onBuyNow, onNavi
 
               {/* Price, Weight & Quick View */}
               <div className="pt-2.5 sm:pt-3 mt-2.5 sm:mt-3 border-t border-[#EAE2D2] flex items-baseline justify-between gap-1">
-                <div>
+                <div onClick={() => (onSelectProduct || onQuickView)(product)} className="cursor-pointer">
                   <span className="text-[9px] sm:text-[10px] text-[#7A8B81] uppercase block truncate max-w-[80px] sm:max-w-none">
                     {product.weight}
                   </span>
@@ -79,9 +85,9 @@ export default function ShopSection({ onQuickView, onAddToCart, onBuyNow, onNavi
                 </div>
 
                 <button
-                  onClick={() => onQuickView(product)}
+                  onClick={() => (onSelectProduct || onQuickView)(product)}
                   className="p-1.5 sm:p-2 rounded-full bg-[#FAF5EC] hover:bg-[#EAE0CB] text-[#183B2B] transition-colors border border-[#DFCFA8]"
-                  title="Quick Details"
+                  title="View Details"
                 >
                   <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>

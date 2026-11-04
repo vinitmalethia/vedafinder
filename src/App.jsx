@@ -13,8 +13,9 @@ import ContactPage from './pages/ContactPage';
 import TheSutraPage from './pages/TheSutraPage';
 import LoginPage from './pages/LoginPage';
 import AdminPage from './pages/AdminPage';
+import ProductDetailPage from './pages/ProductDetailPage';
 import CustomerAccountModal from './components/CustomerAccountModal';
-import { INITIAL_CART } from './data/products';
+import { INITIAL_CART, PRODUCTS_CATALOG } from './data/products';
 import { auth, logoutUser, onAuthStateChanged } from './firebase/config';
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
     }
     return 'Home';
   });
+  const [selectedProduct, setSelectedProduct] = useState(() => PRODUCTS_CATALOG[0]);
   const [shopCategoryFilter, setShopCategoryFilter] = useState('all');
   const [cartItems, setCartItems] = useState(() => {
     try {
@@ -95,6 +97,13 @@ export default function App() {
         window.history.pushState({}, '', '/');
       }
     }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSelectProduct = (product) => {
+    if (!product) return;
+    setSelectedProduct(product);
+    setCurrentPage('Product');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -194,19 +203,32 @@ export default function App() {
   // Render standard storefront pages
   const renderCurrentPage = () => {
     switch (currentPage) {
+      case 'Product':
+        return (
+          <ProductDetailPage 
+            product={selectedProduct}
+            onNavigate={handleNavigate}
+            onSelectProduct={handleSelectProduct}
+            onAddToCart={handleAddToCart}
+            onBuyNow={handleBuyNow}
+          />
+        );
       case 'Home':
         return (
           <HomePage 
             onNavigate={handleNavigate}
-            onQuickView={(p) => setQuickViewProduct(p)}
+            onSelectProduct={handleSelectProduct}
+            onQuickView={handleSelectProduct}
             onAddToCart={handleAddToCart}
+            onBuyNow={handleBuyNow}
           />
         );
       case 'Shop':
         return (
           <ShopPage 
             initialCategory={shopCategoryFilter}
-            onQuickView={(p) => setQuickViewProduct(p)}
+            onSelectProduct={handleSelectProduct}
+            onQuickView={handleSelectProduct}
             onAddToCart={handleAddToCart}
             onBuyNow={handleBuyNow}
           />
@@ -215,7 +237,8 @@ export default function App() {
         return (
           <CollectionsPage 
             onNavigate={handleNavigate}
-            onQuickView={(p) => setQuickViewProduct(p)}
+            onSelectProduct={handleSelectProduct}
+            onQuickView={handleSelectProduct}
             onAddToCart={handleAddToCart}
             onBuyNow={handleBuyNow}
           />
@@ -245,7 +268,8 @@ export default function App() {
         return (
           <HomePage 
             onNavigate={handleNavigate}
-            onQuickView={(p) => setQuickViewProduct(p)}
+            onSelectProduct={handleSelectProduct}
+            onQuickView={handleSelectProduct}
             onAddToCart={handleAddToCart}
             onBuyNow={handleBuyNow}
           />
@@ -291,7 +315,10 @@ export default function App() {
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         initialQuery={searchInitialQuery}
-        onSelectProduct={(item) => setQuickViewProduct(item.raw || item)}
+        onSelectProduct={(item) => {
+          handleSelectProduct(item.raw || item);
+          setIsSearchOpen(false);
+        }}
       />
 
       {/* Product Quick View Modal */}

@@ -5,7 +5,7 @@ import ShopSection from '../components/ShopSection';
 import AboutSection from '../components/AboutSection';
 import SutraSection from '../components/SutraSection';
 
-export default function HomePage({ onNavigate, onQuickView, onAddToCart, onBuyNow }) {
+export default function HomePage({ onNavigate, onSelectProduct, onQuickView, onAddToCart, onBuyNow }) {
   const handleHeroShopClick = () => {
     onNavigate('Shop');
   };
@@ -15,7 +15,7 @@ export default function HomePage({ onNavigate, onQuickView, onAddToCart, onBuyNo
       {/* Hero Section */}
       <Hero 
         onShopClick={handleHeroShopClick}
-        onQuickView={(slide) => onQuickView(slide)}
+        onQuickView={(slide) => (onSelectProduct || onQuickView)(slide)}
       />
 
       {/* 4 Feature Pillars Banner */}
@@ -26,6 +26,7 @@ export default function HomePage({ onNavigate, onQuickView, onAddToCart, onBuyNo
         isHome={true}
         limit={4}
         onNavigate={onNavigate}
+        onSelectProduct={onSelectProduct}
         onQuickView={onQuickView}
         onAddToCart={onAddToCart}
         onBuyNow={onBuyNow}

@@ -88,7 +88,10 @@ export default function CollectionsPage({ onSelectProduct, onQuickView, onAddToC
                   className="group bg-[#FAF7F2] rounded-2xl p-4 border border-[#EAE1CF] hover:border-[#8C682D] hover:bg-white shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
                 >
                   <div>
-                    <div className="w-full h-48 bg-white rounded-xl flex items-center justify-center p-3 border border-[#EAE2D2] group-hover:scale-105 transition-transform duration-300">
+                    <div 
+                      onClick={() => (onSelectProduct || onQuickView)(product)}
+                      className="w-full h-48 bg-white rounded-xl flex items-center justify-center p-3 border border-[#EAE2D2] group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                    >
                       <img 
                         src={product.image} 
                         alt={product.name}
@@ -96,7 +99,10 @@ export default function CollectionsPage({ onSelectProduct, onQuickView, onAddToC
                       />
                     </div>
 
-                    <h3 className="font-serif font-bold text-base text-[#183B2B] mt-3 truncate group-hover:text-[#8C682D]">
+                    <h3 
+                      onClick={() => (onSelectProduct || onQuickView)(product)}
+                      className="font-serif font-bold text-base text-[#183B2B] mt-3 truncate group-hover:text-[#8C682D] cursor-pointer"
+                    >
                       {product.name}
                     </h3>
                     <p className="text-xs text-[#8C682D] italic truncate">
@@ -109,13 +115,13 @@ export default function CollectionsPage({ onSelectProduct, onQuickView, onAddToC
 
                   {/* Price, Weight & Quick View */}
                   <div className="pt-2.5 mt-2.5 border-t border-[#EAE2D2] flex items-baseline justify-between gap-1">
-                    <div>
+                    <div onClick={() => (onSelectProduct || onQuickView)(product)} className="cursor-pointer">
                       <span className="text-[9px] text-[#7A8B81] uppercase block">{product.weight}</span>
                       <span className="font-serif font-bold text-base sm:text-lg text-[#183B2B]">₹{product.price}</span>
                     </div>
 
                     <button
-                      onClick={() => onQuickView(product)}
+                      onClick={() => (onSelectProduct || onQuickView)(product)}
                       className="p-1.5 rounded-full bg-white hover:bg-[#EAE0CB] text-[#183B2B] transition-colors border border-[#DFCFA8]"
                       title="View Details"
                     >
