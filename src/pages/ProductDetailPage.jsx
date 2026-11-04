@@ -134,25 +134,6 @@ export default function ProductDetailPage({
 
   return (
     <div className="bg-[#FAF7F2] min-h-screen text-[#222E26] pb-24 relative selection:bg-[#5D7A44] selection:text-white">
-      
-      {/* 1. Top Green Announcement Bar (Exactly matching Reference Header) */}
-      <div className="bg-[#58793B] text-white text-[11px] sm:text-xs py-2 px-3 text-center font-medium tracking-wide border-b border-[#4A6731]">
-        <div className="max-w-7xl mx-auto flex items-center justify-center flex-wrap gap-x-3 gap-y-1">
-          <span>ISO &amp; GMP Certified Ayurvedic Care</span>
-          <span className="hidden md:inline text-white/60">|</span>
-          <span>Flat ₹80 Shipping on All Orders!</span>
-          <span className="hidden md:inline text-white/60">|</span>
-          <span>Doctor-Formulated. Lab-Tested</span>
-          <span className="hidden md:inline text-white/60">|</span>
-          <a 
-            href="tel:+919034343475" 
-            className="font-bold underline hover:text-[#FAF3E6] transition-colors"
-          >
-            Book a Free Consultation +91-9034343475
-          </a>
-        </div>
-      </div>
-
       {/* Main Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
         
@@ -763,7 +744,7 @@ export default function ProductDetailPage({
 
       {/* Bottom Right WhatsApp Pill: chat with us */}
       <a
-        href="https://wa.me/919034343475?text=Hello%20Veda%20Finder,%20I%20have%20an%20inquiry%20regarding%20Ayurvedic%20formulations."
+        href="https://wa.me/919888335557?text=Hello%20Veda%20Finder,%20I%20have%20an%20inquiry%20regarding%20Ayurvedic%20formulations."
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-40 bg-[#25D366] hover:bg-[#20BD5A] text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-full shadow-xl flex items-center gap-2 transition-all hover:scale-105"
