@@ -319,7 +319,9 @@ export default function ProductDetailPage({
             {/* GM / Variation Selector (Matches Screenshot 3) */}
             <div className="pt-2 space-y-2">
               <div className="text-xs font-bold text-[#183B2B] uppercase tracking-wider">
-                GM: {currentVariation.label}
+                {currentVariation.label?.toLowerCase().includes('cap') || currentVariation.label?.toLowerCase().includes('bag')
+                  ? `PACK: ${currentVariation.label}`
+                  : `GM: ${currentVariation.label}`}
               </div>
               <div className="flex items-center gap-2.5">
                 {detailedProduct.variations.map((v, idx) => {

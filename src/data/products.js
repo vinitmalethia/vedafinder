@@ -115,7 +115,6 @@ export const PRODUCTS_CATALOG = [
       'Keep away from children.'
     ],
     variations: [
-      { label: '5', weight: '5 GM', price: 261, originalPrice: 290 },
       { label: '10', weight: '10 GM', price: 447, originalPrice: 497 }
     ]
   },
@@ -330,7 +329,6 @@ export const PRODUCTS_CATALOG = [
       'Consult doctor for precise dosage.'
     ],
     variations: [
-      { label: '5', weight: '5 GM', price: 414, originalPrice: 460 },
       { label: '10', weight: '10 GM', price: 779, originalPrice: 865 }
     ]
   },
