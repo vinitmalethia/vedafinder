@@ -75,8 +75,7 @@ export const PRODUCTS_CATALOG = [
     reviewsCount: 410,
     image: '/products/abhrak-bhasma.png',
     gallery: [
-      '/products/abhrak-bhasma.png',
-      '/products/abhrak-bhasma-100.png'
+      '/products/abhrak-bhasma.png'
     ],
     tag: '1,000 Puti Supreme Grade',
     inStock: true,
@@ -133,8 +132,7 @@ export const PRODUCTS_CATALOG = [
     reviewsCount: 280,
     image: '/products/abhrak-bhasma-100.png',
     gallery: [
-      '/products/abhrak-bhasma-100.png',
-      '/products/abhrak-bhasma.png'
+      '/products/abhrak-bhasma-100.png'
     ],
     tag: '100 Puti Classical Mica',
     inStock: true,
@@ -239,8 +237,7 @@ export const PRODUCTS_CATALOG = [
     reviewsCount: 380,
     image: '/products/praval-pishti.png',
     gallery: [
-      '/products/praval-pishti.png',
-      '/products/moti-pishti.png'
+      '/products/praval-pishti.png'
     ],
     tag: 'Moon-Calcinated Coral',
     inStock: true,
@@ -294,8 +291,7 @@ export const PRODUCTS_CATALOG = [
     reviewsCount: 520,
     image: '/products/moti-pishti.png',
     gallery: [
-      '/products/moti-pishti.png',
-      '/products/praval-pishti.png'
+      '/products/moti-pishti.png'
     ],
     tag: 'Pure Cultured Pearl Calx',
     inStock: true,
@@ -351,8 +347,7 @@ export const PRODUCTS_CATALOG = [
     reviewsCount: 270,
     image: '/products/vang-bhasma.png',
     gallery: [
-      '/products/vang-bhasma.png',
-      '/products/trivang-bhasma.png'
+      '/products/vang-bhasma.png'
     ],
     tag: 'Purified Tin Calx',
     inStock: true,
@@ -562,8 +557,7 @@ export const PRODUCTS_CATALOG = [
     reviewsCount: 295,
     image: '/products/trivang-bhasma.png',
     gallery: [
-      '/products/trivang-bhasma.png',
-      '/products/vang-bhasma.png'
+      '/products/trivang-bhasma.png'
     ],
     tag: 'Herbo-Mineral Trio',
     inStock: true,
