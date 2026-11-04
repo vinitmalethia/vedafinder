@@ -99,7 +99,7 @@ export const PRODUCTS_CATALOG = [
       'Supreme bioavailability with immediate cellular uptake'
     ],
     specifications: {
-      brand: 'Swarn Ayurveda / Veda Finder',
+      brand: 'Veda Finder',
       productName: 'Abhrak Bhasma (1,000 Puti)',
       category: 'Classical Rasashastra Bhasma',
       mainIngredient: 'Purified Biotite Mica Calx',
@@ -155,7 +155,7 @@ export const PRODUCTS_CATALOG = [
       'Gentle and effective formulation'
     ],
     specifications: {
-      brand: 'Swarn Ayurveda / Veda Finder',
+      brand: 'Veda Finder',
       productName: 'Abhrak Bhasma (100 Puti)',
       category: 'Bhasma',
       mainIngredient: 'Purified Biotite Mica',
@@ -208,7 +208,7 @@ export const PRODUCTS_CATALOG = [
       'GMP certified classical processing'
     ],
     specifications: {
-      brand: 'Swarn Ayurveda / Veda Finder',
+      brand: 'Veda Finder',
       productName: 'Godanti Bhasma',
       category: 'Bhasma',
       mainIngredient: 'Shuddha Godanti',
@@ -263,7 +263,7 @@ export const PRODUCTS_CATALOG = [
       'Zero heavy metal contamination'
     ],
     specifications: {
-      brand: 'Swarn Ayurveda / Veda Finder',
+      brand: 'Veda Finder',
       productName: 'Praval Pishti',
       category: 'Pishti (Rose Water Triturated Coral)',
       mainIngredient: 'Natural Coral Powder (Corallium rubrum)',
@@ -318,7 +318,7 @@ export const PRODUCTS_CATALOG = [
       'Supreme nano-fineness for tranquilizing and cooling action'
     ],
     specifications: {
-      brand: 'Swarn Ayurveda / Veda Finder',
+      brand: 'Veda Finder',
       productName: 'Moti Pishti',
       category: 'Pishti',
       mainIngredient: 'Pure Natural Pearl',
@@ -367,7 +367,7 @@ export const PRODUCTS_CATALOG = [
     keyIngredients: ['Purified Tin (Shuddha Vanga)'],
     whyChoose: ['Zero raw metal trace', 'Ancient Samhita methodology'],
     specifications: {
-      brand: 'Swarn Ayurveda / Veda Finder',
+      brand: 'Veda Finder',
       productName: 'Vang Bhasma',
       category: 'Bhasma',
       mainIngredient: 'Shuddha Vanga',
@@ -409,7 +409,7 @@ export const PRODUCTS_CATALOG = [
     keyIngredients: ['Purified Elemental Iron (Shuddha Lauha)', 'Triphala Kwath'],
     whyChoose: ['Non-constipating formulation', 'Tested for heavy metal safety'],
     specifications: {
-      brand: 'Swarn Ayurveda / Veda Finder',
+      brand: 'Veda Finder',
       productName: 'Loha Bhasma',
       category: 'Bhasma',
       mainIngredient: 'Shuddha Lauha',
@@ -493,7 +493,7 @@ export const PRODUCTS_CATALOG = [
     keyIngredients: ['Purified Silver (Shuddha Rajat)'],
     whyChoose: ['Highest assay 99.9% pure silver calx', 'Lab verified nano-bioavailability'],
     specifications: {
-      brand: 'Swarn Ayurveda / Veda Finder',
+      brand: 'Veda Finder',
       productName: 'Chandi (Rajat) Bhasma',
       category: 'Bhasma',
       mainIngredient: 'Purified Silver',
@@ -578,7 +578,7 @@ export const PRODUCTS_CATALOG = [
     keyIngredients: ['Shuddha Naga', 'Shuddha Vanga', 'Shuddha Yashada'],
     whyChoose: ['Classical Rasashastra trio', 'Purified as per classical Samhitas'],
     specifications: {
-      brand: 'Swarn Ayurveda / Veda Finder',
+      brand: 'Veda Finder',
       productName: 'Trivang Bhasma',
       category: 'Bhasma',
       mainIngredient: 'Purified Naga, Vanga, Yashada',
@@ -674,8 +674,8 @@ export function getProductFullDetails(product) {
     tag: base.tag || '100% Pure Formulation',
     inStock: base.inStock !== false,
     indicates: base.indicates || 'Holistic Vitality, Balance & Rejuvenation',
-    shortDescription: base.shortDescription || base.description || 'Swarn Ayurveda formulation prepared from pure herbal extracts and traditional scriptures to support overall wellness, balance, and vitality.',
-    fullDescription: base.fullDescription || base.description || 'Swarn Ayurveda classical formulation prepared strictly per authentic Ayurvedic principles. Finely processed for convenient use and optimal bio-absorption, this formulation is suitable for inclusion in your daily wellness routine under professional guidance.',
+    shortDescription: base.shortDescription || base.description || 'Veda Finder formulation prepared from pure herbal extracts and traditional scriptures to support overall wellness, balance, and vitality.',
+    fullDescription: base.fullDescription || base.description || 'Veda Finder classical formulation prepared strictly per authentic Ayurvedic principles. Finely processed for convenient use and optimal bio-absorption, this formulation is suitable for inclusion in your daily wellness routine under professional guidance.',
     benefits: (base.benefits && base.benefits.length) ? base.benefits : [
       'Supports digestive wellness and metabolic function',
       'Helps maintain healthy body vitality and stamina',
@@ -695,7 +695,7 @@ export function getProductFullDetails(product) {
       'Suitable for regular Ayurvedic wellness routines'
     ],
     specifications: base.specifications || {
-      brand: 'Swarn Ayurveda',
+      brand: 'Veda Finder',
       productName: base.name,
       category: base.category || 'Ayurvedic Herbal Powder',
       mainIngredient: base.tag || 'Pure Ayurvedic Botanicals',
