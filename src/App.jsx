@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageCircle } from 'lucide-react';
+import WhatsAppIcon from './components/WhatsAppIcon';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
@@ -362,7 +362,7 @@ export default function App() {
             className="fixed bottom-6 right-6 z-40 bg-[#25D366] hover:bg-[#20BD5A] text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 transition-all hover:scale-105 active:scale-95 border border-white/20"
             title="Chat with us on WhatsApp"
           >
-            <MessageCircle className="w-5 h-5 fill-current" />
+            <WhatsAppIcon className="w-5 h-5 shrink-0" fill="currentColor" />
             <span>chat with us</span>
           </a>
         </>

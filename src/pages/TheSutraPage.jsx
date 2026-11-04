@@ -35,6 +35,7 @@ import {
   Filter
 } from 'lucide-react';
 import sutraLogo from '../assets/the-sutra-logo.jpg';
+import WhatsAppIcon from '../components/WhatsAppIcon';
 import { getStoredSutraQuiz } from '../data/sutraQuizData';
 
 // Past Archives Data with Categories
@@ -713,7 +714,7 @@ export default function TheSutraPage({ onNavigate }) {
                     onClick={handleSendToWhatsApp}
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg transition-all"
                   >
-                    <Send className="w-4 h-4" />
+                    <WhatsAppIcon className="w-4 h-4 shrink-0" fill="currentColor" />
                     <span>Re-send Answers to WhatsApp</span>
                   </button>
 
