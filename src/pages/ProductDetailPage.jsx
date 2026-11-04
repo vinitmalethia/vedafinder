@@ -272,8 +272,8 @@ export default function ProductDetailPage({
                   Rs. {activeOriginalPrice}.00
                 </span>
               )}
-              {activeOriginalPrice && (
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-[#EAE0CB] text-[#8C682D]">
+              {activeOriginalPrice && activeOriginalPrice > activePrice && (
+                <span className="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-[#EBF5EE] text-[#2E6B39] border border-[#C5DEC9]">
                   {Math.round(((activeOriginalPrice - activePrice) / activeOriginalPrice) * 100)}% OFF
                 </span>
               )}
@@ -668,8 +668,16 @@ export default function ProductDetailPage({
               <h4 className="font-serif font-bold text-xs sm:text-sm text-[#183B2B] truncate">
                 {detailedProduct.name}
               </h4>
-              <div className="font-serif font-bold text-sm sm:text-base text-[#183B2B]">
-                Rs. {activePrice}.00
+              <div className="flex items-baseline gap-1.5 font-serif font-bold text-sm sm:text-base text-[#183B2B]">
+                <span>Rs. {activePrice}.00</span>
+                {activeOriginalPrice && (
+                  <span className="text-[11px] font-sans font-normal line-through text-[#8F9F95]">Rs. {activeOriginalPrice}.00</span>
+                )}
+                {activeOriginalPrice && activeOriginalPrice > activePrice && (
+                  <span className="text-[10px] font-sans font-extrabold text-[#2E6B39] bg-[#EBF5EE] border border-[#C5DEC9] px-1.5 py-0.2 rounded">
+                    {Math.round(((activeOriginalPrice - activePrice) / activeOriginalPrice) * 100)}% OFF
+                  </span>
+                )}
               </div>
             </div>
           </div>

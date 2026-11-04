@@ -99,10 +99,15 @@ export default function QuickViewModal({ product, isOpen, onClose, onAddToCart, 
                 </p>
               )}
 
-              <div className="flex items-baseline gap-3 mt-3">
+              <div className="flex items-baseline gap-2.5 mt-3">
                 <span className="font-serif font-bold text-2xl text-[#183B2B]">₹{product.price || 449}</span>
                 {product.originalPrice && (
                   <span className="text-sm line-through text-[#8E9F94]">₹{product.originalPrice}</span>
+                )}
+                {product.originalPrice && product.originalPrice > product.price && (
+                  <span className="text-xs font-bold text-[#2E6B39] bg-[#EBF5EE] border border-[#C5DEC9] px-2 py-0.5 rounded-full">
+                    {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                  </span>
                 )}
                 <span className="text-xs font-semibold text-emerald-800 bg-emerald-100/70 px-2 py-0.5 rounded">
                   {product.weight || 'Standard Unit'}

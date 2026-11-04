@@ -113,21 +113,28 @@ export default function CollectionsPage({ onSelectProduct, onQuickView, onAddToC
                     </p>
                   </div>
 
-                  {/* Price, Weight & Quick View */}
-                  <div className="pt-2.5 mt-2.5 border-t border-[#EAE2D2] flex items-baseline justify-between gap-1">
+                  {/* Price, Weight, Discount & Quick View */}
+                  <div className="pt-2.5 mt-2.5 border-t border-[#EAE2D2] flex items-center justify-between gap-1">
                     <div onClick={() => (onSelectProduct || onQuickView)(product)} className="cursor-pointer">
-                      <span className="text-[9px] text-[#7A8B81] uppercase block">{product.weight}</span>
-                      <div className="flex items-baseline gap-1">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[9px] text-[#7A8B81] uppercase font-semibold">{product.weight}</span>
+                        {product.originalPrice && product.originalPrice > product.price && (
+                          <span className="text-[9px] font-extrabold text-[#2E6B39] bg-[#EBF5EE] border border-[#C5DEC9] px-1.5 py-0.5 rounded-full leading-none">
+                            {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-baseline gap-1.5 mt-0.5">
                         <span className="font-serif font-bold text-base sm:text-lg text-[#183B2B]">₹{product.price}</span>
                         {product.originalPrice && (
-                          <span className="text-[10px] line-through text-[#9BA8A0]">₹{product.originalPrice}</span>
+                          <span className="text-[11px] line-through text-[#8F9F95]">₹{product.originalPrice}</span>
                         )}
                       </div>
                     </div>
 
                     <button
                       onClick={() => (onSelectProduct || onQuickView)(product)}
-                      className="p-1.5 rounded-full bg-white hover:bg-[#EAE0CB] text-[#183B2B] transition-colors border border-[#DFCFA8]"
+                      className="p-1.5 rounded-full bg-white hover:bg-[#EAE0CB] text-[#183B2B] transition-colors border border-[#DFCFA8] shrink-0"
                       title="View Details"
                     >
                       <Eye className="w-3.5 h-3.5" />
