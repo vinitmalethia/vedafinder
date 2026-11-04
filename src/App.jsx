@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { MessageCircle } from 'lucide-react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
@@ -339,6 +340,33 @@ export default function App() {
         onNavigate={handleNavigate}
         orders={customerOrders}
       />
+
+      {/* Global Floating Action Badges: ALWAYS VISIBLE across entire website */}
+      {currentPage !== 'Admin' && (
+        <>
+          {/* Right Edge Vertical Pill: BOOK A CONSULTATION */}
+          <button 
+            onClick={() => handleNavigate('Contact')}
+            className="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-[#58793B] hover:bg-[#47632F] text-white text-[11px] sm:text-xs font-bold tracking-widest uppercase px-2.5 py-4 rounded-l-xl shadow-xl transition-all [writing-mode:vertical-rl] flex items-center gap-2 cursor-pointer hover:shadow-2xl active:scale-95"
+            style={{ textOrientation: 'mixed' }}
+            title="Book Doctor Consultation"
+          >
+            <span>BOOK A CONSULTATION</span>
+          </button>
+
+          {/* Bottom Right WhatsApp Pill: chat with us */}
+          <a
+            href="https://wa.me/919888335557?text=Hello%20Veda%20Finder,%20I%20have%20an%20inquiry%20regarding%20Ayurvedic%20formulations."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fixed bottom-6 right-6 z-40 bg-[#25D366] hover:bg-[#20BD5A] text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 transition-all hover:scale-105 active:scale-95 border border-white/20"
+            title="Chat with us on WhatsApp"
+          >
+            <MessageCircle className="w-5 h-5 fill-current" />
+            <span>chat with us</span>
+          </a>
+        </>
+      )}
     </div>
   );
 }

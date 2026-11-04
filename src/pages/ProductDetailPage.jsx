@@ -738,29 +738,6 @@ export default function ProductDetailPage({
         </div>
       </div>
 
-      {/* 6. Floating Action Badges (Matches Reference Screenshots) */}
-      
-      {/* Right Edge Vertical Pill: BOOK A CONSULTATION */}
-      <button 
-        onClick={() => onNavigate('Contact')}
-        className="fixed right-0 top-1/2 -translate-y-1/2 z-30 bg-[#58793B] hover:bg-[#47632F] text-white text-[11px] sm:text-xs font-bold tracking-widest uppercase px-2.5 py-4 rounded-l-xl shadow-lg transition-all [writing-mode:vertical-rl] flex items-center gap-2 cursor-pointer"
-        style={{ textOrientation: 'mixed' }}
-        title="Book Doctor Consultation"
-      >
-        <span>BOOK A CONSULTATION</span>
-      </button>
-
-      {/* Bottom Right WhatsApp Pill: chat with us */}
-      <a
-        href="https://wa.me/919888335557?text=Hello%20Veda%20Finder,%20I%20have%20an%20inquiry%20regarding%20Ayurvedic%20formulations."
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-40 bg-[#25D366] hover:bg-[#20BD5A] text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-full shadow-xl flex items-center gap-2 transition-all hover:scale-105"
-      >
-        <MessageCircle className="w-5 h-5 fill-current" />
-        <span>chat with us</span>
-      </a>
-
     </div>
   );
 }
