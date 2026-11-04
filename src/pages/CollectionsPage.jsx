@@ -125,7 +125,7 @@ export default function CollectionsPage({ onSelectProduct, onQuickView, onAddToC
                         )}
                       </div>
                       <div className="flex items-baseline gap-1.5 mt-0.5">
-                        <span className="font-serif font-bold text-base sm:text-lg text-[#183B2B]">₹{product.price}</span>
+                        <span className="font-sans font-extrabold text-base sm:text-lg text-[#183B2B]">₹{product.price}</span>
                         {product.originalPrice && (
                           <span className="text-[11px] line-through text-[#8F9F95]">₹{product.originalPrice}</span>
                         )}

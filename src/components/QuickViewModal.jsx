@@ -99,8 +99,8 @@ export default function QuickViewModal({ product, isOpen, onClose, onAddToCart, 
                 </p>
               )}
 
-              <div className="flex items-baseline gap-2.5 mt-3">
-                <span className="font-serif font-bold text-2xl text-[#183B2B]">₹{product.price || 449}</span>
+              <div className="flex items-baseline gap-2.5 mt-3 font-sans">
+                <span className="font-extrabold text-2xl text-[#183B2B]">₹{product.price || 449}</span>
                 {product.originalPrice && (
                   <span className="text-sm line-through text-[#8E9F94]">₹{product.originalPrice}</span>
                 )}

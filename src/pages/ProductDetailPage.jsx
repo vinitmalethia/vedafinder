@@ -263,8 +263,8 @@ export default function ProductDetailPage({
             </div>
 
             {/* Price Row */}
-            <div className="flex items-baseline gap-3 pt-1">
-              <span className="font-serif text-3xl sm:text-4xl font-bold text-[#183B2B]">
+            <div className="flex items-baseline gap-3 pt-1 font-sans">
+              <span className="text-3xl sm:text-4xl font-extrabold text-[#183B2B] tracking-tight">
                 Rs. {activePrice}.00
               </span>
               {activeOriginalPrice && (
@@ -632,7 +632,7 @@ export default function ProductDetailPage({
                     {relProd.name}
                   </h3>
                   <div className="text-center mt-1">
-                    <span className="font-serif font-bold text-sm sm:text-base text-[#183B2B]">
+                    <span className="font-sans font-bold text-sm sm:text-base text-[#183B2B]">
                       Rs. {relProd.price}.00
                     </span>
                   </div>
@@ -670,7 +670,7 @@ export default function ProductDetailPage({
               <h4 className="font-serif font-bold text-xs sm:text-sm text-[#183B2B] truncate">
                 {detailedProduct.name}
               </h4>
-              <div className="flex items-baseline gap-1.5 font-serif font-bold text-sm sm:text-base text-[#183B2B]">
+              <div className="flex items-baseline gap-1.5 font-sans font-bold text-sm sm:text-base text-[#183B2B]">
                 <span>Rs. {activePrice}.00</span>
                 {activeOriginalPrice && (
                   <span className="text-[11px] font-sans font-normal line-through text-[#8F9F95]">Rs. {activeOriginalPrice}.00</span>

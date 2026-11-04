@@ -84,7 +84,7 @@ export default function ShopSection({ onSelectProduct, onQuickView, onAddToCart,
                     )}
                   </div>
                   <div className="flex items-baseline gap-1.5 mt-0.5">
-                    <span className="font-serif font-bold text-base sm:text-xl text-[#183B2B]">₹{product.price}</span>
+                    <span className="font-sans font-extrabold text-base sm:text-xl text-[#183B2B]">₹{product.price}</span>
                     {product.originalPrice && (
                       <span className="text-[11px] sm:text-xs line-through text-[#8F9F95]">₹{product.originalPrice}</span>
                     )}
