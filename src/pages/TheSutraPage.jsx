@@ -622,41 +622,6 @@ export default function TheSutraPage({ onNavigate }) {
         {activeTab === 'quiz' && (
           <div className="space-y-8 animate-fadeIn">
             
-            {/* Top Challenge Metadata & Live Timer Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E3D8C3] shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#8C682D] bg-[#FAF3E6] px-3 py-1 rounded-full border border-[#E4D5B9]">
-                    WEEK {currentQuiz.week || 42} CHALLENGE
-                  </span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 flex items-center gap-1">
-                    <span>🌿</span>
-                    <span>DIFFICULTY: INTERMEDIATE</span>
-                  </span>
-                </div>
-                <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#183B2B]">
-                  {currentQuiz.title}
-                </h2>
-                <p className="text-xs sm:text-sm text-[#6B7E72]">
-                  Theme: <strong className="font-serif text-[#8C682D]">{currentQuiz.sanskritTheme}</strong> • {currentQuiz.questions?.length || 1} Classical Samhita Challenge
-                </p>
-              </div>
-
-              {/* Dynamic Live Countdown Box */}
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-[#122E21] to-[#0A1A12] text-white border border-[#C59A4E]/40 text-center shrink-0 w-full md:w-auto shadow-lg">
-                <span className="text-[10px] uppercase font-bold text-[#E6C887] tracking-wider block mb-1 flex items-center justify-center gap-1">
-                  <Clock className="w-3 h-3 text-[#E6C887]" />
-                  CHALLENGE CLOSES IN
-                </span>
-                <div className="font-mono text-xl sm:text-2xl font-bold tracking-wider text-white flex items-center justify-center gap-1.5">
-                  <span className="px-2 py-1 bg-white/10 rounded-lg">{String(timeLeft.hours).padStart(2, '0')}h</span>
-                  <span>:</span>
-                  <span className="px-2 py-1 bg-white/10 rounded-lg">{String(timeLeft.minutes).padStart(2, '0')}m</span>
-                  <span>:</span>
-                  <span className="px-2 py-1 bg-white/10 rounded-lg text-emerald-400">{String(timeLeft.seconds).padStart(2, '0')}s</span>
-                </div>
-              </div>
-            </div>
 
             {/* Scorecard Modal / Banner if Submitted */}
             {isSubmitted && scoreResult && (
