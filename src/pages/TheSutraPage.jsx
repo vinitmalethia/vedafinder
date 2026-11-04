@@ -12,6 +12,7 @@ import {
   ChevronRight, 
   User, 
   Phone, 
+  Mail,
   GraduationCap, 
   MapPin, 
   HelpCircle, 
@@ -197,6 +198,8 @@ export default function TheSutraPage({ onNavigate }) {
   const [registration, setRegistration] = useState({
     name: '',
     phone: '',
+    email: '',
+    state: '',
     role: 'BAMS Student',
     institution: ''
   });
@@ -278,8 +281,10 @@ export default function TheSutraPage({ onNavigate }) {
       `👤 *Participant Details:*`,
       `• *Name:* ${result.name}`,
       `• *WhatsApp:* ${result.phone}`,
-      `• *Category:* ${result.role}`,
-      `• *Institution/City:* ${result.institution}`,
+      `• *Email:* ${result.email}`,
+      `• *State:* ${result.state}`,
+      `• *Category / Role:* ${result.role}`,
+      `• *College / Institution / City:* ${result.institution}`,
       ``,
       `🏆 *Score Summary:*`,
       `• *Total Score:* ${result.score} / ${result.total} (${result.percentage}%)`,
@@ -303,8 +308,15 @@ export default function TheSutraPage({ onNavigate }) {
   const handleQuizSubmit = (e) => {
     e.preventDefault();
 
-    if (!registration.name.trim() || !registration.phone.trim()) {
-      alert('Please fill in your Name and WhatsApp Number to record your submission.');
+    if (
+      !registration.name.trim() || 
+      !registration.phone.trim() || 
+      !registration.email.trim() || 
+      !registration.state.trim() || 
+      !registration.role.trim() || 
+      !registration.institution.trim()
+    ) {
+      alert('Please fill in all 6 compulsory fields (Full Name, WhatsApp Number, Email, State, Category/Role, and College/Institution/City) to record your submission.');
       return;
     }
 
@@ -330,8 +342,10 @@ export default function TheSutraPage({ onNavigate }) {
       tokenId: tokenId,
       name: registration.name.trim(),
       phone: registration.phone.trim(),
+      email: registration.email.trim(),
+      state: registration.state.trim(),
       role: registration.role,
-      institution: registration.institution.trim() || 'Ayurveda Seeker',
+      institution: registration.institution.trim(),
       isWinner: isWinner,
       randomProduct: randomProduct,
       couponCode: couponCode
@@ -851,10 +865,11 @@ export default function TheSutraPage({ onNavigate }) {
 
                 <form onSubmit={handleQuizSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* 1. Full Name */}
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold uppercase tracking-wider text-[#183B2B] flex items-center gap-1.5">
                         <User className="w-3.5 h-3.5 text-[#8C682D]" />
-                        <span>Full Name *</span>
+                        <span>Full Name <span className="text-red-500">*</span></span>
                       </label>
                       <input
                         type="text"
@@ -866,10 +881,11 @@ export default function TheSutraPage({ onNavigate }) {
                       />
                     </div>
 
+                    {/* 2. WhatsApp Number */}
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold uppercase tracking-wider text-[#183B2B] flex items-center gap-1.5">
                         <Phone className="w-3.5 h-3.5 text-[#8C682D]" />
-                        <span>WhatsApp Number *</span>
+                        <span>WhatsApp Number <span className="text-red-500">*</span></span>
                       </label>
                       <input
                         type="tel"
@@ -881,12 +897,81 @@ export default function TheSutraPage({ onNavigate }) {
                       />
                     </div>
 
+                    {/* 3. Email Address */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-[#183B2B] flex items-center gap-1.5">
+                        <Mail className="w-3.5 h-3.5 text-[#8C682D]" />
+                        <span>Email Address <span className="text-red-500">*</span></span>
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="e.g. vaibhav.shastri@gmail.com"
+                        value={registration.email}
+                        onChange={(e) => setRegistration({ ...registration, email: e.target.value })}
+                        className="w-full px-4 py-3 rounded-2xl bg-[#FAF7F2] border border-[#DFCFA8] text-sm text-[#183B2B] focus:outline-none focus:border-[#183B2B] focus:ring-1 focus:ring-[#183B2B]"
+                      />
+                    </div>
+
+                    {/* 4. State */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-[#183B2B] flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-[#8C682D]" />
+                        <span>State <span className="text-red-500">*</span></span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        list="sutra-indian-states"
+                        placeholder="e.g. Punjab / Delhi / Maharashtra / Rajasthan"
+                        value={registration.state}
+                        onChange={(e) => setRegistration({ ...registration, state: e.target.value })}
+                        className="w-full px-4 py-3 rounded-2xl bg-[#FAF7F2] border border-[#DFCFA8] text-sm text-[#183B2B] focus:outline-none focus:border-[#183B2B] focus:ring-1 focus:ring-[#183B2B]"
+                      />
+                      <datalist id="sutra-indian-states">
+                        <option value="Andhra Pradesh" />
+                        <option value="Arunachal Pradesh" />
+                        <option value="Assam" />
+                        <option value="Bihar" />
+                        <option value="Chhattisgarh" />
+                        <option value="Delhi NCR" />
+                        <option value="Goa" />
+                        <option value="Gujarat" />
+                        <option value="Haryana" />
+                        <option value="Himachal Pradesh" />
+                        <option value="Jammu & Kashmir" />
+                        <option value="Jharkhand" />
+                        <option value="Karnataka" />
+                        <option value="Kerala" />
+                        <option value="Ladakh" />
+                        <option value="Madhya Pradesh" />
+                        <option value="Maharashtra" />
+                        <option value="Manipur" />
+                        <option value="Meghalaya" />
+                        <option value="Mizoram" />
+                        <option value="Nagaland" />
+                        <option value="Odisha" />
+                        <option value="Punjab" />
+                        <option value="Rajasthan" />
+                        <option value="Sikkim" />
+                        <option value="Tamil Nadu" />
+                        <option value="Telangana" />
+                        <option value="Tripura" />
+                        <option value="Uttar Pradesh" />
+                        <option value="Uttarakhand" />
+                        <option value="West Bengal" />
+                        <option value="Chandigarh" />
+                      </datalist>
+                    </div>
+
+                    {/* 5. Category / Role */}
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold uppercase tracking-wider text-[#183B2B] flex items-center gap-1.5">
                         <GraduationCap className="w-3.5 h-3.5 text-[#8C682D]" />
-                        <span>Category / Role</span>
+                        <span>Category / Role <span className="text-red-500">*</span></span>
                       </label>
                       <select
+                        required
                         value={registration.role}
                         onChange={(e) => setRegistration({ ...registration, role: e.target.value })}
                         className="w-full px-4 py-3 rounded-2xl bg-[#FAF7F2] border border-[#DFCFA8] text-sm text-[#183B2B] focus:outline-none focus:border-[#183B2B] focus:ring-1 focus:ring-[#183B2B]"
@@ -899,13 +984,15 @@ export default function TheSutraPage({ onNavigate }) {
                       </select>
                     </div>
 
+                    {/* 6. College / Institution / City */}
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold uppercase tracking-wider text-[#183B2B] flex items-center gap-1.5">
                         <MapPin className="w-3.5 h-3.5 text-[#8C682D]" />
-                        <span>College / Institution / City</span>
+                        <span>College / Institution / City <span className="text-red-500">*</span></span>
                       </label>
                       <input
                         type="text"
+                        required
                         placeholder="e.g. NIA Jaipur / AIIA New Delhi / Mumbai"
                         value={registration.institution}
                         onChange={(e) => setRegistration({ ...registration, institution: e.target.value })}
