@@ -510,10 +510,10 @@ export default function TheSutraPage({ onNavigate }) {
         </div>
 
         {/* ==================================================================== */}
-        {/* 3. STICKY / FLOATING NAVIGATION BAR */}
+        {/* 3. STATIC NAVIGATION BAR (STAYS IN PLACE, DOES NOT FLOAT) */}
         {/* ==================================================================== */}
-        <div id="sutra-main-content" className="sticky top-4 z-40 flex justify-center w-full px-2">
-          <div className="inline-flex items-center gap-1 sm:gap-1.5 p-1.5 bg-[#122E21]/95 backdrop-blur-md rounded-full max-w-full border border-[#C59A4E]/50 shadow-2xl text-xs sm:text-sm font-semibold overflow-x-auto no-scrollbar">
+        <div id="sutra-main-content" className="flex justify-center w-full px-2 relative z-10">
+          <div className="inline-flex items-center gap-1 sm:gap-1.5 p-1.5 bg-[#122E21] rounded-full max-w-full border border-[#C59A4E]/50 shadow-xl text-xs sm:text-sm font-semibold overflow-x-auto no-scrollbar">
             
             <button
               onClick={() => setActiveTab('quiz')}
